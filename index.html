@@ -1051,25 +1051,35 @@ scenes.forEach(function(s,i){
   d.onclick=function(){ window.scrollTo({top:s.el.offsetTop + (s.el.offsetHeight-innerHeight)*0.5, behavior:'smooth'}); };
   dotsEl.appendChild(d); s.dot=d;
 });
-/* one <video> per UNIQUE clip (so switching is just an opacity crossfade; no reloads) */
+/* one <video> per UNIQUE clip (crossfade por opacidad; sin recargas).
+   En movil los telefonos no pueden decodificar 9 videos a la vez -> usamos un
+   poster (imagen fija) por escena; se mantiene el mismo sistema y el Ken Burns. */
+var MOB = (Math.min(innerWidth,innerHeight)<768) || ('ontouchstart' in window);
 var vids={};
 scenes.forEach(function(s){
   if(vids[s.clip]) return;
-  var v=document.createElement('video');
-  v.className='vid'; v.src=(window.VDATA&&VDATA[s.clip])||BASE+s.clip; v.muted=true; v.playsInline=true; v.autoplay=true; v.loop=true;
-  v.setAttribute('playsinline',''); v.setAttribute('muted',''); v.setAttribute('autoplay',''); v.preload='auto';
-  stage.insertBefore(v, stage.querySelector('.tint'));
-  v.addEventListener('canplay',function(){ v.play().catch(function(){}); });
-  vids[s.clip]=v;
+  var src=(window.VDATA&&VDATA[s.clip])||BASE+s.clip;
+  var el;
+  if(MOB){
+    el=document.createElement('img'); el.className='vid'; el.alt=''; el.decoding='async';
+    el.src=src.replace(/([^\/]+)\.mp4$/,'poster-$1.jpg');
+  } else {
+    el=document.createElement('video');
+    el.className='vid'; el.src=src; el.muted=true; el.playsInline=true; el.autoplay=true; el.loop=true;
+    el.setAttribute('playsinline',''); el.setAttribute('muted',''); el.setAttribute('autoplay',''); el.preload='auto';
+    el.addEventListener('canplay',function(){ el.play().catch(function(){}); });
+  }
+  stage.insertBefore(el, stage.querySelector('.tint'));
+  vids[s.clip]=el;
 });
-function playAll(){ for(var k in vids){ vids[k].play().catch(function(){}); } }
+function playAll(){ for(var k in vids){ var e=vids[k]; if(e&&e.play) e.play().catch(function(){}); } }
 var curClip=null;
 function showClip(clip, idx){
   if(clip===curClip) return; curClip=clip;
   for(var k in vids){ vids[k].style.opacity = (k===clip)?'1':'0'; }
   var keep={}; keep[clip]=1;
   if(idx>=0){ if(scenes[idx-1]) keep[scenes[idx-1].clip]=1; if(scenes[idx+1]) keep[scenes[idx+1].clip]=1; }
-  for(var k2 in vids){ if(keep[k2]){ vids[k2].play().catch(function(){}); } else { try{vids[k2].pause();}catch(e){} } }
+  for(var k2 in vids){ var e2=vids[k2]; if(keep[k2]){ if(e2&&e2.play) e2.play().catch(function(){}); } else { if(e2&&e2.pause){ try{e2.pause();}catch(e){} } } }
 }
 function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
 function loop(){
