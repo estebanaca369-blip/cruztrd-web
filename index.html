@@ -187,6 +187,25 @@ footer .brand{justify-content:center;font-size:18px;margin-bottom:8px}
 .mbox li{font-family:'Poppins';font-weight:600;font-size:14px;color:#E7EDEF;border:1px solid rgba(25,195,125,.4);border-radius:999px;padding:7px 14px;background:rgba(25,195,125,.06)}
 .mnote{margin-top:18px;font-size:13px;color:var(--muted)}
 
+/* anfitrión: idea incompleta */
+.ambox{max-width:520px;text-align:left}
+.am-host{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.am-av{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid rgba(25,195,125,.55);flex:0 0 auto;background:#0c1116}
+.am-title{font-family:'Poppins';font-weight:700;font-size:21px;line-height:1.15;margin:3px 0 0}
+.am-reason{color:#c7d0d4;font-size:14.5px;line-height:1.5;margin:0 0 15px}
+.am-qlabel{font-family:'Poppins';font-weight:700;font-size:10.5px;letter-spacing:1.3px;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
+.am-qs{list-style:none;display:flex;flex-direction:column;gap:7px;margin:0 0 15px}
+.am-qs li{position:relative;padding-left:20px;font-size:14px;color:#E7EDEF;line-height:1.4;font-family:'Inter',sans-serif;font-weight:400;border:0;background:none;border-radius:0}
+.am-qs li::before{content:'';position:absolute;left:3px;top:7px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.am-ex{background:rgba(25,195,125,.06);border:1px solid rgba(25,195,125,.26);border-radius:12px;padding:12px 14px;margin-bottom:18px}
+.am-exlabel{display:block;font-family:'Poppins';font-weight:700;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.am-ex p{margin:0;color:#dce6e4;font-size:14px;line-height:1.5;font-style:italic}
+.am-actions{display:flex;gap:10px;flex-wrap:wrap}
+.am-use{margin-top:0}
+.am-write{margin-top:0;background:transparent;color:var(--accent);border:1px solid rgba(25,195,125,.55)}
+.am-write:hover{background:rgba(25,195,125,.1)}
+@media(max-width:600px){.am-actions .btn{flex:1 1 100%;text-align:center}}
+
 /* interactive lab */
 .lab{position:relative;width:min(46vw,540px);aspect-ratio:1;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:0 30px 70px rgba(0,0,0,.55)}
 .labimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.04);transition:transform .25s ease;will-change:transform}
@@ -957,6 +976,16 @@ html{scroll-snap-type:y proximity}
   <p class="mnote">Open-source e integraciones listas. Las conectamos y configuramos por ti.</p>
 </div></div>
 
+<div class="modal askmore" id="askMore"><div class="mbox ambox">
+  <button class="mclose" id="amClose" aria-label="Cerrar">✕</button>
+  <div class="am-host"><img class="am-av" id="amAv" alt=""><div><div class="meyebrow">Tu anfitrión · CruzTRD</div><h3 class="am-title">Cuéntame un poco más para armarlo bien</h3></div></div>
+  <p class="am-reason" id="amReason"></p>
+  <div class="am-qlabel">Para darte una propuesta seria necesito saber</div>
+  <ul class="am-qs" id="amQs"></ul>
+  <div class="am-ex"><span class="am-exlabel">Ejemplo de una idea bien planteada</span><p id="amExample"></p></div>
+  <div class="am-actions"><a class="btn am-use" id="amUse" href="#">Usar este ejemplo</a><a class="btn am-write" id="amWrite" href="#">Escribir la mía</a></div>
+</div></div>
+
 <div class="fsplash" id="fsplash"><div class="fsp-box">
   <div class="fsp-eye">CruzTRD · IA</div>
   <div class="fsp-status" id="fspStatus">Analizando tu idea…</div>
@@ -1382,6 +1411,47 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
     note.classList.add('on');
     try{ window.__cruzDiag={appType:diag.appType, summary:diag.summary, keys:diag.caps.map(function(c){return c.k;})}; }catch(_e){}
   }
+  var DEFAULT_ASK={
+    reason:'Con lo que escribiste todavía no logro entender qué app quieres ni para quién. Necesito un poco más para armarte una propuesta seria.',
+    questions:['¿Qué hace la app y qué problema resuelve?','¿Para quién es? (tus usuarios)','¿Cómo genera dinero o valor?'],
+    example:'Una app para que entrenadores personales vendan rutinas y planes de nutrición por suscripción mensual, con seguimiento del progreso de sus clientes.'
+  };
+  function looksIncomplete(t){
+    t=(t||'').trim();
+    if(t.length<15) return true;
+    var words=t.split(/\s+/).filter(function(w){return w.replace(/[^a-záéíóúñ0-9]/gi,'').length>1;});
+    if(words.length<3) return true;
+    var letters=t.replace(/[^a-záéíóúñ]/gi,'').toLowerCase(), uniq={};
+    for(var i=0;i<letters.length;i++) uniq[letters[i]]=1;
+    if(letters.length>=6 && Object.keys(uniq).length<=3) return true;
+    return false;
+  }
+  function isIncompleteResp(out){
+    if(!out) return false;
+    if(out.status && String(out.status).toLowerCase().indexOf('incompl')>=0) return true;
+    if(out.appType && /indefinid|incomplet|insuficien|no\s+(hay|contiene|especif)/i.test(out.appType)) return true;
+    if((!out.caps||out.caps.length<=1) && out.summary && /(no (contiene|hay|se puede|es posible|aporta|permite|alcanza))|insuficien|demasiado (vag|gener)|falta .{0,20}(informaci|detalle|context)/i.test(out.summary)) return true;
+    return false;
+  }
+  function showAskMore(d){
+    d=d||DEFAULT_ASK;
+    var av=document.getElementById('amAv'); if(av) av.src=(typeof AV!=='undefined'&&AV&&AV.infra)||'';
+    document.getElementById('amReason').textContent=(d.reason||DEFAULT_ASK.reason);
+    var qs=(d.questions&&d.questions.length)?d.questions:DEFAULT_ASK.questions;
+    document.getElementById('amQs').innerHTML=qs.map(function(q){return '<li>'+String(q).replace(/[<>]/g,'')+'</li>';}).join('');
+    var ex=d.example||DEFAULT_ASK.example;
+    document.getElementById('amExample').textContent=ex;
+    var dlg=document.getElementById('askMore'); dlg.setAttribute('data-example',ex); dlg.classList.add('on');
+  }
+  function closeAskMore(){ var d=document.getElementById('askMore'); if(d) d.classList.remove('on'); }
+  function backToInput(){ closeAskMore(); try{document.getElementById('formula-result').scrollIntoView({behavior:'smooth',block:'start'});}catch(_e){} setTimeout(function(){ try{ta.focus();}catch(_e){} },320); }
+  (function(){
+    var c=document.getElementById('amClose'), w=document.getElementById('amWrite'), u=document.getElementById('amUse'), dlg=document.getElementById('askMore');
+    if(c) c.addEventListener('click',function(e){e.preventDefault();backToInput();});
+    if(w) w.addEventListener('click',function(e){e.preventDefault();backToInput();});
+    if(u) u.addEventListener('click',function(e){e.preventDefault(); var ex=dlg.getAttribute('data-example')||''; if(ex){ ta.value=ex; ta.dispatchEvent(new Event('input',{bubbles:true})); } backToInput();});
+    if(dlg) dlg.addEventListener('click',function(e){ if(e.target===dlg) backToInput(); });
+  })();
   function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
   var fsplash=document.getElementById('fsplash'), fspStatus=document.getElementById('fspStatus'), fspList=document.getElementById('fspList'), fspType=document.getElementById('fspType');
   function openSplash(){ if(fspList)fspList.innerHTML=''; if(fspType)fspType.textContent=''; if(fspStatus)fspStatus.textContent='Analizando tu idea…'; if(fsplash)fsplash.classList.add('on'); }
@@ -1389,6 +1459,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
   function addSplashItem(k){ var el=document.createElement('div'); el.className='fsp-item'; el.innerHTML='<span class="fsp-ck">✓</span>'+nm(k); fspList.appendChild(el); }
   go.addEventListener('click', async function(){
     var t=(ta.value||'').trim(); if(!t){ ta.focus(); return; }
+    if(looksIncomplete(t)){ showAskMore(DEFAULT_ASK); return; }
     var CCsel=document.getElementById('aiCountry'), SCsel=document.getElementById('aiScale'), MOsel=document.getElementById('aiMonet');
     var country=CCsel?CCsel.value:'Ecuador', scale=SCsel?SCsel.value:'s2', monet=MOsel?MOsel.value:'';
     window.__cruzCtx={country:country, scale:scale, monet:monet};
@@ -1397,9 +1468,10 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
     var ctxPrompt=' Contexto de negocio: se lanza en '+country+', para una escala inicial de '+(SCLBL[scale]||'')+' usuarios; monetizacion: '+(MOLBL[monet]||'a definir')+'. Regla: si el modelo es suscripcion incluye susc y pagos; si es pago unico o comisiones incluye pagos y no susc; si es publicidad prioriza mkt sin pagos ni susc; si aun no la monetiza no incluyas pagos ni susc.';
     go.disabled=true; var old=go.textContent; go.textContent='Diagnosticando…';
     openSplash();
-    var diag=null;
+    var diag=null, incompleteData=null;
     try{
       var applyOut=function(out){
+        if(isIncompleteResp(out)){ incompleteData={reason:(out.reason||out.summary),questions:out.questions,example:out.example}; return; }
         if(out&&out.caps&&out.caps.length){
           var caps=out.caps.filter(function(c){return c&&COMPONENTS.some(function(x){return x.k===c.k;});})
                            .map(function(c){return {k:c.k, why:(c.why&&String(c.why).trim())||CAPWHY[c.k]||''};});
@@ -1409,7 +1481,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
       };
       var sample = (window.claude && window.claude.use) ? (await window.claude.use('sample')) : null;
       if(sample){
-        var prompt='Eres el asesor experto de CruzTRD, un estudio que arma apps D2C por capas. Capas disponibles (key: cuando aplica): infra=Infraestructura (servidores/BD/escalado, casi siempre necesaria); seg=Seguridad (si hay usuarios o datos); pagos=Pagos (cobros unicos); susc=Suscripciones (planes/cobros recurrentes/membresias); mkt=Marketing (analitica/SEO/campanas/crecimiento); fidel=Fidelizacion (recompensas/referidos/retencion); dash=Dashboards & KPIs (metricas/reportes). Idea del usuario: "'+t+'". Diagnostica que tipo de app es y que capacidades necesita. Devuelve SOLO JSON con esta forma exacta: {"appType":"tipo de app en 2-4 palabras","summary":"1-2 frases en espanol explicando el diagnostico","caps":[{"k":"key","why":"una frase corta de por que la necesita"}]}. Ordena caps de mas a menos fundamental. Incluye infra como primera capa salvo que claramente no aplique.'+ctxPrompt+(hasBase?' Nota: el usuario ya tiene su propia base/infraestructura; puedes omitir la capa infra.':'');
+        var prompt='Eres el asesor experto de CruzTRD, un estudio que arma apps D2C por capas. Capas disponibles (key: cuando aplica): infra=Infraestructura (servidores/BD/escalado, casi siempre necesaria); seg=Seguridad (si hay usuarios o datos); pagos=Pagos (cobros unicos); susc=Suscripciones (planes/cobros recurrentes/membresias); mkt=Marketing (analitica/SEO/campanas/crecimiento); fidel=Fidelizacion (recompensas/referidos/retencion); dash=Dashboards & KPIs (metricas/reportes). Idea del usuario: "'+t+'". PRIMERO evalua si la idea tiene los REQUISITOS MINIMOS para diagnosticar: (1) que hace la app o que problema resuelve, (2) para quien es (usuarios), (3) alguna nocion de valor o negocio. Si la idea es vaga, sin sentido, o le falta lo minimo, devuelve SOLO JSON: {"status":"incompleto","reason":"1 frase clara de por que no alcanza","questions":["entre 2 y 4 preguntas concretas, en espanol, para completar la idea"],"example":"1 frase con un ejemplo de idea BIEN planteada, del mismo rubro si se intuye, si no de una app D2C tipica"}. Si la idea SI es suficiente, diagnostica que tipo de app es y que capacidades necesita y devuelve SOLO JSON con esta forma exacta: {"status":"ok","appType":"tipo de app en 2-4 palabras","summary":"1-2 frases en espanol explicando el diagnostico","caps":[{"k":"key","why":"una frase corta de por que la necesita"}]}. Ordena caps de mas a menos fundamental. Incluye infra como primera capa salvo que claramente no aplique.'+ctxPrompt+(hasBase?' Nota: el usuario ya tiene su propia base/infraestructura; puedes omitir la capa infra.':'');
         var out=await sample.json(prompt,{modelTier:'quick',cache:false});
         applyOut(out);
       } else {
@@ -1418,6 +1490,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
         if(resp&&resp.ok){ applyOut(await resp.json()); }
       }
     }catch(e){ diag=null; }
+    if(incompleteData){ closeSplash(); go.disabled=false; go.textContent=old; showAskMore(incompleteData); return; }
     if(!diag){
       var keys=keywordMatch(t);
       if(!keys.length){ keys=hasBase?['seg']:['infra','seg']; }
