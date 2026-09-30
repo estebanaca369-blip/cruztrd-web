@@ -97,7 +97,7 @@ export async function onRequestPost({ request, env }) {
     let model = resolveModel(env);
     let r;
     try { r = await callMessages(key, model, prompt); }
-    catch (e) { return J({ error: 'network', detail: String(e).slice(0, 160) }, 502); }
+    catch (e) { return J({ status: 'error', error: 'network', detail: String(e).slice(0, 160) }); }
 
     // Si el modelo por defecto no existe para esta key, descubre uno válido y reintenta una vez.
     if (r.status === 404) {
@@ -106,32 +106,34 @@ export async function onRequestPost({ request, env }) {
       if (alt && alt !== model) {
         MODEL_CACHE = alt; model = alt;
         try { r = await callMessages(key, model, prompt); }
-        catch (e) { return J({ error: 'network', detail: String(e).slice(0, 160) }, 502); }
+        catch (e) { return J({ status: 'error', error: 'network', detail: String(e).slice(0, 160) }); }
       }
     }
+    // IMPORTANTE: nunca devolver 5xx. Cloudflare reemplaza cualquier 5xx de la Function
+    // por su propia pagina HTML y el frontend no puede leer el JSON. Siempre 200 + status.
     if (!r.ok) {
       const detail = await r.text().catch(() => '');
-      return J({ error: 'upstream', status: r.status, model, detail: detail.slice(0, 200) }, 502);
+      return J({ status: 'error', error: 'upstream', http: r.status, model, detail: detail.slice(0, 200) });
     }
 
     const data = await r.json();
     const text = (data && data.content && data.content[0] && data.content[0].text) || '';
     const parsed = extractJSON(text);
-    if (!parsed) return J({ error: 'sin_json', model, raw: text.slice(0, 200) }, 502);
+    if (!parsed) return J({ status: 'error', error: 'sin_json', model, raw: text.slice(0, 200) });
 
-    // "incompleto" es una respuesta válida (200): el frontend muestra al anfitrión pidiendo más datos.
+    // "incompleto": el frontend muestra al anfitrión pidiendo más datos.
     if (isIncomplete(parsed)) {
       MODEL_CACHE = model;
-      return J({ status: 'incompleto', reason: parsed.reason || parsed.summary || '', questions: parsed.questions || [], example: parsed.example || '', __model: model });
+      return J({ status: 'incompleto', reason: parsed.reason || parsed.summary || '', questions: Array.isArray(parsed.questions) ? parsed.questions : [], example: parsed.example || '', __model: model });
     }
-    if (!parsed.caps || !parsed.caps.length) return J({ error: 'sin_json', model, raw: text.slice(0, 200) }, 502);
+    if (!parsed.caps || !parsed.caps.length) return J({ status: 'error', error: 'sin_caps', model, raw: text.slice(0, 200) });
 
     MODEL_CACHE = model;
-    parsed.status = parsed.status || 'ok';
+    parsed.status = 'ok';
     parsed.__model = model;
     return J(parsed);
   } catch (e) {
-    return J({ error: 'fetch_fail', detail: String(e).slice(0, 200) }, 502);
+    return J({ status: 'error', error: 'fetch_fail', detail: String(e).slice(0, 200) });
   }
 }
 
