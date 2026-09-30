@@ -72,7 +72,9 @@ export async function onRequestPost({ request, env }) {
     const data = await r.json();
     const text = (data && data.content && data.content[0] && data.content[0].text) || '';
     const parsed = extractJSON(text);
-    if (!parsed || !parsed.caps) return J({ error: 'sin_json', model, raw: text.slice(0, 300) }, 502);
+    if (!parsed) return J({ error: 'sin_json', model, raw: text.slice(0, 300) }, 502);
+    const incompleto = (parsed.status && String(parsed.status).toLowerCase().indexOf('incompl') >= 0) || (Array.isArray(parsed.questions) && (!parsed.caps || !parsed.caps.length));
+    if (!incompleto && !parsed.caps) return J({ error: 'sin_json', model, raw: text.slice(0, 300) }, 502);
     parsed.__model = model;
     return J(parsed);
   } catch (e) { return J({ error: 'fetch_fail', detail: String(e).slice(0, 200) }, 502); }

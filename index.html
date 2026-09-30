@@ -1490,12 +1490,17 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
         if(resp&&resp.ok){ applyOut(await resp.json()); }
       }
     }catch(e){ diag=null; }
-    if(incompleteData){ closeSplash(); go.disabled=false; go.textContent=old; showAskMore(incompleteData); return; }
-    if(!diag){
+    if(!diag && !incompleteData){
       var keys=keywordMatch(t);
-      if(!keys.length){ keys=hasBase?['seg']:['infra','seg']; }
-      diag={appType:guessType(keys,t), summary:'Diagnóstico a partir de tu descripción. Cuéntanos más detalles y afinamos tu propuesta.', caps:keys.map(function(k){return {k:k, why:CAPWHY[k]||''};})};
+      var signal=keys.filter(function(k){return k!=='infra';});
+      var wc=t.split(/\s+/).filter(function(w){return w.length>1;}).length;
+      if(!signal.length && wc<7){ incompleteData=DEFAULT_ASK; }
+      else {
+        if(!signal.length){ keys=hasBase?['seg']:['infra','seg']; }
+        diag={appType:guessType(keys,t), summary:'Diagnóstico a partir de tu descripción. Cuéntanos más detalles y afinamos tu propuesta.', caps:keys.map(function(k){return {k:k, why:CAPWHY[k]||''};})};
+      }
     }
+    if(incompleteData){ closeSplash(); go.disabled=false; go.textContent=old; showAskMore(incompleteData); return; }
     // Regla de negocio: la monetización elegida es autoritativa para pagos/suscripciones
     (function(){
       var mon=monet;
