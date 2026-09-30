@@ -32,7 +32,7 @@
 <!-- JSON-LD Organization -->
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CruzTRD","legalName":"CRUZTRD CT S.A.S.","url":"https://cruztrd.com","description":"AI Studio que construye apps D2C por capas, de la idea al lanzamiento.","slogan":"Tu idea merece una gran app","areaServed":"Latinoamérica","knowsAbout":["Apps D2C","Desarrollo de aplicaciones móviles","MVP","Infraestructura cloud","Pagos y suscripciones"]}</script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&family=Share+Tech+Mono&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--accent:#19C37D;--bg:#050608;--ink:#EDF3F1;--muted:#9AA6AD}
 body{font-family:Inter,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
@@ -421,6 +421,15 @@ body.pk-open .deskwin{animation-play-state:paused}
 .ru-live i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:phblink 1.4s ease-in-out infinite}
 .render-ui .ai-input{flex:1 1 auto;min-height:104px;background:linear-gradient(180deg,rgba(12,18,23,.6),rgba(5,8,11,.55));border:1px solid rgba(25,195,125,.28);border-radius:12px;font-size:14.5px;font-family:'Inter',sans-serif;font-weight:400;line-height:1.55;color:#eaf1f2;padding:12px 14px;box-shadow:0 1px 0 rgba(255,255,255,.03) inset}
 .render-ui .ai-input::placeholder{color:#6b7c84}
+/* Consola IA: look terminal / código (tipo Matrix) */
+.render-ui{font-family:'Share Tech Mono','Courier New',monospace}
+.render-ui .ru-top{font-family:'Share Tech Mono',monospace;font-weight:400;letter-spacing:2px;color:#7fd8b4}
+.render-ui .ai-input{font-family:'Share Tech Mono','Courier New',monospace;letter-spacing:.4px;color:#b8f5d6;text-shadow:0 0 6px rgba(45,212,167,.4);line-height:1.5}
+.render-ui .ai-input::placeholder{color:#4f8271;text-shadow:none}
+.render-ui .ai-input:focus{box-shadow:0 0 0 3px rgba(25,195,125,.16),0 0 22px rgba(25,195,125,.14) inset}
+.render-ui .p3d-fl>span{font-family:'Share Tech Mono',monospace!important;letter-spacing:1.4px;color:#6f9e8c}
+.render-ui .pk-field,.render-ui .p3d-sel,.render-ui .pk-trigger{font-family:'Share Tech Mono',monospace!important;letter-spacing:.4px}
+.render-ui .ai-go{font-family:'Share Tech Mono',monospace;letter-spacing:1.6px;font-weight:400}
 .render-ui .ai-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(25,195,125,.16),0 1px 0 rgba(255,255,255,.04) inset}
 .render-ui .dw-config{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px;flex:0 0 auto}
 .render-ui .ai-go{width:100%;justify-content:center;margin-top:9px;font-size:13.5px;font-family:'Poppins',sans-serif;padding:10px 14px;flex:0 0 auto}
@@ -785,7 +794,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="infra-davinci.mp4" data-scrim="left">
     <div class="pin"><div class="content">
-      <span class="eyebrow">Capa 01</span>
       <h2>Infraestructura</h2>
       <p class="sub">La base sobre la que todo corre. Servidores, base de datos y autoescalado listos desde el día uno, para que tu app aguante desde el primer usuario hasta el millón.</p>
       <div class="tchips"><span>Droplets</span><span>Postgres</span><span>Redis</span><span>Autoescalado</span><a class="lib" data-lib="infra">Librerías →</a></div>
@@ -794,7 +802,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="seg-davinci.mp4" data-scrim="right">
     <div class="pin right"><div class="content">
-      <span class="eyebrow">Capa 02</span>
       <h2>Seguridad</h2>
       <p class="sub">Protección de extremo a extremo, por defecto. Autenticación, cifrado y control de accesos que cuidan los datos de tu negocio y los de tus usuarios.</p>
       <div class="tchips"><span>OAuth 2.0</span><span>Cifrado</span><span>2FA</span><span>Roles (RBAC)</span><a class="lib" data-lib="seg">Librerías →</a></div>
@@ -803,7 +810,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="pagos-davinci.mp4" data-scrim="left">
     <div class="pin"><div class="content">
-      <span class="eyebrow">Capa 03</span>
       <h2>Pagos</h2>
       <p class="sub">Cobra desde el primer día, sin fricción. Integramos las pasarelas líderes para recibir pagos únicos o recurrentes de forma simple y segura.</p>
       <div class="tchips"><span>Stripe</span><span>Checkout</span><span>Facturación</span><span>Webhooks</span><a class="lib" data-lib="pagos">Librerías →</a></div>
@@ -812,7 +818,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="susc-davinci.mp4" data-scrim="right">
     <div class="pin right"><div class="content">
-      <span class="eyebrow">Capa 04</span>
       <h2>Suscripciones</h2>
       <p class="sub">Ingresos que se repiten, en piloto automático. Planes, renovaciones, reintentos y prorrateo gestionados solos, para que tu negocio crezca mes a mes.</p>
       <div class="tchips"><span>Planes</span><span>Renovación</span><span>Dunning</span><span>Prorrateo</span><a class="lib" data-lib="susc">Librerías →</a></div>
@@ -821,7 +826,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="mkt-davinci.mp4" data-scrim="left">
     <div class="pin"><div class="content">
-      <span class="eyebrow">Capa 05</span>
       <h2>Marketing</h2>
       <p class="sub">Atrae a las personas correctas. Analítica, SEO y campañas potenciadas con IA para que tu producto llegue lejos y crezca de forma medible.</p>
       <div class="tchips"><span>Embudos</span><span>Analítica</span><span>SEO</span><span>Campañas IA</span><a class="lib" data-lib="mkt">Librerías →</a></div>
@@ -830,7 +834,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="fidel-davinci.mp4" data-scrim="right">
     <div class="pin right"><div class="content">
-      <span class="eyebrow">Capa 06</span>
       <h2>Fidelización</h2>
       <p class="sub">Que se queden por gusto, no por inercia. Recompensas, referidos y soporte que convierten usuarios nuevos en clientes que vuelven una y otra vez.</p>
       <div class="tchips"><span>Recompensas</span><span>Referidos</span><span>Soporte</span><span>Comunidad</span><a class="lib" data-lib="fidel">Librerías →</a></div>
@@ -839,7 +842,6 @@ html{scroll-snap-type:y proximity}
 
   <section class="scene" data-clip="dash-davinci.mp4" data-scrim="left">
     <div class="pin"><div class="content">
-      <span class="eyebrow">Capa 07</span>
       <h2>Dashboards &amp; KPIs</h2>
       <p class="sub">Decide con datos en vivo, no con corazonadas. Métricas, cohortes y alertas en un panel claro para ver qué funciona y actuar a tiempo.</p>
       <div class="tchips"><span>Métricas en vivo</span><span>Cohortes</span><span>Alertas</span><span>Exportes</span><a class="lib" data-lib="dash">Librerías →</a></div>
@@ -895,7 +897,7 @@ html{scroll-snap-type:y proximity}
     <div class="render-screen">
       <div class="render-ui">
         <div class="ru-top"><span>CruzTRD Studio · IA</span><span class="ru-live"><i></i>en vivo</span></div>
-        <textarea id="aiText" class="ai-input" rows="2" placeholder="Ej: una app para vender cursos por suscripción, con pagos y panel de ventas…"></textarea>
+        <textarea id="aiText" class="ai-input" rows="2" placeholder="// describe tu app: qué hace, para quién y cómo cobra&#10;// ej: cursos por suscripción con pagos y panel de ventas"></textarea>
         <div class="dw-config">
           <label class="p3d-fl"><span>País</span>
             <select id="aiCountry" class="p3d-sel">
