@@ -304,7 +304,7 @@ footer .brand{justify-content:center;font-size:18px;margin-bottom:8px}
 .meeting .cast-name{display:none}
 .mtable{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);width:1000px;height:100px;z-index:3}
 .mtable-top{position:absolute;inset:0;border-radius:50%/42%;background:linear-gradient(180deg,#1a2129,#0b0f14 66%);border-top:1px solid rgba(255,255,255,.10);box-shadow:inset 0 22px 46px rgba(0,0,0,.5),0 16px 44px rgba(0,0,0,.6)}
-.fbar{text-align:center;margin-top:14px}
+.fbar{text-align:center;margin-top:10px}.fbar .btn{margin-top:10px}
 .fbar .fcount{display:inline-block;margin:0 0 0 16px;vertical-align:middle}
 .fbar .fhint{margin-top:12px}
 .basetog{display:flex;align-items:center;gap:9px;max-width:920px;margin:2px auto 14px;color:#c7d0d4;font-size:14px;cursor:pointer;justify-content:center}
@@ -523,10 +523,10 @@ body.pk-open .deskwin{animation-play-state:paused}
 .dg-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:7px}
 .dg-tag{font-family:'Poppins';font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#04120b;background:var(--accent);border-radius:999px;padding:4px 10px}
 .dg-type{font-family:'Poppins';font-weight:700;font-size:17px;color:var(--ink)}
-.dg-sum{font-size:13.5px;color:#c7d0d4;line-height:1.5;margin-bottom:13px}
-.dg-caplabel{font-family:'Poppins';font-weight:700;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:9px}
-.dg-caps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.dg-cap{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:8px 11px}
+.dg-sum{font-size:13.5px;color:#c7d0d4;line-height:1.48;margin-bottom:9px}
+.dg-caplabel{font-family:'Poppins';font-weight:700;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.dg-caps{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.dg-cap{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:11px;padding:6px 10px}
 .dg-av{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:top center;flex:0 0 auto;border:2px solid rgba(25,195,125,.5);background:#0e141a}
 .dg-ct{min-width:0}
 .dg-cn{font-family:'Poppins';font-weight:600;font-size:13px;color:var(--ink)}
@@ -620,13 +620,13 @@ body.pk-open .deskwin{animation-play-state:paused}
 
 /* bloque "Cuéntanos tu idea" como una sola pantalla centrada */
 #formula-result{min-height:100vh;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
-#formula-result .wrap{width:100%;padding-top:30px;padding-bottom:30px}
-@media(max-height:720px){#formula-result{min-height:0}}
+#formula-result .wrap{width:100%;padding-top:18px;padding-bottom:18px}
+@media(max-height:640px){#formula-result{min-height:0}}
 
 /* cada pantalla ocupa su propio scroll completo */
 #formula,#formula-quote{min-height:100vh;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
-#formula .wrap,#formula-quote .wrap{width:100%;padding-top:30px;padding-bottom:30px}
-@media(max-height:760px){#formula,#formula-result,#formula-quote{min-height:0}}
+#formula .wrap,#formula-quote .wrap{width:100%;padding-top:18px;padding-bottom:18px}
+@media(max-height:640px){#formula,#formula-result,#formula-quote{min-height:0}}
 
 /* escenas cinematográficas: fondo de video en equipo + construcción con IA */
 .formula{position:relative;overflow:hidden}
