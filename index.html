@@ -1435,7 +1435,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') resultEl.c
   }
   function showAskMore(d){
     d=d||DEFAULT_ASK;
-    var av=document.getElementById('amAv'); if(av) av.src=(typeof AV!=='undefined'&&AV&&AV.infra)||'';
+    var av=document.getElementById('amAv'); if(av) av.src='media/host-avatar.png';
     document.getElementById('amReason').textContent=(d.reason||DEFAULT_ASK.reason);
     var qs=(d.questions&&d.questions.length)?d.questions:DEFAULT_ASK.questions;
     document.getElementById('amQs').innerHTML=qs.map(function(q){return '<li>'+String(q).replace(/[<>]/g,'')+'</li>';}).join('');
