@@ -123,6 +123,11 @@ h2{font-family:'Poppins';font-weight:700;font-size:clamp(32px,3.7vw,50px);line-h
 .contacto p{margin-top:16px;font-size:18px;color:#D2DBDF}
 footer{border-top:1px solid rgba(255,255,255,.08);padding:34px;text-align:center;color:var(--muted);font-size:13px;position:relative;z-index:10;background:var(--bg)}
 footer .brand{justify-content:center;font-size:18px;margin-bottom:8px}
+.foot-legal{margin-top:16px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+.foot-legal a{color:#9fb0b8;text-decoration:none;border-bottom:1px solid transparent;transition:color .15s,border-color .15s}
+.foot-legal a:hover{color:var(--accent);border-color:rgba(45,212,167,.5)}
+.foot-sep{color:#3a444b}
+.foot-copy{margin-top:12px;font-size:11.5px;color:#5b6570}
 
 /* ===== PALETTE SWITCHER ===== */
 .sw{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:9px;
@@ -967,8 +972,15 @@ html{scroll-snap-type:y proximity}
 <footer>
   <div class="brand"><span class="c">Cruz</span><span class="t">TRD</span></div>
   <div>AI Studio · Convertimos ideas en apps listas para las personas · Quito, Ecuador</div>
-  <div style="margin-top:6px;opacity:.7">CRUZTRD CT S.A.S. · cruztrd.com</div>
+  <div style="margin-top:6px;opacity:.7">CRUZTRD CT S.A.S. · RUC 1793237622001 · cruztrd.com</div>
+  <div class="foot-legal">
+    <a href="/terminos.html">Términos y Condiciones</a>
+    <span class="foot-sep">·</span>
+    <a href="/privacidad.html">Política de Privacidad</a>
+  </div>
+  <div class="foot-copy">© <span id="footYear">2026</span> CRUZTRD CT S.A.S. Todos los derechos reservados.</div>
 </footer>
+<script>(function(){var y=document.getElementById('footYear');if(y)y.textContent=new Date().getFullYear();})();</script>
 
 <div class="modal" id="modal"><div class="mbox">
   <button class="mclose" id="mclose" aria-label="Cerrar">✕</button>
