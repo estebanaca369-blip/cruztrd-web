@@ -2569,15 +2569,31 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
 (function(){
   if(!window.THREE) return;
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var isSmall=Math.min(innerWidth,innerHeight)<768 || ('ontouchstart' in window);
   var rigs=[];
   var tmx=0,tmy=0;
   addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-0.5)*2;tmy=(e.clientY/innerHeight-0.5)*2;},{passive:true});
-  if(window.DeviceOrientationEvent){addEventListener('deviceorientation',function(e){if(e.gamma==null)return;tmx=Math.max(-1,Math.min(1,e.gamma/28));tmy=Math.max(-1,Math.min(1,(e.beta-42)/28));});}
+  // móvil: arrastrar con el dedo para asomarse (no depende de permisos)
+  var drag=false,dsx=0,dsy=0,dbx=0,dby=0;
+  addEventListener('pointerdown',function(e){ if(e.pointerType==='touch'){drag=true;dsx=e.clientX;dsy=e.clientY;dbx=tmx;dby=tmy;} },{passive:true});
+  addEventListener('pointermove',function(e){ if(drag){ tmx=Math.max(-1,Math.min(1,dbx+(e.clientX-dsx)/innerWidth*2.4)); tmy=Math.max(-1,Math.min(1,dby+(e.clientY-dsy)/innerHeight*2.4)); } },{passive:true});
+  addEventListener('pointerup',function(){drag=false;},{passive:true});
+  addEventListener('pointercancel',function(){drag=false;},{passive:true});
+  // giroscopio: inclinar el teléfono para asomarse (iOS 13+ pide permiso en el primer toque)
+  function onOrient(e){ if(e.gamma==null)return; tmx=Math.max(-1,Math.min(1,e.gamma/26)); tmy=Math.max(-1,Math.min(1,(e.beta-42)/26)); }
+  var gyroOn=false;
+  function enableGyro(){ if(gyroOn||!window.DeviceOrientationEvent)return;
+    if(typeof DeviceOrientationEvent.requestPermission==='function'){
+      DeviceOrientationEvent.requestPermission().then(function(s){ if(s==='granted'){addEventListener('deviceorientation',onOrient);gyroOn=true;} }).catch(function(){});
+    } else { addEventListener('deviceorientation',onOrient); gyroOn=true; }
+  }
+  if(window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission!=='function'){ addEventListener('deviceorientation',onOrient); gyroOn=true; }
+  addEventListener('touchstart',enableGyro,{passive:true});
 
   function mount(canvas){
     try{
       var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
-      renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+      renderer.setPixelRatio(Math.min(devicePixelRatio,isSmall?1.5:2));
       var scene=new THREE.Scene();
       var CAMD=1.4,FOV=45;
       var camera=new THREE.PerspectiveCamera(FOV,1,0.1,10);camera.position.set(0,0,CAMD);
@@ -2589,7 +2605,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
         vertexShader:['varying vec2 vUv;','uniform sampler2D uDepth;','uniform float uDisplace;','void main(){ vUv=uv;','float d=texture2D(uDepth,uv).r;','vec3 p=position;','p.z += (d-0.35)*uDisplace;','gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);','}'].join('\n'),
         fragmentShader:['varying vec2 vUv;','uniform sampler2D uColor;','void main(){ gl_FragColor=texture2D(uColor,vUv); }'].join('\n')});
       var ASPECT=16/9;
-      var mesh=new THREE.Mesh(new THREE.PlaneGeometry(ASPECT,1,300,170),mat);scene.add(mesh);
+      var mesh=new THREE.Mesh(new THREE.PlaneGeometry(ASPECT,1,isSmall?170:300,isSmall?96:170),mat);scene.add(mesh);
       var rig={canvas:canvas,renderer:renderer,scene:scene,camera:camera,uni:uni,mesh:mesh,ASPECT:ASPECT,mx:0,my:0,visible:true,w:0,h:0};
       function fit(){
         var host=canvas.parentElement;var w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;
