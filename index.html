@@ -758,6 +758,19 @@ body.pk-open .deskwin{animation-play-state:paused}
 
 #formula-result .scenebg{opacity:.5;filter:saturate(.95)}
 #formula-result .scenebg-tint{background:radial-gradient(90% 90% at 50% 45%,rgba(5,7,10,.4),rgba(5,7,10,.82))}
+
+/* ===== Laboratorio 3D con profundidad (parallax real detrás de las pantallas) ===== */
+.depthbg{display:block;background:#06080B;touch-action:none}
+#formula .depthbg,#formula-result .depthbg{opacity:.95;filter:saturate(1)}
+#formula .scenebg-tint{background:radial-gradient(96% 96% at 50% 44%,rgba(5,7,10,.26),rgba(5,7,10,.74))}
+#formula-result .scenebg-tint{background:radial-gradient(96% 96% at 50% 46%,rgba(5,7,10,.3),rgba(5,7,10,.76))}
+/* el especialista flota dentro del lab: rim verde + sombra de contacto */
+#formula .sc-fig img{filter:drop-shadow(0 0 16px rgba(25,195,125,.32)) drop-shadow(0 16px 22px rgba(0,0,0,.55))}
+#formula .sc-fig:after{background:rgba(25,195,125,.5);width:160px;filter:blur(13px)}
+#formula .phost{filter:drop-shadow(0 0 13px rgba(25,195,125,.24)) drop-shadow(0 14px 20px rgba(0,0,0,.5))}
+/* la consola del plan se asienta como panel holográfico sobre el lab */
+#formula-result .render-stage{filter:drop-shadow(0 30px 60px rgba(0,0,0,.55))}
+@media(prefers-reduced-motion:reduce){.depthbg{opacity:.7}}
 </style>
 </head>
 <body>
@@ -860,7 +873,7 @@ body.pk-open .deskwin{animation-play-state:paused}
   </section>
 </main>
 
-<section class="solid formula" id="formula"><video class="scenebg" src="media/equipo-1080.mp4" autoplay muted loop playsinline preload="auto"></video><div class="scenebg-tint"></div><div class="wrap">
+<section class="solid formula" id="formula"><canvas class="scenebg depthbg" data-col="media/lab-equipo.jpg" data-dep="media/lab-equipo-depth.jpg" aria-hidden="true"></canvas><div class="scenebg-tint"></div><div class="wrap">
   <div class="fhead">
     <div class="sec-eyebrow">Conoce a tu equipo CruzTRD</div>
     <h2 class="sec-title" style="margin:8px 0 8px">Un especialista para cada capa de tu app.</h2>
@@ -889,7 +902,7 @@ body.pk-open .deskwin{animation-play-state:paused}
   </div>
 </div></section>
 
-<section class="solid formula formula-b" id="formula-result"><video class="scenebg" src="media/ia-1080.mp4" autoplay muted loop playsinline preload="auto"></video><div class="scenebg-tint"></div><div class="wrap">
+<section class="solid formula formula-b" id="formula-result"><canvas class="scenebg depthbg" data-col="media/lab-plan.jpg" data-dep="media/lab-plan-depth.jpg" aria-hidden="true"></canvas><div class="scenebg-tint"></div><div class="wrap">
   <div class="fhead">
     <div class="sec-eyebrow">Diagnóstico con IA</div>
     <h2 class="sec-title" style="margin:8px 0 8px">Cuéntanos tu idea y armamos tu plan.</h2>
@@ -2548,6 +2561,68 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var n,r,i,a,
     field.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); open(); });
   }
   try{ ['aiCountry','aiScale','aiMonet'].forEach(function(id){ enhanceSelect(document.getElementById(id)); }); }catch(e){}
+})();
+</script>
+<!-- ===== Motor de profundidad 3D (parallax sobre frames reales del laboratorio) ===== -->
+<script src="vendor/three.min.js"></script>
+<script>
+(function(){
+  if(!window.THREE) return;
+  var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var rigs=[];
+  var tmx=0,tmy=0;
+  addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-0.5)*2;tmy=(e.clientY/innerHeight-0.5)*2;},{passive:true});
+  if(window.DeviceOrientationEvent){addEventListener('deviceorientation',function(e){if(e.gamma==null)return;tmx=Math.max(-1,Math.min(1,e.gamma/28));tmy=Math.max(-1,Math.min(1,(e.beta-42)/28));});}
+
+  function mount(canvas){
+    try{
+      var renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});
+      renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+      var scene=new THREE.Scene();
+      var CAMD=1.4,FOV=45;
+      var camera=new THREE.PerspectiveCamera(FOV,1,0.1,10);camera.position.set(0,0,CAMD);
+      var loader=new THREE.TextureLoader();
+      var colTex=loader.load(canvas.getAttribute('data-col'));colTex.minFilter=THREE.LinearFilter;
+      var depTex=loader.load(canvas.getAttribute('data-dep'));depTex.minFilter=THREE.LinearFilter;
+      var uni={uColor:{value:colTex},uDepth:{value:depTex},uDisplace:{value:0.0}};
+      var mat=new THREE.ShaderMaterial({uniforms:uni,
+        vertexShader:['varying vec2 vUv;','uniform sampler2D uDepth;','uniform float uDisplace;','void main(){ vUv=uv;','float d=texture2D(uDepth,uv).r;','vec3 p=position;','p.z += (d-0.35)*uDisplace;','gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);','}'].join('\n'),
+        fragmentShader:['varying vec2 vUv;','uniform sampler2D uColor;','void main(){ gl_FragColor=texture2D(uColor,vUv); }'].join('\n')});
+      var ASPECT=16/9;
+      var mesh=new THREE.Mesh(new THREE.PlaneGeometry(ASPECT,1,300,170),mat);scene.add(mesh);
+      var rig={canvas:canvas,renderer:renderer,scene:scene,camera:camera,uni:uni,mesh:mesh,ASPECT:ASPECT,mx:0,my:0,visible:true,w:0,h:0};
+      function fit(){
+        var host=canvas.parentElement;var w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;
+        rig.w=w;rig.h=h;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
+        var visH=2*Math.tan(FOV*Math.PI/360)*CAMD,visW=visH*(w/h);
+        var cover=Math.max(visW/ASPECT,visH/1)*1.24;mesh.scale.set(cover,cover,1);
+      }
+      rig.fit=fit;fit();
+      if('IntersectionObserver' in window){
+        new IntersectionObserver(function(en){en.forEach(function(x){rig.visible=x.isIntersecting;});},{threshold:0.01}).observe(canvas.parentElement);
+      }
+      rigs.push(rig);
+    }catch(e){/* fallback: fondo oscuro */}
+  }
+
+  document.querySelectorAll('.depthbg').forEach(mount);
+  if(!rigs.length) return;
+  addEventListener('resize',function(){rigs.forEach(function(r){r.fit();});});
+
+  var t0=performance.now();
+  function loop(){
+    requestAnimationFrame(loop);
+    var t=(performance.now()-t0)/1000;
+    var ax=reduce?0:Math.sin(t*0.32)*0.2, ay=reduce?0:Math.cos(t*0.25)*0.1;
+    for(var i=0;i<rigs.length;i++){
+      var r=rigs[i];if(!r.visible)continue;
+      r.mx+=((tmx+ax)-r.mx)*0.05; r.my+=((tmy+ay)-r.my)*0.05;
+      r.camera.position.x=r.mx*0.10; r.camera.position.y=-r.my*0.07; r.camera.lookAt(0,0,0);
+      if(r.uni.uDisplace.value<0.22) r.uni.uDisplace.value+=0.004;
+      r.renderer.render(r.scene,r.camera);
+    }
+  }
+  loop();
 })();
 </script>
 </body>
