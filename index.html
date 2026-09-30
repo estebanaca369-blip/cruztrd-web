@@ -668,9 +668,7 @@ body.pk-open .deskwin{animation-play-state:paused}
 .formula .wrap{position:relative;z-index:2}
 #formula-result .ai-note{display:none!important}
 
-/* cada pantalla final se encuadra sola (sin quedar a mitad entre dos) */
-html{scroll-snap-type:y proximity}
-#formula,#formula-result{scroll-snap-align:start}
+/* scroll libre: sin snap, para que el footer sea siempre alcanzable */
 
 /* pantalla del equipo: título arriba, circulitos abajo (se cierra ahí) */
 #formula{justify-content:flex-start}
