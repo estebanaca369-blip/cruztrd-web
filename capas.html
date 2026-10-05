@@ -370,12 +370,22 @@ h2 b{color:var(--accent2)}
   var dotEls=[].slice.call(dots.children);
   function onScroll(){var y=scrollY,h=document.body.scrollHeight-innerHeight;document.getElementById('prog').style.width=(h>0?(y/h*100):0)+'%';var idx=Math.max(0,Math.min(caps.length-1,Math.round(y/innerHeight)));dotEls.forEach(function(d,i){d.className=i===idx?'on':'';});}
   addEventListener('scroll',onScroll,{passive:true});onScroll();
-  // reveal + play visible video
+  // reveal panel (.holo.in) + play visible scene video + run character sprite ONCE
+  // Robusto: IntersectionObserver + barrido inmediato / en scroll (no depende de THREE)
+  function runSpr(el){if(!el||el.dataset.done)return;el.dataset.done='1';el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
+  function activate(cap){
+    var holo=cap.querySelector('.holo');if(holo)holo.classList.add('in');
+    var v=cap.querySelector('.cvid');if(v){v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){});}
+    runSpr(cap.querySelector('.charspr'));
+  }
+  function inView(cap){var r=cap.getBoundingClientRect();return r.top<innerHeight*0.8 && r.bottom>innerHeight*0.2;}
+  function sweep(){caps.forEach(function(c){if(inView(c))activate(c);else{var v=c.querySelector('.cvid');if(v){try{v.pause();}catch(e){}}}});}
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(en){en.forEach(function(x){var holo=x.target.querySelector('.holo'),v=x.target.querySelector('.cvid');
-      if(x.isIntersecting){if(holo)holo.classList.add('in');if(v){try{v.play();}catch(e){}}}else{if(v){try{v.pause();}catch(e){}}}});},{threshold:0.3});
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting)activate(x.target);else{var v=x.target.querySelector('.cvid');if(v){try{v.pause();}catch(e){}}}});},{threshold:0.25});
     caps.forEach(function(c){io.observe(c);});
-  } else caps.forEach(function(c){var h=c.querySelector('.holo');if(h)h.classList.add('in');var v=c.querySelector('.cvid');if(v)try{v.play();}catch(e){}});
+  }
+  sweep();addEventListener('scroll',sweep,{passive:true});addEventListener('resize',sweep,{passive:true});
+  setTimeout(sweep,300);setTimeout(sweep,1200);
 
   if(!window.THREE)return;
   var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,isSmall=Math.min(innerWidth,innerHeight)<768||('ontouchstart' in window);
@@ -425,24 +435,5 @@ h2 b{color:var(--accent2)}
   (function(){var els=[].slice.call(document.querySelectorAll('[data-lat]'));if(!els.length)return;
     function tick(){els.forEach(function(e){var b=38+Math.round(Math.random()*9);e.textContent=b;});}
     tick();if(!reduce)setInterval(tick,1100);})();
-  // production: real <video> plays on the live site; play only what is visible
-  (function(){
-    var vids=[].slice.call(document.querySelectorAll('.cvid, .charvid'));if(!vids.length)return;
-    function kick(v){try{v.muted=true;var p=v.play();if(p&&p.catch)p.catch(function(){});}catch(e){}}
-    if('IntersectionObserver' in window){
-      var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting)kick(x.target);else{try{x.target.pause();}catch(e){}}});},{threshold:0.2});
-      vids.forEach(function(v){io.observe(v);});
-    } else vids.forEach(kick);
-    ['pointerdown','touchstart','scroll','keydown'].forEach(function(ev){addEventListener(ev,function(){vids.forEach(function(v){var r=v.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0)kick(v);});},{passive:true});});
-  })();
-  // sprite characters: run the gesture ONCE when the section first becomes visible
-  (function(){
-    var sprs=[].slice.call(document.querySelectorAll('.charspr'));if(!sprs.length)return;
-    function run(el){if(el.dataset.done)return;el.dataset.done='1';el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
-    if('IntersectionObserver' in window){
-      var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){run(x.target);io.unobserve(x.target);}});},{threshold:0.35});
-      sprs.forEach(function(s){io.observe(s);});
-    } else sprs.forEach(run);
-  })();
 })();
 </script>
