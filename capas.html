@@ -431,7 +431,7 @@ h2 b{color:var(--accent2)}
     var depTex=loader.load(canvas.getAttribute('data-dep'));depTex.minFilter=THREE.LinearFilter;
     var uni={uColor:{value:colTex},uDepth:{value:depTex},uDisplace:{value:0},uFog:{value:new THREE.Color(0.03,0.09,0.10)}};
     var mat=new THREE.ShaderMaterial({uniforms:uni,
-      vertexShader:['varying vec2 vUv;','varying float vD;','uniform sampler2D uDepth;','uniform float uDisplace;','void main(){vUv=uv;float d=texture2D(uDepth,uv).r;vD=d;vec3 p=position;p.z+=(d-0.35)*uDisplace;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}'].join('\n'),
+      vertexShader:['varying vec2 vUv;','varying float vD;','uniform sampler2D uDepth;','uniform float uDisplace;','void main(){vUv=uv;float d=texture2D(uDepth,uv).r;vD=d;float o=d-0.4;o=sign(o)*pow(abs(o),1.35);vec3 p=position;p.z+=o*uDisplace;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}'].join('\n'),
       fragmentShader:['varying vec2 vUv;','varying float vD;','uniform sampler2D uColor;','uniform vec3 uFog;','void main(){','vec4 c=texture2D(uColor,vUv);','float far=smoothstep(0.0,0.65,1.0-vD);','c.rgb=mix(c.rgb,uFog,far*0.5);','c.rgb*=1.0+(vD-0.5)*0.14;','vec2 q=vUv-0.5;float vig=smoothstep(0.98,0.30,length(q));','c.rgb*=mix(0.70,1.0,vig);','gl_FragColor=c;','}'].join('\n')});
     var ASPECT=16/9,mesh=new THREE.Mesh(new THREE.PlaneGeometry(ASPECT,1,isSmall?140:230,isSmall?80:130),mat);scene.add(mesh);
     var rig={renderer:renderer,scene:scene,camera:camera,uni:uni,mesh:mesh,FOV:FOV,CAMD:CAMD,ASPECT:ASPECT,mx:0,my:0,fitted:false};
@@ -453,8 +453,8 @@ h2 b{color:var(--accent2)}
     if(!bgRig.fitted)bgRig.fit();
     bgRig.mx+=((tmx+ax)-bgRig.mx)*0.05;bgRig.my+=((tmy+ay)-bgRig.my)*0.05;
     var sc=(scrollY/Math.max(1,innerHeight))%1;
-    bgRig.camera.position.x=bgRig.mx*0.15;bgRig.camera.position.y=-bgRig.my*0.10+(sc-0.5)*0.05;bgRig.camera.lookAt(0,0,0);
-    if(bgRig.uni.uDisplace.value<0.34)bgRig.uni.uDisplace.value+=0.005;bgRig.renderer.render(bgRig.scene,bgRig.camera);
+    bgRig.camera.position.x=bgRig.mx*0.11;bgRig.camera.position.y=-bgRig.my*0.075+(sc-0.5)*0.04;bgRig.camera.lookAt(0,0,0);
+    if(bgRig.uni.uDisplace.value<0.19)bgRig.uni.uDisplace.value+=0.004;bgRig.renderer.render(bgRig.scene,bgRig.camera);
     if(!isSmall){var mx=bgRig.mx,my=bgRig.my;for(var k=0;k<vis.length;k++){var cp=vis[k];var ce=cp.__ce||(cp.__ce=cp.querySelector('.char')),co=cp.__co||(cp.__co=cp.querySelector('.content'));if(ce)ce.style.transform='translate3d('+(-mx*18)+'px,'+(-my*10)+'px,0)';if(co)co.style.transform='translate3d('+(mx*10)+'px,'+(my*6)+'px,0)';}}
   }loop();
   // live latency readout
