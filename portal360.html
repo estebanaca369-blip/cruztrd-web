@@ -6,7 +6,7 @@
 <title>Estudio 360 CruzTRD — prototipo inmersivo</title>
 <meta name="robots" content="noindex">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500&family=Share+Tech+Mono&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--accent:#19C37D;--accent2:#2DD4A7;--ink:#EDF3F1;--mono:'Share Tech Mono',monospace;--bg:#04070a}
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;overflow:hidden}
@@ -16,23 +16,59 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .badge{position:fixed;top:20px;left:22px;z-index:6;font-family:'Poppins';font-weight:700;font-size:20px;color:var(--ink);text-shadow:0 2px 14px rgba(0,0,0,.8)}
 .badge b{color:var(--accent)}
 .title{position:fixed;top:18px;right:22px;z-index:6;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;opacity:.8;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+
 /* hotspots */
 .hs{position:fixed;z-index:4;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;will-change:left,top;transition:opacity .25s}
-.hs .dot{width:22px;height:22px;border-radius:50%;background:rgba(45,212,167,.18);border:1.5px solid var(--accent2);box-shadow:0 0 0 0 rgba(45,212,167,.5);display:flex;align-items:center;justify-content:center;animation:pulse 2.4s ease-out infinite}
+.hs .dot{width:22px;height:22px;border-radius:50%;background:rgba(45,212,167,.18);border:1.5px solid var(--accent2);display:flex;align-items:center;justify-content:center;animation:pulse 2.4s ease-out infinite}
 .hs .dot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,212,167,.45)}70%{box-shadow:0 0 0 16px rgba(45,212,167,0)}100%{box-shadow:0 0 0 0 rgba(45,212,167,0)}}
 .hs .lbl{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(5,14,12,.6);padding:5px 11px;border-radius:999px;border:1px solid rgba(45,212,167,.28);backdrop-filter:blur(6px);opacity:0;transition:opacity .2s;text-shadow:0 1px 6px rgba(0,0,0,.8)}
 .hs:hover .lbl{opacity:1}
 .hs:hover .dot{background:rgba(45,212,167,.4)}
-/* panel */
-.panel{position:fixed;top:0;right:0;height:100%;width:min(380px,86vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.96),rgba(4,7,10,.98));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .5s cubic-bezier(.22,1,.36,1);padding:56px 30px 30px;display:flex;flex-direction:column;gap:14px;box-shadow:-30px 0 70px rgba(0,0,0,.55)}
+.hs.fire .dot{animation:fire .7s ease-out}
+@keyframes fire{0%{box-shadow:0 0 0 0 rgba(45,212,167,.9)}100%{box-shadow:0 0 0 46px rgba(45,212,167,0)}}
+
+/* panel + despliegue del especialista */
+.panel{position:fixed;top:0;right:0;height:100%;width:min(430px,90vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .55s cubic-bezier(.22,1,.36,1);padding:44px 28px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
 .panel.open{transform:translateX(0)}
-.panel .x{position:absolute;top:16px;right:18px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
+.panel .x{position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--ink);font-size:17px;cursor:pointer;line-height:1;z-index:2}
+.charwrap{position:relative;height:300px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px}
+.charwrap::after{content:"";position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:62%;height:26px;border-radius:50%;background:radial-gradient(ellipse,rgba(45,212,167,.5),transparent 70%);filter:blur(5px)}
+/* sprites (mismos del estudio de capas) */
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes sprun{from{background-position-x:0%}to{background-position-x:100%}}
+@keyframes spy2{from{background-position-y:0%}to{background-position-y:100%}}
+@keyframes deploy{from{opacity:0;transform:translateY(26px) scale(.96)}to{opacity:1;transform:none}}
+.charspr{display:block;height:300px;width:auto;background-repeat:no-repeat;background-position:0% 0%;filter:drop-shadow(0 0 22px rgba(25,195,125,.34)) drop-shadow(0 20px 26px rgba(0,0,0,.6));animation:breathe 6.5s ease-in-out infinite;will-change:background-position}
+.charspr.reveal{animation:breathe 6.5s ease-in-out infinite, deploy .6s cubic-bezier(.22,1,.36,1) both}
+.charspr.hosta{aspect-ratio:1000/877;background-size:1200% 200%}
+.charspr.infraa{aspect-ratio:540/650;background-size:2500% 100%;background-position:0% 50%}
+.charspr.sega{aspect-ratio:1000/1102;background-size:1200% 200%}
+.charspr.pagosa{aspect-ratio:1000/1062;background-size:1000% 200%}
+.charspr.susca{aspect-ratio:1000/1331;background-size:1200% 200%}
+.charspr.mkta{aspect-ratio:1000/1333;background-size:1200% 200%}
+.charspr.fidela{aspect-ratio:1000/1061;background-size:1200% 200%}
+.charspr.dasha{aspect-ratio:1000/1338;background-size:1200% 200%}
+.charspr.go.hosta{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.sega{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.pagosa{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(10,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.susca{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.mkta{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.fidela{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.dasha{animation:breathe 6.5s ease-in-out infinite, sprun 1s steps(12,jump-none) 2 both, spy2 2s steps(2,jump-none) 1 both}
+.charspr.go.infraa{animation:breathe 6.5s ease-in-out infinite, sprun 3s steps(25,jump-none) 1 both}
+
 .panel .eyebrow{font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--accent2);font-size:11px}
-.panel h2{font-family:'Poppins';font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.5px}
-.panel .who{font-family:var(--mono);font-size:12px;color:#9fe9cf;letter-spacing:1px}
-.panel p{font-size:15px;line-height:1.55;color:#cfe0dc}
-.panel .cta{margin-top:auto;display:inline-flex;gap:8px;align-items:center;justify-content:center;font-family:'Poppins';font-weight:600;font-size:15px;padding:13px 20px;border-radius:11px;background:var(--accent);color:#04140d;text-decoration:none}
+.panel h2{font-family:'Poppins';font-weight:700;font-size:30px;line-height:1.03;letter-spacing:-.5px;margin-top:3px}
+.panel .who{font-family:var(--mono);font-size:12px;color:#9fe9cf;letter-spacing:1px;margin-top:5px}
+.panel p{font-size:15px;line-height:1.55;color:#cfe0dc;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:8px;margin-top:14px;align-self:flex-start;font-family:var(--mono);font-size:12px;letter-spacing:1px;color:#eafff6;background:rgba(45,212,167,.12);border:1px solid rgba(45,212,167,.3);padding:8px 13px;border-radius:999px}
+.chip b{color:var(--accent2);font-family:'Poppins';font-size:15px}
+.panel .cta{margin-top:auto;padding-top:18px;display:inline-flex;gap:8px;align-items:center;justify-content:center;font-family:'Poppins';font-weight:600;font-size:15px;padding:13px 20px;border-radius:11px;background:var(--accent);color:#04140d;text-decoration:none}
+.steps{display:flex;gap:5px;margin-top:16px}
+.steps i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.12)}
+.steps i.on{background:var(--accent2)}
+
 .hint{position:fixed;left:0;right:0;bottom:26px;z-index:5;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.9);transition:opacity .6s}
 .hint span{display:inline-block;animation:sway 2.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:translateX(-7px);opacity:.65}50%{transform:translateX(7px);opacity:1}}
@@ -49,10 +85,12 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 <aside class="panel" id="panel">
   <button class="x" id="panelX" aria-label="Cerrar">✕</button>
+  <div class="charwrap"><div class="charspr" id="pChar"></div></div>
   <div class="eyebrow" id="pEye">Capa</div>
   <h2 id="pTitle">—</h2>
   <div class="who" id="pWho">—</div>
   <p id="pText">—</p>
+  <div class="chip" id="pStat"><b>—</b><span>—</span></div>
   <a class="cta" id="pCta" href="/capas.html">Ver esta capa →</a>
 </aside>
 
@@ -71,106 +109,99 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   camera.position.set(0,0,0);
 
   var RADIUS=500;
-  // esfera invertida con la panorámica equirectangular
-  var geo=new THREE.SphereGeometry(RADIUS,80,50);
-  geo.scale(-1,1,1);                       // ver desde adentro
+  var geo=new THREE.SphereGeometry(RADIUS,80,50); geo.scale(-1,1,1);
   var tex=new THREE.TextureLoader().load('media/lab-pano.jpg', function(){
     loader.style.opacity='0'; setTimeout(function(){loader.style.display='none';},900);
   });
   tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter;
   tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
   var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:tex}));
-  var PANO_YAW=Math.PI/2;                    // alinea el frente del lab hacia +Z
-  sphere.rotation.y=PANO_YAW;
-  scene.add(sphere);
+  var PANO_YAW=Math.PI/2; sphere.rotation.y=PANO_YAW; scene.add(sphere);
 
-  // --- hotspots (lon/lat en grados; frente del lab = 0) ---
+  // --- 8 estaciones = 8 especialistas (sprites del estudio de capas) ---
   var SPOTS=[
-    {lon:  0, lat:-2,  eye:'El núcleo',     title:'7 capas, 1 estudio', who:'ANFITRIÓN · D2C',
-     text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.'},
-    {lon:-44, lat:-6,  eye:'Capa 01',        title:'Infraestructura', who:'ESPECIALISTA · INFRA',
-     text:'La base que se auto-escala: nodos activos, uptime y rendimiento para que la app no se caiga nunca.'},
-    {lon: 46, lat:-6,  eye:'Capa 03',        title:'Pagos', who:'ESPECIALISTA · PAGOS',
-     text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.'},
-    {lon:-23, lat: 6,  eye:'Capa 02',        title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
-     text:'Cero brechas. Vigilancia continua de la plataforma y los datos de tus usuarios.'},
-    {lon: 23, lat: 6,  eye:'Capa 07',        title:'Dashboards', who:'ESPECIALISTA · DATOS',
-     text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.'}
+    {lon:  0,lat:-2, eye:'El núcleo',title:'7 capas, 1 estudio',who:'ANFITRIÓN · D2C',
+     text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
+     stat:'8', slbl:'especialistas', sheet:'media/strip-host.webp', cls:'hosta'},
+    {lon:-44,lat:-6, eye:'Capa 01',title:'Infraestructura',who:'ESPECIALISTA · INFRA',
+     text:'La base que se auto-escala: nodos activos, uptime y rendimiento para que la app no se caiga nunca.',
+     stat:'99.98%', slbl:'uptime', sheet:'media/strip-infra.webp', cls:'infraa'},
+    {lon:-23,lat: 6, eye:'Capa 02',title:'Seguridad',who:'ESPECIALISTA · SEGURIDAD',
+     text:'Cero brechas. Vigilancia continua de la plataforma y de los datos de tus usuarios.',
+     stat:'0', slbl:'brechas · 24h', sheet:'media/strip-seg.webp', cls:'sega'},
+    {lon: 46,lat:-6, eye:'Capa 03',title:'Pagos',who:'ESPECIALISTA · PAGOS',
+     text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
+     stat:'▲ 6%', slbl:'conversión', sheet:'media/strip-pagos.webp', cls:'pagosa'},
+    {lon:-62,lat: 2, eye:'Capa 04',title:'Suscripciones',who:'ESPECIALISTA · SUSCRIPCIONES',
+     text:'Ingresos recurrentes: planes, renovaciones y ciclos de cobro que crecen mes a mes.',
+     stat:'MRR', slbl:'en vivo', sheet:'media/strip-susc.webp', cls:'susca'},
+    {lon: 62,lat: 2, eye:'Capa 05',title:'Marketing',who:'ESPECIALISTA · MARKETING',
+     text:'Llega a las personas correctas y hazlas entrar al producto, al menor costo de adquisición.',
+     stat:'CAC ↓', slbl:'optimizado', sheet:'media/strip-mkt.webp', cls:'mkta'},
+    {lon:-82,lat: 4, eye:'Capa 06',title:'Fidelización',who:'ESPECIALISTA · FIDELIZACIÓN',
+     text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.',
+     stat:'61%', slbl:'recurrencia', sheet:'media/strip-fidel.webp', cls:'fidela'},
+    {lon: 23,lat: 6, eye:'Capa 07',title:'Dashboards',who:'ESPECIALISTA · DATOS',
+     text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
+     stat:'NPS 72', slbl:'tiempo real', sheet:'media/strip-dash.webp', cls:'dasha'}
   ];
-  var panel=document.getElementById('panel');
-  function openPanel(s){
+
+  var panel=document.getElementById('panel'), pChar=document.getElementById('pChar');
+  function openPanel(s,idx){
+    // desplegar el personaje (reinicia su animación cada vez)
+    pChar.className='charspr '+s.cls;
+    pChar.style.backgroundImage='url('+s.sheet+')';
+    void pChar.offsetWidth;                      // reflow -> reinicia animaciones
+    pChar.classList.add('go','reveal');
     document.getElementById('pEye').textContent=s.eye;
     document.getElementById('pTitle').textContent=s.title;
     document.getElementById('pWho').textContent=s.who;
     document.getElementById('pText').textContent=s.text;
+    document.getElementById('pStat').innerHTML='<b>'+s.stat+'</b><span>'+s.slbl+'</span>';
     panel.classList.add('open');
   }
   document.getElementById('panelX').onclick=function(){panel.classList.remove('open');};
 
-  SPOTS.forEach(function(s){
-    var a=(s.lon)*Math.PI/180, b=(s.lat)*Math.PI/180;
+  SPOTS.forEach(function(s,idx){
+    var a=s.lon*Math.PI/180, b=s.lat*Math.PI/180;
     s.dir=new THREE.Vector3(-Math.cos(b)*Math.sin(a), Math.sin(b), Math.cos(b)*Math.cos(a));
     s.pos=s.dir.clone().multiplyScalar(RADIUS*0.9);
     var el=document.createElement('div'); el.className='hs';
     el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
-    el.addEventListener('click',function(ev){ev.stopPropagation(); openPanel(s);});
+    el.addEventListener('click',function(ev){ev.stopPropagation(); el.classList.remove('fire'); void el.offsetWidth; el.classList.add('fire'); openPanel(s,idx);});
     document.body.appendChild(el); s.el=el;
   });
-  // handles de ajuste en vivo (solo para calibrar)
-  window.__T={sphere:sphere, camera:camera, SPOTS:SPOTS,
-    setYaw:function(v){PANO_YAW=v; sphere.rotation.y=v;},
-    setSpot:function(i,lon,lat){var s=SPOTS[i];var a=lon*Math.PI/180,b=lat*Math.PI/180;
-      s.lon=lon;s.lat=lat;s.dir.set(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));
-      s.pos.copy(s.dir).multiplyScalar(RADIUS*0.9);},
-    getYaw:function(){return PANO_YAW;}};
 
-  // --- control de mirada (yaw/pitch) ---
-  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0, moved=false;
-  function down(x,y){dragging=true;moved=false;px=x;py=y;cv.classList.add('drag');}
-  function move(x,y){ if(!dragging)return; var dx=x-px,dy=y-py; px=x;py=y;
-    if(Math.abs(dx)+Math.abs(dy)>3)moved=true;
-    tyaw-=dx*0.0022; tpitch-=dy*0.0022;
-    tpitch=Math.max(-1.0,Math.min(1.0,tpitch));
-    hideHint(); }
-  function up(){dragging=false;cv.classList.remove('drag');}
-  cv.addEventListener('pointerdown',function(e){down(e.clientX,e.clientY);});
-  addEventListener('pointermove',function(e){move(e.clientX,e.clientY);});
-  addEventListener('pointerup',up);
-  // rueda = zoom (fov)
+  // --- control de mirada ---
+  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
+  cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
+  addEventListener('pointermove',function(e){ if(!dragging)return; tyaw-=(e.clientX-px)*0.0022; tpitch-=(e.clientY-py)*0.0022; px=e.clientX;py=e.clientY; tpitch=Math.max(-1.0,Math.min(1.0,tpitch)); hideHint();});
+  addEventListener('pointerup',function(){dragging=false;cv.classList.remove('drag');});
   addEventListener('wheel',function(e){camera.fov=Math.max(38,Math.min(86,camera.fov+e.deltaY*0.03));camera.updateProjectionMatrix();},{passive:true});
 
   var hint=document.getElementById('hint'), hintHid=false;
   function hideHint(){if(!hintHid){hintHid=true;hint.style.opacity='0';}}
-  setTimeout(hideHint,6000);
-
+  setTimeout(hideHint,6500);
   function fit(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
   addEventListener('resize',fit); fit();
 
-  // --- animación de entrada: FOV abre (el estudio se despliega alrededor) ---
-  var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800;
-  var proj=new THREE.Vector3();
-
+  var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800, proj=new THREE.Vector3(), fwd=new THREE.Vector3();
   function loop(){
     requestAnimationFrame(loop);
-    var now=performance.now(), el=now-t0;
-    if(el<ENTER){var k=el/ENTER; k=1-Math.pow(1-k,3); camera.fov=FOV0+(FOV1-FOV0)*k; camera.updateProjectionMatrix();}
-    // deriva suave + easing hacia el objetivo del arrastre
+    var now=performance.now(), e=now-t0;
+    if(e<ENTER){var k=e/ENTER;k=1-Math.pow(1-k,3);camera.fov=FOV0+(FOV1-FOV0)*k;camera.updateProjectionMatrix();}
     var drift=Math.sin(now/4200)*0.05;
     yaw+=((tyaw+drift)-yaw)*0.08; pitch+=(tpitch-pitch)*0.08;
     var cp=Math.cos(pitch);
-    camera.lookAt(Math.sin(yaw)*cp, Math.sin(pitch), Math.cos(yaw)*cp);
-
-    // proyectar hotspots a pantalla
+    fwd.set(Math.sin(yaw)*cp, Math.sin(pitch), Math.cos(yaw)*cp);
+    camera.lookAt(fwd.x,fwd.y,fwd.z);
     for(var i=0;i<SPOTS.length;i++){var s=SPOTS[i];
       proj.copy(s.pos).project(camera);
-      var vis=proj.z<1 && proj.x>-1.08 && proj.x<1.08 && proj.y>-1.08 && proj.y<1.08;
-      // visible solo si está delante de la cámara
-      var fwd=new THREE.Vector3(Math.sin(yaw)*cp,Math.sin(pitch),Math.cos(yaw)*cp);
-      if(s.dir.dot(fwd) < 0.1) vis=false;
-      if(vis){ s.el.style.opacity='1'; s.el.style.pointerEvents='auto';
+      var vis=proj.z<1 && proj.x>-1.08 && proj.x<1.08 && proj.y>-1.08 && proj.y<1.08 && s.dir.dot(fwd)>0.12;
+      if(vis){s.el.style.opacity='1';s.el.style.pointerEvents='auto';
         s.el.style.left=((proj.x*0.5+0.5)*innerWidth)+'px';
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
-      } else { s.el.style.opacity='0'; s.el.style.pointerEvents='none'; }
+      } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
     renderer.render(scene,camera);
   }
