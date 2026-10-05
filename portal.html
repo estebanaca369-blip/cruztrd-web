@@ -14,8 +14,9 @@ body{height:420vh}            /* altura para que haya scroll que mueve la cámar
 #c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
 .vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,transparent 40%,rgba(3,6,9,.55) 86%,rgba(3,6,9,.92) 100%)}
 .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.05;background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 2px)}
+.tscrim{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 66% 42% at 50% 50%,rgba(3,6,9,.62),rgba(3,6,9,.28) 55%,transparent 74%)}
 .ui{position:fixed;inset:0;z-index:3;pointer-events:none;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
-.stage{max-width:900px;transition:opacity .5s ease, transform .6s ease}
+.stage{max-width:900px;will-change:opacity,transform}
 .eyebrow{font-family:var(--mono);letter-spacing:4px;text-transform:uppercase;color:var(--accent2);font-size:13px;margin-bottom:14px}
 h1{font-family:'Poppins';font-weight:700;font-size:clamp(34px,6.4vw,80px);line-height:1.02;letter-spacing:-1px;text-shadow:0 4px 40px rgba(0,0,0,.8)}
 h1 .g{color:var(--accent)}
@@ -30,7 +31,7 @@ h1 .g{color:var(--accent)}
 </head>
 <body>
 <canvas id="c"></canvas>
-<div class="vig"></div><div class="grain"></div>
+<div class="vig"></div><div class="grain"></div><div class="tscrim" id="tscrim"></div>
 <div class="badge">Cruz<b>TRD</b></div>
 
 <!-- Overlays por etapa de scroll -->
@@ -104,8 +105,10 @@ h1 .g{color:var(--accent)}
   addEventListener('resize',fit); fit();
 
   // overlays por etapa
-  var s0=document.getElementById('s0'),s1=document.getElementById('s1'),s2=document.getElementById('s2'),hint=document.getElementById('hint');
-  function setOpacity(el,o,ty){el.style.opacity=o;el.style.transform='translateY('+ty+'px)';}
+  var s0=document.getElementById('s0'),s1=document.getElementById('s1'),s2=document.getElementById('s2'),hint=document.getElementById('hint'),tscrim=document.getElementById('tscrim');
+  function clamp01(x){return x<0?0:x>1?1:x;}
+  // visibilidad por "banda": sube en [a-f,a], plena en [a,b], baja en [b,b+f]
+  function band(x,a,b,f){var u=clamp01((x-(a-f))/f);var d=clamp01(((b+f)-x)/f);return Math.min(u,d);}
 
   var cz=6, mx=0,my=0, t0=performance.now();
   function prog(){var m=document.body.scrollHeight-innerHeight;return m>0?Math.min(1,Math.max(0,scrollY/m)):0;}
@@ -123,11 +126,14 @@ h1 .g{color:var(--accent)}
     camera.lookAt(mx*0.3, -my*0.2, cz-6);
     pts.rotation.z=t*0.01; pmat.opacity=0.35+0.2*Math.sin(t*0.8);
 
-    // etapas de texto
-    setOpacity(s0, p<0.14?1:0, p<0.14?0:-20);
-    setOpacity(s1,(p>0.30&&p<0.62)?1:0,(p>0.30&&p<0.62)?0:20);
-    setOpacity(s2, p>0.82?1:0, p>0.82?0:20);
-    hint.style.opacity = p<0.08?'' : '0';
+    // etapas de texto — opacidad calculada por frame (sin solapamiento)
+    var o0=band(p,-1,0.12,0.06), o1=band(p,0.32,0.56,0.07), o2=band(p,0.82,2,0.07);
+    s0.style.opacity=o0; s0.style.transform='translateY('+(1-o0)*-22+'px)';
+    s1.style.opacity=o1; s1.style.transform='translateY('+(1-o1)*18+'px)';
+    s2.style.opacity=o2; s2.style.transform='translateY('+(1-o2)*18+'px)';
+    // el scrim de legibilidad sigue al texto visible (se desvanece en los huecos)
+    tscrim.style.opacity=Math.max(o0,o1,o2);
+    hint.style.opacity = p<0.08?'1':'0';
 
     renderer.render(scene,camera);
   }
