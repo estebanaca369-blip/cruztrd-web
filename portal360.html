@@ -86,15 +86,15 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
   // --- hotspots (lon/lat en grados; frente del lab = 0) ---
   var SPOTS=[
-    {lon:  0, lat: 3,  eye:'El núcleo',     title:'7 capas, 1 estudio', who:'ANFITRIÓN · D2C',
+    {lon:  0, lat:-2,  eye:'El núcleo',     title:'7 capas, 1 estudio', who:'ANFITRIÓN · D2C',
      text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.'},
-    {lon:-37, lat:-9,  eye:'Capa 01',        title:'Infraestructura', who:'ESPECIALISTA · INFRA',
+    {lon:-44, lat:-6,  eye:'Capa 01',        title:'Infraestructura', who:'ESPECIALISTA · INFRA',
      text:'La base que se auto-escala: nodos activos, uptime y rendimiento para que la app no se caiga nunca.'},
-    {lon: 40, lat:-9,  eye:'Capa 03',        title:'Pagos', who:'ESPECIALISTA · PAGOS',
+    {lon: 46, lat:-6,  eye:'Capa 03',        title:'Pagos', who:'ESPECIALISTA · PAGOS',
      text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.'},
-    {lon:-23, lat: 7,  eye:'Capa 02',        title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
+    {lon:-23, lat: 6,  eye:'Capa 02',        title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
      text:'Cero brechas. Vigilancia continua de la plataforma y los datos de tus usuarios.'},
-    {lon: 23, lat: 7,  eye:'Capa 07',        title:'Dashboards', who:'ESPECIALISTA · DATOS',
+    {lon: 23, lat: 6,  eye:'Capa 07',        title:'Dashboards', who:'ESPECIALISTA · DATOS',
      text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.'}
   ];
   var panel=document.getElementById('panel');
@@ -109,7 +109,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
   SPOTS.forEach(function(s){
     var a=(s.lon)*Math.PI/180, b=(s.lat)*Math.PI/180;
-    s.dir=new THREE.Vector3(Math.cos(b)*Math.sin(a), Math.sin(b), Math.cos(b)*Math.cos(a));
+    s.dir=new THREE.Vector3(-Math.cos(b)*Math.sin(a), Math.sin(b), Math.cos(b)*Math.cos(a));
     s.pos=s.dir.clone().multiplyScalar(RADIUS*0.9);
     var el=document.createElement('div'); el.className='hs';
     el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
@@ -120,7 +120,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   window.__T={sphere:sphere, camera:camera, SPOTS:SPOTS,
     setYaw:function(v){PANO_YAW=v; sphere.rotation.y=v;},
     setSpot:function(i,lon,lat){var s=SPOTS[i];var a=lon*Math.PI/180,b=lat*Math.PI/180;
-      s.lon=lon;s.lat=lat;s.dir.set(Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));
+      s.lon=lon;s.lat=lat;s.dir.set(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));
       s.pos.copy(s.dir).multiplyScalar(RADIUS*0.9);},
     getYaw:function(){return PANO_YAW;}};
 
