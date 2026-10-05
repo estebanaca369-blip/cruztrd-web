@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es-EC">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Estudio 360 CruzTRD — prototipo inmersivo</title>
+<meta name="robots" content="noindex">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&family=Share+Tech+Mono&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:#19C37D;--accent2:#2DD4A7;--ink:#EDF3F1;--mono:'Share Tech Mono',monospace;--bg:#04070a}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;overflow:hidden}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;cursor:grab;touch-action:none}
+#c.drag{cursor:grabbing}
+.vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 46%,rgba(3,6,9,.5) 88%,rgba(3,6,9,.9) 100%)}
+.badge{position:fixed;top:20px;left:22px;z-index:6;font-family:'Poppins';font-weight:700;font-size:20px;color:var(--ink);text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.badge b{color:var(--accent)}
+.title{position:fixed;top:18px;right:22px;z-index:6;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;opacity:.8;text-shadow:0 2px 14px rgba(0,0,0,.9)}
+/* hotspots */
+.hs{position:fixed;z-index:4;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;will-change:left,top;transition:opacity .25s}
+.hs .dot{width:22px;height:22px;border-radius:50%;background:rgba(45,212,167,.18);border:1.5px solid var(--accent2);box-shadow:0 0 0 0 rgba(45,212,167,.5);display:flex;align-items:center;justify-content:center;animation:pulse 2.4s ease-out infinite}
+.hs .dot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,212,167,.45)}70%{box-shadow:0 0 0 16px rgba(45,212,167,0)}100%{box-shadow:0 0 0 0 rgba(45,212,167,0)}}
+.hs .lbl{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(5,14,12,.6);padding:5px 11px;border-radius:999px;border:1px solid rgba(45,212,167,.28);backdrop-filter:blur(6px);opacity:0;transition:opacity .2s;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.hs:hover .lbl{opacity:1}
+.hs:hover .dot{background:rgba(45,212,167,.4)}
+/* panel */
+.panel{position:fixed;top:0;right:0;height:100%;width:min(380px,86vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.96),rgba(4,7,10,.98));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .5s cubic-bezier(.22,1,.36,1);padding:56px 30px 30px;display:flex;flex-direction:column;gap:14px;box-shadow:-30px 0 70px rgba(0,0,0,.55)}
+.panel.open{transform:translateX(0)}
+.panel .x{position:absolute;top:16px;right:18px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:transparent;color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
+.panel .eyebrow{font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--accent2);font-size:11px}
+.panel h2{font-family:'Poppins';font-weight:700;font-size:28px;line-height:1.05;letter-spacing:-.5px}
+.panel .who{font-family:var(--mono);font-size:12px;color:#9fe9cf;letter-spacing:1px}
+.panel p{font-size:15px;line-height:1.55;color:#cfe0dc}
+.panel .cta{margin-top:auto;display:inline-flex;gap:8px;align-items:center;justify-content:center;font-family:'Poppins';font-weight:600;font-size:15px;padding:13px 20px;border-radius:11px;background:var(--accent);color:#04140d;text-decoration:none}
+.hint{position:fixed;left:0;right:0;bottom:26px;z-index:5;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.9);transition:opacity .6s}
+.hint span{display:inline-block;animation:sway 2.6s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:translateX(-7px);opacity:.65}50%{transform:translateX(7px);opacity:1}}
+.load{position:fixed;inset:0;z-index:10;background:#04070a;display:flex;align-items:center;justify-content:center;color:#9fe9cf;font-family:var(--mono);letter-spacing:3px;font-size:13px;transition:opacity .9s ease}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="vig"></div>
+<div class="badge">Cruz<b>TRD</b></div>
+<div class="title">Estudio 360° · recorrido inmersivo</div>
+
+<div class="hint" id="hint"><span>↔ arrastra para mirar el estudio · toca los puntos</span></div>
+
+<aside class="panel" id="panel">
+  <button class="x" id="panelX" aria-label="Cerrar">✕</button>
+  <div class="eyebrow" id="pEye">Capa</div>
+  <h2 id="pTitle">—</h2>
+  <div class="who" id="pWho">—</div>
+  <p id="pText">—</p>
+  <a class="cta" id="pCta" href="/capas.html">Ver esta capa →</a>
+</aside>
+
+<div class="load" id="loader">entrando al estudio…</div>
+
+<script src="vendor/three.min.js"></script>
+<script>
+(function(){
+  var loader=document.getElementById('loader');
+  if(!window.THREE){loader.textContent='WebGL no disponible';return;}
+  var cv=document.getElementById('c');
+  var renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,0.1,1100);
+  camera.position.set(0,0,0);
+
+  var RADIUS=500;
+  // esfera invertida con la panorámica equirectangular
+  var geo=new THREE.SphereGeometry(RADIUS,80,50);
+  geo.scale(-1,1,1);                       // ver desde adentro
+  var tex=new THREE.TextureLoader().load('media/lab-pano.jpg', function(){
+    loader.style.opacity='0'; setTimeout(function(){loader.style.display='none';},900);
+  });
+  tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter;
+  tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:tex}));
+  var PANO_YAW=Math.PI;                     // alinea el frente del lab hacia +Z
+  sphere.rotation.y=PANO_YAW;
+  scene.add(sphere);
+
+  // --- hotspots (lon/lat en grados; frente del lab = 0) ---
+  var SPOTS=[
+    {lon:  0, lat: 3,  eye:'El núcleo',     title:'7 capas, 1 estudio', who:'ANFITRIÓN · D2C',
+     text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.'},
+    {lon:-37, lat:-9,  eye:'Capa 01',        title:'Infraestructura', who:'ESPECIALISTA · INFRA',
+     text:'La base que se auto-escala: nodos activos, uptime y rendimiento para que la app no se caiga nunca.'},
+    {lon: 40, lat:-9,  eye:'Capa 03',        title:'Pagos', who:'ESPECIALISTA · PAGOS',
+     text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.'},
+    {lon:-23, lat: 7,  eye:'Capa 02',        title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
+     text:'Cero brechas. Vigilancia continua de la plataforma y los datos de tus usuarios.'},
+    {lon: 23, lat: 7,  eye:'Capa 07',        title:'Dashboards', who:'ESPECIALISTA · DATOS',
+     text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.'}
+  ];
+  var panel=document.getElementById('panel');
+  function openPanel(s){
+    document.getElementById('pEye').textContent=s.eye;
+    document.getElementById('pTitle').textContent=s.title;
+    document.getElementById('pWho').textContent=s.who;
+    document.getElementById('pText').textContent=s.text;
+    panel.classList.add('open');
+  }
+  document.getElementById('panelX').onclick=function(){panel.classList.remove('open');};
+
+  SPOTS.forEach(function(s){
+    var a=(s.lon)*Math.PI/180, b=(s.lat)*Math.PI/180;
+    s.dir=new THREE.Vector3(Math.cos(b)*Math.sin(a), Math.sin(b), Math.cos(b)*Math.cos(a));
+    s.pos=s.dir.clone().multiplyScalar(RADIUS*0.9);
+    var el=document.createElement('div'); el.className='hs';
+    el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
+    el.addEventListener('click',function(ev){ev.stopPropagation(); openPanel(s);});
+    document.body.appendChild(el); s.el=el;
+  });
+
+  // --- control de mirada (yaw/pitch) ---
+  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0, moved=false;
+  function down(x,y){dragging=true;moved=false;px=x;py=y;cv.classList.add('drag');}
+  function move(x,y){ if(!dragging)return; var dx=x-px,dy=y-py; px=x;py=y;
+    if(Math.abs(dx)+Math.abs(dy)>3)moved=true;
+    tyaw-=dx*0.0022; tpitch-=dy*0.0022;
+    tpitch=Math.max(-1.0,Math.min(1.0,tpitch));
+    hideHint(); }
+  function up(){dragging=false;cv.classList.remove('drag');}
+  cv.addEventListener('pointerdown',function(e){down(e.clientX,e.clientY);});
+  addEventListener('pointermove',function(e){move(e.clientX,e.clientY);});
+  addEventListener('pointerup',up);
+  // rueda = zoom (fov)
+  addEventListener('wheel',function(e){camera.fov=Math.max(38,Math.min(86,camera.fov+e.deltaY*0.03));camera.updateProjectionMatrix();},{passive:true});
+
+  var hint=document.getElementById('hint'), hintHid=false;
+  function hideHint(){if(!hintHid){hintHid=true;hint.style.opacity='0';}}
+  setTimeout(hideHint,6000);
+
+  function fit(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+  addEventListener('resize',fit); fit();
+
+  // --- animación de entrada: FOV abre (el estudio se despliega alrededor) ---
+  var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800;
+  var proj=new THREE.Vector3();
+
+  function loop(){
+    requestAnimationFrame(loop);
+    var now=performance.now(), el=now-t0;
+    if(el<ENTER){var k=el/ENTER; k=1-Math.pow(1-k,3); camera.fov=FOV0+(FOV1-FOV0)*k; camera.updateProjectionMatrix();}
+    // deriva suave + easing hacia el objetivo del arrastre
+    var drift=Math.sin(now/4200)*0.05;
+    yaw+=((tyaw+drift)-yaw)*0.08; pitch+=(tpitch-pitch)*0.08;
+    var cp=Math.cos(pitch);
+    camera.lookAt(Math.sin(yaw)*cp, Math.sin(pitch), Math.cos(yaw)*cp);
+
+    // proyectar hotspots a pantalla
+    for(var i=0;i<SPOTS.length;i++){var s=SPOTS[i];
+      proj.copy(s.pos).project(camera);
+      var vis=proj.z<1 && proj.x>-1.08 && proj.x<1.08 && proj.y>-1.08 && proj.y<1.08;
+      // visible solo si está delante de la cámara
+      var fwd=new THREE.Vector3(Math.sin(yaw)*cp,Math.sin(pitch),Math.cos(yaw)*cp);
+      if(s.dir.dot(fwd) < 0.1) vis=false;
+      if(vis){ s.el.style.opacity='1'; s.el.style.pointerEvents='auto';
+        s.el.style.left=((proj.x*0.5+0.5)*innerWidth)+'px';
+        s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
+      } else { s.el.style.opacity='0'; s.el.style.pointerEvents='none'; }
+    }
+    renderer.render(scene,camera);
+  }
+  loop();
+})();
+</script>
+</body>
+</html>
