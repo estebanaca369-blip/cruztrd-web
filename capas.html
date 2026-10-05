@@ -449,12 +449,12 @@ h2 b{color:var(--accent2)}
   var t0=performance.now();
   function loop(){requestAnimationFrame(loop);
     if(!bgRig)return;
-    var t=(performance.now()-t0)/1000;var ax=reduce?0:Math.sin(t*0.3)*0.2,ay=reduce?0:Math.cos(t*0.24)*0.1;
+    var t=(performance.now()-t0)/1000;var ax=reduce?0:Math.sin(t*0.26)*0.32,ay=reduce?0:Math.cos(t*0.21)*0.16;
     if(!bgRig.fitted)bgRig.fit();
     bgRig.mx+=((tmx+ax)-bgRig.mx)*0.05;bgRig.my+=((tmy+ay)-bgRig.my)*0.05;
     var sc=(scrollY/Math.max(1,innerHeight))%1;
-    bgRig.camera.position.x=bgRig.mx*0.11;bgRig.camera.position.y=-bgRig.my*0.075+(sc-0.5)*0.04;bgRig.camera.lookAt(0,0,0);
-    if(bgRig.uni.uDisplace.value<0.19)bgRig.uni.uDisplace.value+=0.004;bgRig.renderer.render(bgRig.scene,bgRig.camera);
+    bgRig.camera.position.x=bgRig.mx*0.14;bgRig.camera.position.y=-bgRig.my*0.09+(sc-0.5)*0.05;bgRig.camera.lookAt(0,0,0);
+    if(bgRig.uni.uDisplace.value<0.26)bgRig.uni.uDisplace.value+=0.004;bgRig.renderer.render(bgRig.scene,bgRig.camera);
     if(!isSmall){var mx=bgRig.mx,my=bgRig.my;for(var k=0;k<vis.length;k++){var cp=vis[k];var ce=cp.__ce||(cp.__ce=cp.querySelector('.char')),co=cp.__co||(cp.__co=cp.querySelector('.content'));if(ce)ce.style.transform='translate3d('+(-mx*18)+'px,'+(-my*10)+'px,0)';if(co)co.style.transform='translate3d('+(mx*10)+'px,'+(my*6)+'px,0)';}}
   }loop();
   // live latency readout
