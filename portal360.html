@@ -244,19 +244,20 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       {type:'char', lon:150,lat:-4, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
        sheet:'media/strip-host.webp', cls:'hosta'},
-      {type:'door', lon:-55,lat:-2, to:1, label:'Entrar a los Cimientos'}
+      {type:'door', lon:-55,lat:-2, to:1, label:'Entrar · Infraestructura'}
     ]},
-    {name:'Los Cimientos', pano:'media/sala2.jpg', entryYaw:0, spots:[
-      {type:'char', lon:-42,lat:-5, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
+    {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg', entryYaw:0, spots:[
+      {type:'char', lon:44,lat:-5, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
        text:'La base que se auto-escala para que tu app no se caiga, del primer usuario al millón.',
        sheet:'media/strip-infra.webp', cls:'infraa'},
-      {type:'char', lon:4,lat:-3, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
+      {type:'door', lon:-30,lat:-2, to:2, label:'Siguiente · Seguridad'},
+      {type:'door', lon:180,lat:-2, to:0, label:'Volver'}
+    ]},
+    {name:'Capa 02 · Seguridad', pano:'media/sala3.jpg', entryYaw:0, spots:[
+      {type:'char', lon:2,lat:-4, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
        text:'Cifrado, 2FA y vigilancia continua: tus datos y los de tus usuarios, blindados.',
        sheet:'media/strip-seg.webp', cls:'sega'},
-      {type:'char', lon:44,lat:-5, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'ESPECIALISTA · PAGOS',
-       text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
-       sheet:'media/strip-pagos.webp', cls:'pagosa'},
-      {type:'door', lon:180,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:130,lat:-2, to:1, label:'Volver · Infraestructura'}
     ]}
   ];
   var cur=0;
