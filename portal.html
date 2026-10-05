@@ -69,6 +69,7 @@ h1 .g{color:var(--accent)}
   camera.position.set(0,0,6);
 
   var AR=1500/843;
+  var MAXANISO=renderer.capabilities.getMaxAnisotropy();   // filtrado anisotrópico (nitidez en piso/paredes en ángulo)
   var tl=new THREE.TextureLoader();
   var loaded=0, need=3;
   function done(){loaded++;if(loaded>=need){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},700);}}
@@ -76,7 +77,9 @@ h1 .g{color:var(--accent)}
   function plane(url, z, coverMul, transparent){
     var mat=new THREE.MeshBasicMaterial({transparent:!!transparent, depthWrite:!transparent, depthTest:true, opacity:1});
     var tex=tl.load(url, done, undefined, done);
-    tex.minFilter=THREE.LinearFilter; tex.generateMipmaps=false;
+    tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=false;
+    tex.anisotropy=MAXANISO;                 // muestreo multi-tap: quita el "pixelado" rasante
+    if(THREE.SRGBColorSpace){tex.colorSpace=THREE.SRGBColorSpace;}
     mat.map=tex;
     // tamaño para cubrir el FOV a esa distancia desde la cámara inicial
     var D=6 - z;
