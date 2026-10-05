@@ -68,7 +68,7 @@ h1 .g{color:var(--accent)}
   var FOV=58, camera=new THREE.PerspectiveCamera(FOV,innerWidth/innerHeight,0.1,100);
   camera.position.set(0,0,6);
 
-  var AR=1500/843;
+  var AR=4096/2286;   // AR real de las capas 5.5K
   var MAXANISO=renderer.capabilities.getMaxAnisotropy();   // filtrado anisotrópico (nitidez en piso/paredes en ángulo)
   var tl=new THREE.TextureLoader();
   var loaded=0, need=3;
