@@ -80,7 +80,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter;
   tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
   var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:tex}));
-  var PANO_YAW=Math.PI;                     // alinea el frente del lab hacia +Z
+  var PANO_YAW=Math.PI/2;                    // alinea el frente del lab hacia +Z
   sphere.rotation.y=PANO_YAW;
   scene.add(sphere);
 
@@ -116,6 +116,13 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
     el.addEventListener('click',function(ev){ev.stopPropagation(); openPanel(s);});
     document.body.appendChild(el); s.el=el;
   });
+  // handles de ajuste en vivo (solo para calibrar)
+  window.__T={sphere:sphere, camera:camera, SPOTS:SPOTS,
+    setYaw:function(v){PANO_YAW=v; sphere.rotation.y=v;},
+    setSpot:function(i,lon,lat){var s=SPOTS[i];var a=lon*Math.PI/180,b=lat*Math.PI/180;
+      s.lon=lon;s.lat=lat;s.dir.set(Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));
+      s.pos.copy(s.dir).multiplyScalar(RADIUS*0.9);},
+    getYaw:function(){return PANO_YAW;}};
 
   // --- control de mirada (yaw/pitch) ---
   var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0, moved=false;
