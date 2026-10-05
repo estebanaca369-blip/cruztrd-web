@@ -35,6 +35,22 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hs.door:hover .dgate{background:rgba(45,212,167,.32)}
 .fadeov{position:fixed;inset:0;z-index:9;background:#04070a;opacity:0;pointer-events:none;transition:opacity .42s ease}
 #roomtag{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#cfe9df;text-transform:uppercase;text-shadow:0 2px 12px #000;pointer-events:none}
+/* hotspot tipo pantalla/directorio */
+.hs.scr .dgate{width:62px;height:46px;border-radius:9px}
+.hs.scr .darrow{font-size:20px}
+/* panel directorio */
+.dirpanel{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .5s cubic-bezier(.22,1,.36,1);padding:46px 26px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
+.dirpanel.open{transform:translateX(0)}
+.dirpanel .x{position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(6,11,14,.6);color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
+.direye{font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--accent2);font-size:11px}
+.dirh{font-family:'Poppins';font-weight:700;font-size:28px;line-height:1.03;margin-top:3px}
+.dirsub{font-size:14px;color:#9fb3ad;margin-top:6px;margin-bottom:16px}
+.dirlist{display:flex;flex-direction:column;gap:9px}
+.dirow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(45,212,167,.2);border-radius:12px;padding:14px 15px;color:var(--ink);transition:background .2s,border-color .2s,transform .15s}
+.dirow:hover{background:rgba(45,212,167,.1);border-color:rgba(45,212,167,.5);transform:translateX(3px)}
+.dirow .dnum{font-family:var(--mono);font-size:13px;color:var(--accent2);min-width:26px}
+.dirow .dnm{flex:1;font-family:'Poppins';font-weight:600;font-size:16px}
+.dirow .darr{color:var(--accent2);font-size:17px}
 
 /* ====== panel de despliegue ====== */
 .panel{position:fixed;top:0;right:0;height:100%;width:min(480px,93vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .55s cubic-bezier(.22,1,.36,1);padding:40px 26px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
@@ -217,6 +233,14 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   <div class="holo in" id="pHolo"></div>
 </aside>
 
+<aside class="dirpanel" id="dirPanel">
+  <button class="x" id="dirX" aria-label="Cerrar">✕</button>
+  <div class="direye">Directorio del estudio</div>
+  <h2 class="dirh">Estudio CruzTRD</h2>
+  <div class="dirsub">Elige la capa que quieres visitar.</div>
+  <div class="dirlist" id="dirList"></div>
+</aside>
+
 <div class="load" id="loader">entrando al estudio…</div>
 
 <script src="vendor/three.min.js"></script>
@@ -244,34 +268,31 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       {type:'char', lon:150,lat:-4, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
        sheet:'media/strip-host.webp', cls:'hosta'},
-      {type:'door', lon:-55,lat:-2, to:1, label:'Entrar · Infraestructura'}
+      {type:'dir', lon:112,lat:-2, label:'Directorio del estudio'}
     ]},
     {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg', entryYaw:0, spots:[
       {type:'char', lon:44,lat:-5, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
        text:'La base que se auto-escala para que tu app no se caiga, del primer usuario al millón.',
        sheet:'media/strip-infra.webp', cls:'infraa'},
-      {type:'door', lon:-30,lat:-2, to:2, label:'Siguiente · Seguridad'},
-      {type:'door', lon:180,lat:-2, to:0, label:'Volver'}
+      {type:'door', lon:180,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
     {name:'Capa 02 · Seguridad', pano:'media/sala3.jpg', entryYaw:0, spots:[
       {type:'char', lon:2,lat:-4, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
        text:'Cifrado, 2FA y vigilancia continua: tus datos y los de tus usuarios, blindados.',
        sheet:'media/strip-seg.webp', cls:'sega'},
-      {type:'door', lon:-40,lat:-2, to:3, label:'Siguiente · Pagos'},
-      {type:'door', lon:130,lat:-2, to:1, label:'Volver · Infraestructura'}
+      {type:'door', lon:130,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
     {name:'Capa 03 · Pagos', pano:'media/sala4.jpg', entryYaw:0, spots:[
       {type:'char', lon:40,lat:-4, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'ESPECIALISTA · PAGOS',
        text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
        sheet:'media/strip-pagos.webp', cls:'pagosa'},
-      {type:'door', lon:-30,lat:-2, to:4, label:'Siguiente · Suscripciones'},
-      {type:'door', lon:150,lat:-2, to:2, label:'Volver · Seguridad'}
+      {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
     {name:'Capa 04 · Suscripciones', pano:'media/sala5.jpg', entryYaw:0, spots:[
       {type:'char', lon:35,lat:-4, hk:'susc', eye:'Capa 04', title:'Suscripciones', who:'ESPECIALISTA · SUSCRIPCIONES',
        text:'Ingresos recurrentes: planes, renovaciones y reintentos que crecen mes a mes.',
        sheet:'media/strip-susc.webp', cls:'susca'},
-      {type:'door', lon:150,lat:-2, to:3, label:'Volver · Pagos'}
+      {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]}
   ];
   var cur=0;
@@ -301,6 +322,9 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       if(s.type==='door'){ el.className='hs door';
         el.innerHTML='<div class="dgate"><span class="darrow">↗</span></div><div class="dlbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
+      else if(s.type==='dir'){ el.className='hs door scr';
+        el.innerHTML='<div class="dgate"><span class="darrow">⊞</span></div><div class="dlbl">'+s.label+'</div>';
+        el.addEventListener('click',function(ev){ev.stopPropagation(); openDir();}); }
       else { el.className='hs';
         el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); el.classList.remove('fire');void el.offsetWidth;el.classList.add('fire'); openPanel(s);}); }
@@ -321,6 +345,20 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       setTimeout(function(){fadeov.style.opacity='0';},150);
     },420);
   }
+  // directorio (hub): lista las capas y salta a cada una
+  var dirPanel=document.getElementById('dirPanel'), dirList=document.getElementById('dirList');
+  function openDir(){
+    var html='';
+    for(var i=1;i<ROOMS.length;i++){
+      var nm=ROOMS[i].name.replace(/^Capa \d+ · /,'');
+      html+='<button class="dirow" data-go="'+i+'"><span class="dnum">'+(i<10?'0'+i:i)+'</span><span class="dnm">'+nm+'</span><span class="darr">→</span></button>';
+    }
+    dirList.innerHTML=html;
+    [].slice.call(dirList.querySelectorAll('.dirow')).forEach(function(b){b.onclick=function(){dirPanel.classList.remove('open'); goRoom(+b.getAttribute('data-go'));};});
+    dirPanel.classList.add('open');
+  }
+  document.getElementById('dirX').onclick=function(){dirPanel.classList.remove('open');};
+
   // arranque en Recepción
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);});
   buildHotspots(ROOMS[0]); roomtag.textContent=ROOMS[0].name;
