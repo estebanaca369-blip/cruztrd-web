@@ -27,6 +27,14 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hs:hover .dot{background:rgba(45,212,167,.4)}
 .hs.fire .dot{animation:fire .7s ease-out}
 @keyframes fire{0%{box-shadow:0 0 0 0 rgba(45,212,167,.9)}100%{box-shadow:0 0 0 46px rgba(45,212,167,0)}}
+/* puerta: saltar a otra sala */
+.hs.door{z-index:5}
+.hs.door .dgate{width:56px;height:56px;border-radius:50%;background:rgba(45,212,167,.14);border:2px solid var(--accent2);display:flex;align-items:center;justify-content:center;box-shadow:0 0 26px rgba(45,212,167,.42);animation:pulse 2.4s ease-out infinite;backdrop-filter:blur(3px)}
+.hs.door .darrow{font-size:25px;color:var(--accent2);line-height:1;font-weight:700}
+.hs.door .dlbl{position:absolute;left:50%;top:64px;transform:translateX(-50%);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(5,14,12,.72);padding:6px 13px;border-radius:999px;border:1px solid rgba(45,212,167,.4);backdrop-filter:blur(6px);text-shadow:0 1px 6px #000}
+.hs.door:hover .dgate{background:rgba(45,212,167,.32)}
+.fadeov{position:fixed;inset:0;z-index:9;background:#04070a;opacity:0;pointer-events:none;transition:opacity .42s ease}
+#roomtag{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#cfe9df;text-transform:uppercase;text-shadow:0 2px 12px #000;pointer-events:none}
 
 /* ====== panel de despliegue ====== */
 .panel{position:fixed;top:0;right:0;height:100%;width:min(480px,93vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .55s cubic-bezier(.22,1,.36,1);padding:40px 26px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
@@ -195,7 +203,9 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <div class="badge">Cruz<b>TRD</b></div>
 <div class="topr">Estudio 360° · recorrido inmersivo</div>
 
-<div class="hint" id="hint"><span>↔ arrastra para mirar el estudio · toca los puntos</span></div>
+<div class="hint" id="hint"><span>↔ arrastra para mirar el estudio · toca los puntos · cruza las puertas</span></div>
+<div id="roomtag"></div>
+<div class="fadeov" id="fadeov"></div>
 
 <aside class="panel" id="panel">
   <button class="x" id="panelX" aria-label="Cerrar">✕</button>
@@ -223,40 +233,33 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
   camera.position.set(0,0,0);
   var RADIUS=500;
   var geo=new THREE.SphereGeometry(RADIUS,80,50); geo.scale(-1,1,1);
-  var tex=new THREE.TextureLoader().load('media/lab-pano.jpg', function(){
-    loader.style.opacity='0'; setTimeout(function(){loader.style.display='none';},900);
-  });
-  tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter;
-  tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
-  var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:tex}));
+  var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:null}));
   sphere.rotation.y=Math.PI/2; scene.add(sphere);
+  var texLoader=new THREE.TextureLoader();
+  function setPano(url,cb){ texLoader.load(url,function(t){ t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=renderer.capabilities.getMaxAnisotropy(); var old=sphere.material.map; sphere.material.map=t; sphere.material.needsUpdate=true; if(old)old.dispose(); if(cb)cb(); }); }
 
-  var SPOTS=[
-    {lon:  0,lat:-2, hk:'intro', eye:'El núcleo',title:'7 capas, 1 estudio',who:'ANFITRIÓN · D2C',
-     text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
-     sheet:'media/strip-host.webp', cls:'hosta'},
-    {lon:-44,lat:-6, hk:'infra', eye:'Capa 01',title:'Infraestructura',who:'ESPECIALISTA · INFRA',
-     text:'La base que se auto-escala para que tu app no se caiga, del primer usuario al millón.',
-     sheet:'media/strip-infra.webp', cls:'infraa'},
-    {lon:-23,lat: 6, hk:'seg', eye:'Capa 02',title:'Seguridad',who:'ESPECIALISTA · SEGURIDAD',
-     text:'Cifrado, 2FA y vigilancia continua: tus datos y los de tus usuarios, blindados.',
-     sheet:'media/strip-seg.webp', cls:'sega'},
-    {lon: 46,lat:-6, hk:'pagos', eye:'Capa 03',title:'Pagos',who:'ESPECIALISTA · PAGOS',
-     text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
-     sheet:'media/strip-pagos.webp', cls:'pagosa'},
-    {lon:-62,lat: 2, hk:'susc', eye:'Capa 04',title:'Suscripciones',who:'ESPECIALISTA · SUSCRIPCIONES',
-     text:'Ingresos recurrentes: planes, renovaciones y reintentos que crecen mes a mes.',
-     sheet:'media/strip-susc.webp', cls:'susca'},
-    {lon: 62,lat: 2, hk:'mkt', eye:'Capa 05',title:'Marketing',who:'ESPECIALISTA · MARKETING',
-     text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.',
-     sheet:'media/strip-mkt.webp', cls:'mkta'},
-    {lon:-82,lat: 4, hk:'fidel', eye:'Capa 06',title:'Fidelización',who:'ESPECIALISTA · FIDELIZACIÓN',
-     text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.',
-     sheet:'media/strip-fidel.webp', cls:'fidela'},
-    {lon: 23,lat: 6, hk:'dash', eye:'Capa 07',title:'Dashboards',who:'ESPECIALISTA · DATOS',
-     text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
-     sheet:'media/strip-dash.webp', cls:'dasha'}
+  // ===== salas del recorrido =====
+  var ROOMS=[
+    {name:'Recepción · Entrada', pano:'media/lab-pano.jpg', entryYaw:0, spots:[
+      {type:'char', lon:150,lat:-4, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
+       text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
+       sheet:'media/strip-host.webp', cls:'hosta'},
+      {type:'door', lon:-55,lat:-2, to:1, label:'Entrar a los Cimientos'}
+    ]},
+    {name:'Los Cimientos', pano:'media/sala2.jpg', entryYaw:0, spots:[
+      {type:'char', lon:-42,lat:-5, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
+       text:'La base que se auto-escala para que tu app no se caiga, del primer usuario al millón.',
+       sheet:'media/strip-infra.webp', cls:'infraa'},
+      {type:'char', lon:4,lat:-3, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
+       text:'Cifrado, 2FA y vigilancia continua: tus datos y los de tus usuarios, blindados.',
+       sheet:'media/strip-seg.webp', cls:'sega'},
+      {type:'char', lon:44,lat:-5, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'ESPECIALISTA · PAGOS',
+       text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
+       sheet:'media/strip-pagos.webp', cls:'pagosa'},
+      {type:'door', lon:180,lat:-2, to:0, label:'Volver a Recepción'}
+    ]}
   ];
+  var cur=0;
 
   var panel=document.getElementById('panel'), pChar=document.getElementById('pChar'), pHolo=document.getElementById('pHolo');
   function openPanel(s){
@@ -274,15 +277,41 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
   }
   document.getElementById('panelX').onclick=function(){panel.classList.remove('open');var v=pHolo.querySelector('video');if(v){try{v.pause();}catch(e){}}};
 
-  SPOTS.forEach(function(s){
-    var a=s.lon*Math.PI/180, b=s.lat*Math.PI/180;
-    s.dir=new THREE.Vector3(-Math.cos(b)*Math.sin(a), Math.sin(b), Math.cos(b)*Math.cos(a));
-    s.pos=s.dir.clone().multiplyScalar(RADIUS*0.9);
-    var el=document.createElement('div'); el.className='hs';
-    el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
-    el.addEventListener('click',function(ev){ev.stopPropagation(); el.classList.remove('fire'); void el.offsetWidth; el.classList.add('fire'); openPanel(s);});
-    document.body.appendChild(el); s.el=el;
-  });
+  function mkDir(s){var a=s.lon*Math.PI/180,b=s.lat*Math.PI/180;s.dir=new THREE.Vector3(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));s.pos=s.dir.clone().multiplyScalar(RADIUS*0.9);}
+  function buildHotspots(room){
+    [].slice.call(document.querySelectorAll('.hs')).forEach(function(e){e.remove();});
+    room.spots.forEach(function(s){
+      mkDir(s);
+      var el=document.createElement('div');
+      if(s.type==='door'){ el.className='hs door';
+        el.innerHTML='<div class="dgate"><span class="darrow">↗</span></div><div class="dlbl">'+s.label+'</div>';
+        el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
+      else { el.className='hs';
+        el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
+        el.addEventListener('click',function(ev){ev.stopPropagation(); el.classList.remove('fire');void el.offsetWidth;el.classList.add('fire'); openPanel(s);}); }
+      document.body.appendChild(el); s.el=el;
+    });
+  }
+  var fadeov=document.getElementById('fadeov'), roomtag=document.getElementById('roomtag');
+  function goRoom(idx){
+    panel.classList.remove('open');
+    fadeov.style.opacity='1';
+    setTimeout(function(){
+      cur=idx; var r=ROOMS[idx];
+      setPano(r.pano);
+      buildHotspots(r);
+      tyaw=yaw=r.entryYaw||0; tpitch=pitch=0;
+      t0=performance.now();                 // re-dispara la sensación de entrada (FOV)
+      roomtag.textContent=r.name;
+      setTimeout(function(){fadeov.style.opacity='0';},150);
+    },420);
+  }
+  // arranque en Recepción
+  setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);});
+  buildHotspots(ROOMS[0]); roomtag.textContent=ROOMS[0].name;
+  window.__T={ROOMS:ROOMS, go:goRoom, curRoom:function(){return cur;},
+    set:function(room,i,lon,lat){var s=ROOMS[room].spots[i];s.lon=lon;s.lat=lat;mkDir(s);},
+    yaw:function(v){tyaw=yaw=v;}};
 
   var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
@@ -305,7 +334,7 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     var cp=Math.cos(pitch);
     fwd.set(Math.sin(yaw)*cp, Math.sin(pitch), Math.cos(yaw)*cp);
     camera.lookAt(fwd.x,fwd.y,fwd.z);
-    for(var i=0;i<SPOTS.length;i++){var s=SPOTS[i];
+    var spots=ROOMS[cur].spots; for(var i=0;i<spots.length;i++){var s=spots[i];
       proj.copy(s.pos).project(camera);
       var vis=proj.z<1 && proj.x>-1.08 && proj.x<1.08 && proj.y>-1.08 && proj.y<1.08 && s.dir.dot(fwd)>0.12;
       if(vis){s.el.style.opacity='1';s.el.style.pointerEvents='auto';
