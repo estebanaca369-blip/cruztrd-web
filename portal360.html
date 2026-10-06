@@ -17,40 +17,41 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .badge b{color:var(--accent)}
 .topr{position:fixed;top:18px;right:22px;z-index:6;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;opacity:.8;text-shadow:0 2px 14px rgba(0,0,0,.9)}
 
-/* hotspots */
+/* hotspots unificados (mismo lenguaje para anfitrión, puertas y directorio) */
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,212,167,.4)}70%{box-shadow:0 0 0 13px rgba(45,212,167,0)}100%{box-shadow:0 0 0 0 rgba(45,212,167,0)}}
 .hs{position:fixed;z-index:4;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;will-change:left,top;transition:opacity .25s}
-.hs .dot{width:22px;height:22px;border-radius:50%;background:rgba(45,212,167,.18);border:1.5px solid var(--accent2);display:flex;align-items:center;justify-content:center;animation:pulse 2.4s ease-out infinite}
-.hs .dot::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent2);box-shadow:0 0 8px var(--accent2)}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(45,212,167,.45)}70%{box-shadow:0 0 0 16px rgba(45,212,167,0)}100%{box-shadow:0 0 0 0 rgba(45,212,167,0)}}
-.hs .lbl{position:absolute;left:30px;top:50%;transform:translateY(-50%);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(5,14,12,.6);padding:5px 11px;border-radius:999px;border:1px solid rgba(45,212,167,.28);backdrop-filter:blur(6px);opacity:0;transition:opacity .2s;text-shadow:0 1px 6px rgba(0,0,0,.8)}
-.hs:hover .lbl{opacity:1}
-.hs:hover .dot{background:rgba(45,212,167,.4)}
-.hs.fire .dot{animation:fire .7s ease-out}
-@keyframes fire{0%{box-shadow:0 0 0 0 rgba(45,212,167,.9)}100%{box-shadow:0 0 0 46px rgba(45,212,167,0)}}
-/* puerta: saltar a otra sala */
-.hs.door{z-index:5}
-.hs.door .dgate{width:56px;height:56px;border-radius:50%;background:rgba(45,212,167,.14);border:2px solid var(--accent2);display:flex;align-items:center;justify-content:center;box-shadow:0 0 26px rgba(45,212,167,.42);animation:pulse 2.4s ease-out infinite;backdrop-filter:blur(3px)}
-.hs.door .darrow{font-size:25px;color:var(--accent2);line-height:1;font-weight:700}
-.hs.door .dlbl{position:absolute;left:50%;top:64px;transform:translateX(-50%);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(5,14,12,.72);padding:6px 13px;border-radius:999px;border:1px solid rgba(45,212,167,.4);backdrop-filter:blur(6px);text-shadow:0 1px 6px #000}
-.hs.door:hover .dgate{background:rgba(45,212,167,.32)}
+.hs .mk{position:relative;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(8,16,15,.3);border:1.5px solid rgba(45,212,167,.9);box-shadow:0 0 15px rgba(45,212,167,.3),inset 0 0 10px rgba(45,212,167,.12);backdrop-filter:blur(2px);animation:pulse 2.8s ease-out infinite;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.hs:hover .mk{transform:scale(1.15);background:rgba(45,212,167,.26);box-shadow:0 0 26px rgba(45,212,167,.5)}
+.hs .mk .ic{font-family:var(--mono);font-size:14px;color:#daffef;line-height:1}
+.hs.char .mk .ic{width:7px;height:7px;border-radius:50%;background:var(--accent2);box-shadow:0 0 9px var(--accent2)}
+.hs .lbl{position:absolute;left:50%;top:44px;transform:translateX(-50%) translateY(5px);white-space:nowrap;font-family:'Poppins';font-weight:600;font-size:12.5px;color:#eafff6;background:rgba(6,12,12,.5);padding:7px 14px;border-radius:999px;border:1px solid rgba(45,212,167,.28);backdrop-filter:blur(10px);opacity:0;transition:opacity .22s ease,transform .22s ease;text-shadow:0 1px 6px #000;pointer-events:none}
+.hs:hover .lbl{opacity:1;transform:translateX(-50%) translateY(0)}
 .fadeov{position:fixed;inset:0;z-index:9;background:#04070a;opacity:0;pointer-events:none;transition:opacity .42s ease}
 #roomtag{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:6;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#cfe9df;text-transform:uppercase;text-shadow:0 2px 12px #000;pointer-events:none}
-/* hotspot tipo pantalla/directorio */
-.hs.scr .dgate{width:62px;height:46px;border-radius:9px}
-.hs.scr .darrow{font-size:20px}
-/* panel directorio */
-.dirpanel{position:fixed;top:0;right:0;height:100%;width:min(440px,92vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .5s cubic-bezier(.22,1,.36,1);padding:46px 26px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
-.dirpanel.open{transform:translateX(0)}
-.dirpanel .x{position:absolute;top:14px;right:16px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(6,11,14,.6);color:var(--ink);font-size:17px;cursor:pointer;line-height:1}
-.direye{font-family:var(--mono);letter-spacing:3px;text-transform:uppercase;color:var(--accent2);font-size:11px}
-.dirh{font-family:'Poppins';font-weight:700;font-size:28px;line-height:1.03;margin-top:3px}
-.dirsub{font-size:14px;color:#9fb3ad;margin-top:6px;margin-bottom:16px}
-.dirlist{display:flex;flex-direction:column;gap:9px}
-.dirow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid rgba(45,212,167,.2);border-radius:12px;padding:14px 15px;color:var(--ink);transition:background .2s,border-color .2s,transform .15s}
-.dirow:hover{background:rgba(45,212,167,.1);border-color:rgba(45,212,167,.5);transform:translateX(3px)}
-.dirow .dnum{font-family:var(--mono);font-size:13px;color:var(--accent2);min-width:26px}
-.dirow .dnm{flex:1;font-family:'Poppins';font-weight:600;font-size:16px}
-.dirow .darr{color:var(--accent2);font-size:17px}
+/* ===== directorio: modal central + fondo difuminado (glassmorphism) ===== */
+.dirback{position:fixed;inset:0;z-index:7;background:rgba(3,7,9,.52);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .4s ease}
+.dirback.open{opacity:1;pointer-events:auto}
+.dirmodal{position:fixed;top:50%;left:50%;transform:translate(-50%,-47%) scale(.97);z-index:8;width:min(540px,92vw);max-height:86vh;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .4s ease,transform .45s cubic-bezier(.22,1,.36,1);background:radial-gradient(130% 90% at 50% 0%,rgba(16,30,28,.95),rgba(6,11,13,.97));border:1px solid rgba(45,212,167,.26);border-radius:20px;padding:30px 28px 24px;box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 60px rgba(25,195,125,.12),inset 0 1px 0 rgba(255,255,255,.05)}
+.dirmodal::before{content:"";position:absolute;inset:0;border-radius:20px;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(45,212,167,.03) 0 1px,transparent 1px 4px);opacity:.5;mix-blend-mode:screen}
+.dirmodal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.dirmodal .x{position:absolute;top:15px;right:15px;width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(6,11,14,.5);color:var(--ink);font-size:16px;cursor:pointer;line-height:1;z-index:2}
+.direye{font-family:var(--mono);letter-spacing:4px;text-transform:uppercase;color:var(--accent2);font-size:11px}
+.dirh{font-family:'Poppins';font-weight:700;font-size:29px;line-height:1.03;margin-top:5px;letter-spacing:-.5px}
+.dirh b{color:var(--accent)}
+.dirsub{font-size:13.5px;color:#9fb3ad;margin-top:6px;margin-bottom:20px}
+.dirlist{display:grid;gap:10px}
+.dirow{position:relative;display:flex;align-items:center;gap:15px;width:100%;text-align:left;cursor:pointer;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:13px;padding:15px 16px 15px 19px;color:var(--ink);overflow:hidden;transition:background .2s,border-color .2s,transform .18s}
+.dirow::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent2);transform:scaleY(0);transition:transform .2s}
+.dirow:hover{background:rgba(45,212,167,.08);border-color:rgba(45,212,167,.42);transform:translateX(4px)}
+.dirow:hover::before{transform:scaleY(1)}
+.dirow .dnum{font-family:var(--mono);font-size:13px;color:var(--accent2);min-width:24px;opacity:.85}
+.dirow .dnm{flex:1;font-family:'Poppins';font-weight:600;font-size:16.5px}
+.dirow .darr{color:var(--accent2);font-size:16px;opacity:.55;transition:opacity .2s,transform .2s}
+.dirow:hover .darr{opacity:1;transform:translateX(3px)}
+/* botón persistente del directorio (navegación scene-agnostic) */
+.navhub{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);z-index:6;display:inline-flex;align-items:center;gap:9px;font-family:'Poppins';font-weight:600;font-size:13px;color:#eafff6;background:rgba(6,12,12,.42);border:1px solid rgba(45,212,167,.3);border-radius:999px;padding:11px 18px;backdrop-filter:blur(12px);cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.4);transition:background .2s,border-color .2s,transform .2s;text-shadow:0 1px 5px #000}
+.navhub:hover{background:rgba(45,212,167,.2);border-color:rgba(45,212,167,.6);transform:translateX(-50%) translateY(-2px)}
+.navhub .nhic{font-family:var(--mono);color:var(--accent2);font-size:15px}
 
 /* ====== panel de despliegue ====== */
 .panel{position:fixed;top:0;right:0;height:100%;width:min(480px,93vw);z-index:8;background:linear-gradient(180deg,rgba(6,11,14,.97),rgba(4,7,10,.99));border-left:1px solid rgba(45,212,167,.22);backdrop-filter:blur(14px);transform:translateX(102%);transition:transform .55s cubic-bezier(.22,1,.36,1);padding:40px 26px 26px;display:flex;flex-direction:column;box-shadow:-30px 0 70px rgba(0,0,0,.55);overflow-y:auto}
@@ -207,7 +208,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .latwave polyline{fill:none;stroke:#2DD4A7;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(45,212,167,.6))}
 .latwave .lwscroll{animation:lwscroll 1.9s linear infinite}
 
-.hint{position:fixed;left:0;right:0;bottom:26px;z-index:5;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.9);transition:opacity .6s}
+.hint{position:fixed;left:0;right:0;bottom:78px;z-index:5;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.9);transition:opacity .6s}
 .hint span{display:inline-block;animation:sway 2.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:translateX(-7px);opacity:.65}50%{transform:translateX(7px);opacity:1}}
 .load{position:fixed;inset:0;z-index:10;background:#04070a;display:flex;align-items:center;justify-content:center;color:#9fe9cf;font-family:var(--mono);letter-spacing:3px;font-size:13px;transition:opacity .9s ease}
@@ -233,13 +234,15 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   <div class="holo in" id="pHolo"></div>
 </aside>
 
-<aside class="dirpanel" id="dirPanel">
+<div class="dirback" id="dirBack"></div>
+<div class="dirmodal" id="dirPanel">
   <button class="x" id="dirX" aria-label="Cerrar">✕</button>
   <div class="direye">Directorio del estudio</div>
-  <h2 class="dirh">Estudio CruzTRD</h2>
+  <h2 class="dirh">Estudio Cruz<b>TRD</b></h2>
   <div class="dirsub">Elige la capa que quieres visitar.</div>
   <div class="dirlist" id="dirList"></div>
-</aside>
+</div>
+<button class="navhub" id="navHub"><span class="nhic">&#8862;</span>Directorio</button>
 
 <div class="load" id="loader">entrando al estudio…</div>
 
@@ -320,14 +323,14 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       mkDir(s);
       var el=document.createElement('div');
       if(s.type==='door'){ el.className='hs door';
-        el.innerHTML='<div class="dgate"><span class="darrow">↗</span></div><div class="dlbl">'+s.label+'</div>';
+        el.innerHTML='<div class="mk"><span class="ic">↗</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
-      else if(s.type==='dir'){ el.className='hs door scr';
-        el.innerHTML='<div class="dgate"><span class="darrow">⊞</span></div><div class="dlbl">'+s.label+'</div>';
+      else if(s.type==='dir'){ el.className='hs dir';
+        el.innerHTML='<div class="mk"><span class="ic">⊞</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); openDir();}); }
-      else { el.className='hs';
-        el.innerHTML='<div class="dot"></div><div class="lbl">'+s.title+'</div>';
-        el.addEventListener('click',function(ev){ev.stopPropagation(); el.classList.remove('fire');void el.offsetWidth;el.classList.add('fire'); openPanel(s);}); }
+      else { el.className='hs char';
+        el.innerHTML='<div class="mk"><span class="ic"></span></div><div class="lbl">'+s.title+'</div>';
+        el.addEventListener('click',function(ev){ev.stopPropagation(); openPanel(s);}); }
       document.body.appendChild(el); s.el=el;
     });
   }
@@ -346,7 +349,8 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     },420);
   }
   // directorio (hub): lista las capas y salta a cada una
-  var dirPanel=document.getElementById('dirPanel'), dirList=document.getElementById('dirList');
+  var dirPanel=document.getElementById('dirPanel'), dirList=document.getElementById('dirList'), dirBack=document.getElementById('dirBack');
+  function closeDir(){dirPanel.classList.remove('open');dirBack.classList.remove('open');}
   function openDir(){
     var html='';
     for(var i=1;i<ROOMS.length;i++){
@@ -354,10 +358,12 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       html+='<button class="dirow" data-go="'+i+'"><span class="dnum">'+(i<10?'0'+i:i)+'</span><span class="dnm">'+nm+'</span><span class="darr">→</span></button>';
     }
     dirList.innerHTML=html;
-    [].slice.call(dirList.querySelectorAll('.dirow')).forEach(function(b){b.onclick=function(){dirPanel.classList.remove('open'); goRoom(+b.getAttribute('data-go'));};});
-    dirPanel.classList.add('open');
+    [].slice.call(dirList.querySelectorAll('.dirow')).forEach(function(b){b.onclick=function(){closeDir(); goRoom(+b.getAttribute('data-go'));};});
+    dirBack.classList.add('open'); dirPanel.classList.add('open');
   }
-  document.getElementById('dirX').onclick=function(){dirPanel.classList.remove('open');};
+  document.getElementById('dirX').onclick=closeDir;
+  dirBack.onclick=closeDir;
+  document.getElementById('navHub').onclick=openDir;
 
   // arranque en Recepción
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);});
