@@ -211,7 +211,14 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hint{position:fixed;left:0;right:0;bottom:78px;z-index:5;text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;pointer-events:none;text-shadow:0 2px 14px rgba(0,0,0,.9);transition:opacity .6s}
 .hint span{display:inline-block;animation:sway 2.6s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:translateX(-7px);opacity:.65}50%{transform:translateX(7px);opacity:1}}
-.load{position:fixed;inset:0;z-index:10;background:#04070a;display:flex;align-items:center;justify-content:center;color:#9fe9cf;font-family:var(--mono);letter-spacing:3px;font-size:13px;transition:opacity .9s ease}
+.load{position:fixed;inset:0;z-index:10;background:radial-gradient(120% 90% at 50% 38%,#0a1413,#04070a 70%);display:flex;align-items:center;justify-content:center;transition:opacity .9s ease}
+.loadwrap{display:flex;flex-direction:column;align-items:center;gap:17px;text-align:center}
+.loadmark{font-family:'Poppins';font-weight:700;font-size:30px;color:var(--ink);letter-spacing:-.5px;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.loadmark b{color:var(--accent)}
+.loadbar{width:180px;height:3px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;position:relative}
+.loadbar i{position:absolute;top:0;left:0;height:100%;width:42%;border-radius:999px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);animation:loadslide 1.25s ease-in-out infinite}
+@keyframes loadslide{0%{transform:translateX(-120%)}100%{transform:translateX(330%)}}
+.loadsub{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#9fe9cf;opacity:.8}
 
 /* ===== ascensor (transición cinematográfica entre salas) ===== */
 .elev{position:fixed;inset:0;z-index:12;pointer-events:none;visibility:hidden}
@@ -299,7 +306,13 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <button class="navhub" id="navHub"><span class="nhic">&#8862;</span>Directorio</button>
 <button class="gyrobtn" id="gyroBtn" hidden><span class="gic">&#9673;</span><span class="glbl">Mirar con el móvil</span></button>
 
-<div class="load" id="loader">entrando al estudio…</div>
+<div class="load" id="loader">
+  <div class="loadwrap">
+    <div class="loadmark">Cruz<b>TRD</b></div>
+    <div class="loadbar"><i></i></div>
+    <div class="loadsub">preparando el estudio 360°…</div>
+  </div>
+</div>
 
 <script src="vendor/three.min.js"></script>
 <script>
@@ -318,7 +331,20 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
   var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:null}));
   sphere.rotation.y=Math.PI/2; scene.add(sphere);
   var texLoader=new THREE.TextureLoader();
-  function setPano(url,cb){ texLoader.load(url,function(t){ t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=renderer.capabilities.getMaxAnisotropy(); var old=sphere.material.map; sphere.material.map=t; sphere.material.needsUpdate=true; if(old)old.dispose(); if(cb)cb(); }); }
+  // caché LRU de texturas: volver entre pisos ya vistos es instantáneo (sin re-decodificar 4K)
+  var texCache=Object.create(null), texOrder=[], MAXTEX=4;
+  function applyTex(t){ sphere.material.map=t; sphere.material.needsUpdate=true; }
+  function touchCache(url){
+    var i=texOrder.indexOf(url); if(i>-1)texOrder.splice(i,1); texOrder.push(url);
+    while(texOrder.length>MAXTEX){ var ev=texOrder.shift(); if(texCache[ev] && texCache[ev]!==sphere.material.map){ texCache[ev].dispose(); delete texCache[ev]; } }
+  }
+  function setPano(url,cb){
+    if(texCache[url]){ applyTex(texCache[url]); touchCache(url); if(cb)cb(); return; }
+    texLoader.load(url,function(t){
+      t.minFilter=THREE.LinearFilter;t.magFilter=THREE.LinearFilter;t.anisotropy=renderer.capabilities.getMaxAnisotropy();
+      texCache[url]=t; touchCache(url); applyTex(t); if(cb)cb();
+    });
+  }
 
   // ===== salas del recorrido =====
   var ROOMS=[
