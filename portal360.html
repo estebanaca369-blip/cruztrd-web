@@ -231,6 +231,11 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .elevdoor.r::after{left:0;background:linear-gradient(270deg,transparent,rgba(45,212,167,.08))}
 .elevseam{position:absolute;top:0;bottom:0;left:50%;width:2px;transform:translateX(-50%);z-index:3;background:linear-gradient(180deg,transparent,rgba(45,212,167,.55),transparent);opacity:0;transition:opacity .4s}
 .elev.shut .elevseam{opacity:1}
+/* interior real de la cabina (se revela durante el viaje) */
+.elevcabin{position:absolute;inset:0;z-index:1;background:#05080a center/cover no-repeat;opacity:0;transition:opacity .35s ease}
+.elevcabin::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 46%,transparent 40%,rgba(3,6,9,.55) 92%),linear-gradient(180deg,rgba(3,6,9,.28),rgba(3,6,9,.5))}
+.elevcabin.show{opacity:1;animation:cabinzoom 7s ease-out both}
+@keyframes cabinzoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .elevhud{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);z-index:4;width:min(260px,76vw);opacity:0;transition:opacity .4s ease,transform .45s cubic-bezier(.22,1,.36,1);pointer-events:none}
 .elev.shut .elevhud{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .elevpanel{background:linear-gradient(180deg,rgba(15,24,26,.93),rgba(7,12,13,.96));border:1px solid rgba(45,212,167,.26);border-radius:18px;padding:22px 20px 18px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 46px rgba(25,195,125,.1),inset 0 1px 0 rgba(255,255,255,.05)}
@@ -260,6 +265,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <div class="fadeov" id="fadeov"></div>
 
 <div class="elev" id="elev">
+  <div class="elevcabin" id="elevCabin" style="background-image:url('media/cabin.jpg')"></div>
   <div class="elevhud" id="elevHud">
     <div class="elevpanel">
       <div class="elevrow"><span class="elevarrow" id="elevArrow">▲</span><span class="elevnum" id="elevNum">L</span></div>
@@ -285,9 +291,9 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <div class="dirback" id="dirBack"></div>
 <div class="dirmodal" id="dirPanel">
   <button class="x" id="dirX" aria-label="Cerrar">✕</button>
-  <div class="direye">Directorio del estudio</div>
+  <div class="direye">Panel del ascensor</div>
   <h2 class="dirh">Estudio Cruz<b>TRD</b></h2>
-  <div class="dirsub">Elige la capa que quieres visitar.</div>
+  <div class="dirsub">Selecciona el piso al que quieres subir.</div>
   <div class="dirlist" id="dirList"></div>
 </div>
 <button class="navhub" id="navHub"><span class="nhic">&#8862;</span>Directorio</button>
@@ -316,11 +322,11 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
 
   // ===== salas del recorrido =====
   var ROOMS=[
-    {name:'Recepción · Entrada', pano:'media/lab-pano.jpg', entryYaw:0, spots:[
-      {type:'char', lon:-98,lat:-12, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
-       text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas.',
+    {name:'Recepción · Lobby', pano:'media/lab-pano.jpg', entryYaw:0, spots:[
+      {type:'char', lon:-108,lat:-12, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
+       text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas. Llama al ascensor cuando quieras subir a cualquier piso del estudio.',
        sheet:'media/strip-host.webp', cls:'hosta'},
-      {type:'dir', lon:-81,lat:5, label:'Directorio del estudio'}
+      {type:'dir', lon:92,lat:-4, label:'Llamar el ascensor'}
     ]},
     {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg', entryYaw:0, spots:[
       {type:'char', lon:46,lat:-8, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
@@ -428,50 +434,55 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
       });
     }catch(e){}
   }
-  var moving=false;
+  var moving=false, elevCabin=document.getElementById('elevCabin');
+  function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
   function goRoom(idx){
     if(moving)return;
     if(idx===cur){panel.classList.remove('open');return;}
+    runElevator(cur,idx);
+  }
+  async function runElevator(from,to){
     moving=true;
     panel.classList.remove('open');
-    var from=cur, to=idx, up=to>=from;
-    // 1 · aparece el ascensor y las puertas cierran
+    var up=to>=from, f, k;
+    // 1 · aparece el ascensor; las puertas cierran sobre la sala actual
     elev.classList.add('on');
     elevArrow.textContent=up?'▲':'▼';
     elevNum.textContent=floorLabel(from);
-    elevName.textContent='';
-    elevFill.style.width='0%';
+    elevName.textContent=''; elevFill.style.width='0%';
     void elev.offsetWidth;
     elev.classList.add('shut');
-    // 2 · puertas cerradas → viaje entre pisos (cambia la sala por detrás)
-    setTimeout(function(){
-      setPano(ROOMS[to].pano);
-      buildHotspots(ROOMS[to]);
-      cur=to; roomtag.textContent=ROOMS[to].name;
-      var seq=[],f;
-      if(up){for(f=from;f<=to;f++)seq.push(f);} else {for(f=from;f>=to;f--)seq.push(f);}
-      var d=Math.max(1,seq.length-1), stepMs=Math.max(150,Math.min(320,1100/d)), k=0;
-      (function tick(){
-        elevNum.textContent=floorLabel(seq[k]);
-        elevFill.style.width=Math.round((k/d)*100)+'%';
-        k++;
-        if(k<seq.length){setTimeout(tick,stepMs);} else {arrive();}
-      })();
-    },640);
-    function arrive(){
-      elevNum.textContent=floorLabel(to);
-      elevName.textContent=floorName(to);
-      elevFill.style.width='100%';
-      ding();
-      setTimeout(function(){
-        // 3 · abre las puertas en la nueva sala y re-dispara el FOV de entrada
-        tyaw=yaw=ROOMS[to].entryYaw||0; tpitch=pitch=0;
-        if(gyro.on)gyro.have=false;        // recalibra el giroscopio a la nueva sala
-        t0=performance.now();
-        elev.classList.remove('shut');
-        setTimeout(function(){elev.classList.remove('on');moving=false;},660);
-      },280);
+    await wait(640);
+    // 2 · entras a la cabina: se revela el interior real del ascensor
+    elevCabin.classList.add('show');
+    await wait(40);
+    elev.classList.remove('shut');                 // puertas abren → cabina
+    setPano(ROOMS[to].pano);                        // carga la sala destino tras la cabina
+    buildHotspots(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name;
+    await wait(620);
+    // 3 · viaje entre pisos (indicador sobre la cabina)
+    var seq=[];
+    if(up){for(f=from;f<=to;f++)seq.push(f);} else {for(f=from;f>=to;f--)seq.push(f);}
+    var d=Math.max(1,seq.length-1), stepMs=Math.max(150,Math.min(300,1000/d));
+    for(k=0;k<seq.length;k++){
+      elevNum.textContent=floorLabel(seq[k]);
+      elevFill.style.width=Math.round((k/d)*100)+'%';
+      if(k<seq.length-1)await wait(stepMs);
     }
+    elevName.textContent=floorName(to); elevFill.style.width='100%';
+    ding();
+    await wait(340);
+    // 4 · puertas cierran sobre la cabina y abren en la sala destino
+    elev.classList.add('shut');
+    await wait(560);
+    elevCabin.classList.remove('show');            // la cabina se desvanece tras las puertas
+    await wait(320);
+    tyaw=yaw=ROOMS[to].entryYaw||0; tpitch=pitch=0; // prepara la vista + re-dispara el FOV de entrada
+    if(gyro.on)gyro.have=false;                     // recalibra el giroscopio a la nueva sala
+    t0=performance.now();
+    elev.classList.remove('shut');                  // puertas abren → sala destino
+    await wait(640);
+    elev.classList.remove('on'); moving=false;
   }
   // directorio (hub): lista las capas y salta a cada una
   var dirPanel=document.getElementById('dirPanel'), dirList=document.getElementById('dirList'), dirBack=document.getElementById('dirBack');
