@@ -237,7 +237,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .elevcabin.show{opacity:1;animation:cabinzoom 7s ease-out both}
 @keyframes cabinzoom{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 .elevhud{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.95);z-index:4;width:min(260px,76vw);opacity:0;transition:opacity .4s ease,transform .45s cubic-bezier(.22,1,.36,1);pointer-events:none}
-.elev.shut .elevhud{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.elev.shut .elevhud,.elev.riding .elevhud{opacity:1;transform:translate(-50%,-50%) scale(1)}
 .elevpanel{background:linear-gradient(180deg,rgba(15,24,26,.93),rgba(7,12,13,.96));border:1px solid rgba(45,212,167,.26);border-radius:18px;padding:22px 20px 18px;text-align:center;box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 46px rgba(25,195,125,.1),inset 0 1px 0 rgba(255,255,255,.05)}
 .elevrow{display:flex;align-items:center;justify-content:center;gap:13px}
 .elevarrow{font-size:19px;color:var(--accent2);line-height:1;filter:drop-shadow(0 0 7px rgba(45,212,167,.6));animation:elevblink 1.1s ease-in-out infinite}
@@ -455,6 +455,7 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     await wait(640);
     // 2 · entras a la cabina: se revela el interior real del ascensor
     elevCabin.classList.add('show');
+    elev.classList.add('riding');          // mantiene visible el indicador de piso durante el viaje
     await wait(40);
     elev.classList.remove('shut');                 // puertas abren → cabina
     setPano(ROOMS[to].pano);                        // carga la sala destino tras la cabina
@@ -476,6 +477,7 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     elev.classList.add('shut');
     await wait(560);
     elevCabin.classList.remove('show');            // la cabina se desvanece tras las puertas
+    elev.classList.remove('riding');
     await wait(320);
     tyaw=yaw=ROOMS[to].entryYaw||0; tpitch=pitch=0; // prepara la vista + re-dispara el FOV de entrada
     if(gyro.on)gyro.have=false;                     // recalibra el giroscopio a la nueva sala
