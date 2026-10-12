@@ -346,6 +346,40 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     });
   }
 
+  // ===== muro de video (prueba: pantalla con actividad real dentro de la sala) =====
+  var wallMesh=null, wallVid=null, wallTex=null;
+  function clearWall(){
+    if(wallMesh){ scene.remove(wallMesh); wallMesh.traverse(function(o){ if(o.geometry)o.geometry.dispose(); if(o.material)o.material.dispose(); }); wallMesh=null; }
+    if(wallTex){ wallTex.dispose(); wallTex=null; }
+    if(wallVid){ try{wallVid.pause();}catch(e){} if(wallVid.parentNode)wallVid.parentNode.removeChild(wallVid); wallVid=null; }
+  }
+  function positionWall(w){
+    var a=w.lon*Math.PI/180,b=w.lat*Math.PI/180;
+    var dir=new THREE.Vector3(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));
+    wallMesh.position.copy(dir.multiplyScalar(RADIUS*(w.dist||0.58)));
+    wallMesh.lookAt(0,0,0);
+  }
+  function buildWall(room){
+    clearWall();
+    var w=room.wall; if(!w)return;
+    wallVid=document.createElement('video');
+    wallVid.muted=true; wallVid.loop=true; wallVid.autoplay=true;
+    wallVid.setAttribute('playsinline',''); wallVid.setAttribute('webkit-playsinline','');
+    wallVid.style.cssText='position:absolute;left:-10px;top:-10px;width:2px;height:2px;opacity:0;pointer-events:none';
+    wallVid.src=w.vid; document.body.appendChild(wallVid);
+    var pp=wallVid.play(); if(pp&&pp.catch)pp.catch(function(){});
+    wallTex=new THREE.VideoTexture(wallVid); wallTex.minFilter=THREE.LinearFilter; wallTex.magFilter=THREE.LinearFilter;
+    var ww=w.w||160, hh=ww/(w.ratio||1.777);
+    wallMesh=new THREE.Group();
+    var bezel=new THREE.Mesh(new THREE.PlaneGeometry(ww*1.05,hh*1.09), new THREE.MeshBasicMaterial({color:0x080f0e}));
+    bezel.position.z=-0.6;
+    var edge=new THREE.Mesh(new THREE.PlaneGeometry(ww*1.02,hh*1.05), new THREE.MeshBasicMaterial({color:0x2DD4A7,transparent:true,opacity:.35}));
+    edge.position.z=-0.3;
+    var screen=new THREE.Mesh(new THREE.PlaneGeometry(ww,hh), new THREE.MeshBasicMaterial({map:wallTex}));
+    wallMesh.add(bezel); wallMesh.add(edge); wallMesh.add(screen);
+    positionWall(w); scene.add(wallMesh);
+  }
+
   // ===== salas del recorrido =====
   var ROOMS=[
     {name:'Recepción · Lobby', pano:'media/lab-pano.jpg', entryYaw:0, spots:[
@@ -390,7 +424,7 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
        sheet:'media/strip-fidel.webp', cls:'fidela'},
       {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg', entryYaw:0, spots:[
+    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg', entryYaw:0, wall:{lon:-42,lat:-3,vid:'media/scene-dash.mp4',w:175,ratio:1.777,dist:0.58}, spots:[
       {type:'char', lon:8,lat:-10, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'ESPECIALISTA · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
        sheet:'media/strip-dash.webp', cls:'dasha'},
@@ -485,7 +519,7 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
     await wait(40);
     elev.classList.remove('shut');                 // puertas abren → cabina
     setPano(ROOMS[to].pano);                        // carga la sala destino tras la cabina
-    buildHotspots(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name;
+    buildHotspots(ROOMS[to]); buildWall(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name;
     await wait(620);
     // 3 · viaje entre pisos (indicador sobre la cabina)
     var seq=[];
@@ -531,10 +565,11 @@ var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted 
 
   // arranque en Recepción
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);});
-  buildHotspots(ROOMS[0]); roomtag.textContent=ROOMS[0].name;
+  buildHotspots(ROOMS[0]); buildWall(ROOMS[0]); roomtag.textContent=ROOMS[0].name;
   window.__T={ROOMS:ROOMS, go:goRoom, curRoom:function(){return cur;},
     set:function(room,i,lon,lat){var s=ROOMS[room].spots[i];s.lon=lon;s.lat=lat;mkDir(s);},
-    yaw:function(v){tyaw=yaw=v;}};
+    yaw:function(v){tyaw=yaw=v;},
+    wall:function(lon,lat,w,dist){var rm=ROOMS[cur];if(!rm.wall)return 'sin muro';if(lon!=null)rm.wall.lon=lon;if(lat!=null)rm.wall.lat=lat;if(w!=null)rm.wall.w=w;if(dist!=null)rm.wall.dist=dist;buildWall(rm);return rm.wall;}};
 
   var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
