@@ -427,9 +427,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     g.setAttribute('puv',new THREE.Float32BufferAttribute(puv,2));
     g.setIndex(idx);
     var mat=new THREE.ShaderMaterial({
-      uniforms:{dash:{value:tex},pano:{value:sphere.material.map},avg:{value:sc.avg||0.28},str:{value:(sc.str!=null?sc.str:0.85)}},
+      uniforms:{dash:{value:tex},pano:{value:sphere.material.map},avg:{value:sc.avg||0.28},str:{value:(sc.str!=null?sc.str:0.7)}},
       vertexShader:'attribute vec2 puv; varying vec2 vUv; varying vec2 vP; void main(){ vUv=uv; vP=puv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
-      fragmentShader:'uniform sampler2D dash; uniform sampler2D pano; uniform float avg; uniform float str; varying vec2 vUv; varying vec2 vP; void main(){ vec3 d=texture2D(dash,vUv).rgb; vec3 p=texture2D(pano,vP).rgb; float lum=dot(p,vec3(0.299,0.587,0.114)); float sh=clamp(lum/max(avg,0.04),0.5,1.45); sh=mix(1.0,sh,str); vec3 hi=max(p-vec3(0.62),vec3(0.0))*0.85; float fx=smoothstep(0.0,0.035,vUv.x)*smoothstep(0.0,0.035,1.0-vUv.x); float fy=smoothstep(0.0,0.05,vUv.y)*smoothstep(0.0,0.05,1.0-vUv.y); gl_FragColor=vec4(d*sh+hi, fx*fy); }',
+      fragmentShader:'uniform sampler2D dash; uniform sampler2D pano; uniform float avg; uniform float str; varying vec2 vUv; varying vec2 vP; void main(){ vec3 d=texture2D(dash,vUv).rgb; vec3 p=texture2D(pano,vP).rgb; float lum=dot(p,vec3(0.299,0.587,0.114)); float sh=clamp(lum/max(avg,0.04),0.6,1.35); sh=mix(1.0,sh,str); vec3 hi=max(p-vec3(0.78),vec3(0.0))*0.5; float fx=smoothstep(0.0,0.035,vUv.x)*smoothstep(0.0,0.035,1.0-vUv.x); float fy=smoothstep(0.0,0.05,vUv.y)*smoothstep(0.0,0.05,1.0-vUv.y); gl_FragColor=vec4(d*sh+hi, fx*fy); }',
       transparent:true, depthTest:false, depthWrite:false, side:THREE.DoubleSide
     });
     var mesh=new THREE.Mesh(g,mat); mesh.renderOrder=3; mesh.layers.enable(BLOOM_LAYER); scene.add(mesh);
