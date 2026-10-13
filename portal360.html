@@ -414,7 +414,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var screens=[];
   function clearWall(){ screens.forEach(function(s){scene.remove(s.mesh); if(s.mesh.geometry)s.mesh.geometry.dispose();}); screens=[]; }
   function makeScreen(sc){
-    var cv=document.createElement('canvas'); cv.width=640; cv.height=384; var cx=cv.getContext('2d');
+    var sm=!!sc.sm, cw=sm?448:640, ch=sm?272:384;
+    var cv=document.createElement('canvas'); cv.width=cw; cv.height=ch; var cx=cv.getContext('2d');
     var tex=new THREE.CanvasTexture(cv); tex.flipY=false; tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
     var R=RADIUS*0.985, p=sc.corners.map(function(c){return lonlatToDir(c[0],c[1]).multiplyScalar(R);});
     var g=new THREE.BufferGeometry();
@@ -422,7 +423,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0,1,0,1,1, 0,0,1,1,0,1]),2));
     var mesh=new THREE.Mesh(g,new THREE.MeshBasicMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false,side:THREE.DoubleSide}));
     mesh.renderOrder=3; mesh.layers.enable(BLOOM_LAYER); scene.add(mesh);
-    var s={mesh:mesh,cx:cx,tex:tex,type:sc.type,acc:ACC[sc.acc]||sc.acc||ACC.g,title:sc.title||'',seed:sc.seed||Math.random()*7,last:0};
+    var s=Object.assign({},sc); s.mesh=mesh;s.cx=cx;s.tex=tex;s.acc=ACC[sc.acc]||sc.acc||ACC.g;s.title=sc.title||'';s.seed=sc.seed||Math.random()*7;s.W=cw;s.H=ch;s.iv=sm?150:70;s.last=performance.now()-Math.random()*s.iv;
     drawPanel(s,performance.now()/1000); s.tex.needsUpdate=true; screens.push(s);
   }
   function buildWall(room){ clearWall(); if(room.screens)room.screens.forEach(makeScreen); }
@@ -448,7 +449,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     c.beginPath();c.moveTo(m+b,H-m);c.lineTo(m,H-m);c.lineTo(m,H-m-b);c.stroke();
   }
   function drawPanel(s,t){
-    var c=s.cx,W=640,H=384,acc=s.acc,sd=s.seed,i,x,y,n;
+    var c=s.cx,W=s.W,H=s.H,acc=s.acc,sd=s.seed,i,x,y,n;
     frame(c,W,H,acc,s.title,t);
     if(s.type==='bigline'){
       n=16; var cx0=22,cx1=W-22,cy0=H-26,cy1=118;
@@ -689,6 +690,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     vp:function(){return [innerWidth,innerHeight];},
     // calibración multi-pantalla: agrega una pantalla desde 4 puntos de pantalla (client px) TL,TR,BR,BL
     sAdd:function(type,acc,title,pts,extra){var rm=ROOMS[cur];if(!rm.screens)rm.screens=[];var sc={corners:pts.map(function(p){return dirToLonLat(screenToDir(p[0],p[1]));}),type:type,acc:acc,title:title};if(extra)for(var k in extra)sc[k]=extra[k];rm.screens.push(sc);buildWall(rm);return rm.screens.length;},
+    sAddBatch:function(arr){var rm=ROOMS[cur];if(!rm.screens)rm.screens=[];arr.forEach(function(a){var sc={corners:a.pts.map(function(p){return dirToLonLat(screenToDir(p[0],p[1]));}),type:a.type,acc:a.acc,title:a.title||''};if(a.sm)sc.sm=1;if(a.extra)for(var k in a.extra)sc[k]=a.extra[k];rm.screens.push(sc);});buildWall(rm);return rm.screens.length;},
     sClear:function(){var rm=ROOMS[cur];rm.screens=[];buildWall(rm);return 0;},
     sDel:function(i){var rm=ROOMS[cur];if(rm.screens)rm.screens.splice(i,1);buildWall(rm);return rm.screens?rm.screens.length:0;},
     sDump:function(){var rm=ROOMS[cur];return rm.screens?JSON.stringify(rm.screens):'sin screens';},
@@ -750,7 +752,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
       } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
-    for(var wi=0;wi<screens.length;wi++){var sc=screens[wi]; if(now-sc.last>60){sc.last=now; drawPanel(sc, now/1000); sc.tex.needsUpdate=true;}}
+    for(var wi=0;wi<screens.length;wi++){var sc=screens[wi]; if(now-sc.last>sc.iv){sc.last=now; drawPanel(sc, now/1000); sc.tex.needsUpdate=true;}}
     renderComposited();
   }
   loop();
