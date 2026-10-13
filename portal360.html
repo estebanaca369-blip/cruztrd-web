@@ -415,7 +415,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function clearWall(){ screens.forEach(function(s){scene.remove(s.mesh); if(s.mesh.geometry)s.mesh.geometry.dispose(); if(s.mesh.material)s.mesh.material.dispose(); if(s.tex)s.tex.dispose();}); screens=[]; }
   function makeScreen(sc){
     var sm=!!sc.sm, cw=sm?448:640, ch=sm?272:384, SS=2;
-    var cv=document.createElement('canvas'); cv.width=cw*SS; cv.height=ch*SS; var cx=cv.getContext('2d'); cx.scale(SS,SS);
+    var cv=document.createElement('canvas'); cv.width=cw*SS; cv.height=ch*SS; var cx=cv.getContext('2d'); cx.scale(SS,SS); try{Object.defineProperty(cx,'shadowBlur',{get:function(){return 0;},set:function(v){},configurable:true});}catch(e){}
     var tex=new THREE.CanvasTexture(cv); tex.flipY=false; tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=false; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
     var c=sc.corners, N=18, M=10, R=RADIUS*0.992, pos=[],uv=[],puv=[],idx=[];
     function L2(s,t){var lon=(1-t)*((1-s)*c[0][0]+s*c[1][0])+t*((1-s)*c[3][0]+s*c[2][0]);var lat=(1-t)*((1-s)*c[0][1]+s*c[1][1])+t*((1-s)*c[3][1]+s*c[2][1]);return [lon,lat];}
