@@ -411,12 +411,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var ACC={g:'#2DD4A7',c:'#38E5FF',b:'#5AA0FF',a:'#FFB84D',m:'#FF6FA5',v:'#B98CFF'};
   function hx(h,a){var n=parseInt(h.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
   // ---- varias pantallas vivas por sala (textura canvas en WebGL) ----
-  var screens=[];
+  var screens=[], __fw=new THREE.Vector3();
   function clearWall(){ screens.forEach(function(s){scene.remove(s.mesh); if(s.mesh.geometry)s.mesh.geometry.dispose(); if(s.mesh.material)s.mesh.material.dispose(); if(s.tex)s.tex.dispose();}); screens=[]; }
   function makeScreen(sc){
     var sm=!!sc.sm, cw=sm?448:640, ch=sm?272:384, SS=2;
     var cv=document.createElement('canvas'); cv.width=cw*SS; cv.height=ch*SS; var cx=cv.getContext('2d'); cx.scale(SS,SS);
-    var tex=new THREE.CanvasTexture(cv); tex.flipY=false; tex.minFilter=THREE.LinearMipmapLinearFilter; tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=true; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    var tex=new THREE.CanvasTexture(cv); tex.flipY=false; tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter; tex.generateMipmaps=false; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
     var c=sc.corners, N=18, M=10, R=RADIUS*0.992, pos=[],uv=[],puv=[],idx=[];
     function L2(s,t){var lon=(1-t)*((1-s)*c[0][0]+s*c[1][0])+t*((1-s)*c[3][0]+s*c[2][0]);var lat=(1-t)*((1-s)*c[0][1]+s*c[1][1])+t*((1-s)*c[3][1]+s*c[2][1]);return [lon,lat];}
     for(var j=0;j<=M;j++)for(var i=0;i<=N;i++){var s=i/N,t=j/M,q=L2(s,t),d=lonlatToDir(q[0],q[1]).multiplyScalar(R);pos.push(d.x,d.y,d.z);uv.push(s,t);var u=((q[0]-180)/360)%1;if(u<0)u+=1;puv.push(u,(q[1]+90)/180);}
@@ -433,7 +433,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       transparent:true, depthTest:false, depthWrite:false, side:THREE.DoubleSide
     });
     var mesh=new THREE.Mesh(g,mat); mesh.renderOrder=3; mesh.layers.enable(BLOOM_LAYER); scene.add(mesh);
-    var s=Object.assign({},sc); s.mesh=mesh;s.cx=cx;s.tex=tex;s.acc=ACC[sc.acc]||sc.acc||ACC.g;s.title=sc.title||'';s.seed=sc.seed||Math.random()*7;s.W=cw;s.H=ch;s.iv=sc.iv||(sm?150:70);s.last=performance.now()-Math.random()*s.iv;
+    var s=Object.assign({},sc); s.mesh=mesh;s.cx=cx;s.tex=tex;(function(){var q=L2(0.5,0.5);s.cdir=lonlatToDir(q[0],q[1]).normalize();})();s.acc=ACC[sc.acc]||sc.acc||ACC.g;s.title=sc.title||'';s.seed=sc.seed||Math.random()*7;s.W=cw;s.H=ch;s.iv=sc.iv||(sm?150:70);s.last=performance.now()-Math.random()*s.iv;
     drawPanel(s,performance.now()/1000); s.tex.needsUpdate=true; screens.push(s);
   }
   function buildWall(room){ clearWall(); if(room.screens)room.screens.forEach(makeScreen); }
@@ -762,7 +762,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
       } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
-    for(var wi=0;wi<screens.length;wi++){var sc=screens[wi]; if(sc.mesh.material.uniforms&&sc.mesh.material.uniforms.pano.value!==sphere.material.map)sc.mesh.material.uniforms.pano.value=sphere.material.map; if(now-sc.last>sc.iv){sc.last=now; drawPanel(sc, now/1000); sc.tex.needsUpdate=true;}}
+    for(var wi=0;wi<screens.length;wi++){var sc=screens[wi]; if(sc.mesh.material.uniforms&&sc.mesh.material.uniforms.pano.value!==sphere.material.map)sc.mesh.material.uniforms.pano.value=sphere.material.map; camera.getWorldDirection(__fw); if(sc.cdir&&sc.cdir.dot(__fw)<0.2)continue; if(now-sc.last>sc.iv){sc.last=now; drawPanel(sc, now/1000); sc.tex.needsUpdate=true;}}
     renderComposited();
   }
   loop();
