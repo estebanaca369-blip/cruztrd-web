@@ -369,12 +369,24 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var geo=new THREE.SphereGeometry(RADIUS,80,50); geo.scale(-1,1,1);
   var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:null}));
   sphere.rotation.y=Math.PI/2; scene.add(sphere);
-  // ===== compositing (motor VFX): bloom + grano de película sobre toda la escena =====
-  var composer=new THREE.EffectComposer(renderer);
-  composer.addPass(new THREE.RenderPass(scene,camera));
-  var bloomPass=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.75,0.55,0.72); // strength, radius, threshold
-  composer.addPass(bloomPass);
-  var filmPass=new THREE.FilmPass(0.14,0.0,0,false); filmPass.renderToScreen=true; composer.addPass(filmPass); // grano sutil, sin scanlines globales
+  // ===== compositing (motor VFX): bloom SELECTIVO (solo el tablero) + grano de película =====
+  var BLOOM_LAYER=1, bloomLayer=new THREE.Layers(); bloomLayer.set(BLOOM_LAYER);
+  var darkMat=new THREE.MeshBasicMaterial({color:0x000000}); var matStash={};
+  var renderPass=new THREE.RenderPass(scene,camera);
+  var bloomPass=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.9,0.5,0.0); // strength, radius, threshold
+  var bloomComposer=new THREE.EffectComposer(renderer); bloomComposer.renderToScreen=false;
+  bloomComposer.addPass(renderPass); bloomComposer.addPass(bloomPass);
+  var mixPass=new THREE.ShaderPass(new THREE.ShaderMaterial({
+    uniforms:{baseTexture:{value:null}, bloomTexture:{value:bloomComposer.renderTarget2.texture}},
+    vertexShader:'varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+    fragmentShader:'uniform sampler2D baseTexture; uniform sampler2D bloomTexture; varying vec2 vUv; void main(){ gl_FragColor = texture2D(baseTexture,vUv) + texture2D(bloomTexture,vUv); }'
+  }),'baseTexture');
+  var filmPass=new THREE.FilmPass(0.12,0.0,0,false); filmPass.renderToScreen=true;
+  var finalComposer=new THREE.EffectComposer(renderer);
+  finalComposer.addPass(renderPass); finalComposer.addPass(mixPass); finalComposer.addPass(filmPass);
+  function darkenNB(o){ if(o.isMesh && o.layers && !bloomLayer.test(o.layers)){ matStash[o.uuid]=o.material; o.material=darkMat; } }
+  function restoreNB(o){ if(matStash[o.uuid]){ o.material=matStash[o.uuid]; delete matStash[o.uuid]; } }
+  function renderComposited(){ scene.traverse(darkenNB); bloomComposer.render(); scene.traverse(restoreNB); finalComposer.render(); }
   var texLoader=new THREE.TextureLoader();
   // caché LRU de texturas: volver entre pisos ya vistos es instantáneo (sin re-decodificar 4K)
   var texCache=Object.create(null), texOrder=[], MAXTEX=4;
@@ -412,7 +424,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       p[0].x,p[0].y,p[0].z, p[2].x,p[2].y,p[2].z, p[3].x,p[3].y,p[3].z]),3));
     g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0, 1,0, 1,1,  0,0, 1,1, 0,1]),2));
     var m=new THREE.MeshBasicMaterial({map:dashTex,transparent:true,depthTest:false,depthWrite:false,side:THREE.DoubleSide});
-    wallMesh=new THREE.Mesh(g,m); wallMesh.renderOrder=3; scene.add(wallMesh);
+    wallMesh=new THREE.Mesh(g,m); wallMesh.renderOrder=3; wallMesh.layers.enable(BLOOM_LAYER); scene.add(wallMesh);
     wallHk=w.hk; drawDash(wallHk, performance.now()/1000); dashTex.needsUpdate=true;
   }
   // ---- render del tablero en canvas (estilo pantalla emisiva, homologado) ----
@@ -668,7 +680,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var hint=document.getElementById('hint'), hintHid=false;
   function hideHint(){if(!hintHid){hintHid=true;hint.style.opacity='0';}}
   setTimeout(hideHint,6500);
-  function fit(){renderer.setSize(innerWidth,innerHeight,false);composer.setSize(innerWidth,innerHeight);bloomPass.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+  function fit(){renderer.setSize(innerWidth,innerHeight,false);bloomComposer.setSize(innerWidth,innerHeight);finalComposer.setSize(innerWidth,innerHeight);bloomPass.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
   addEventListener('resize',fit); fit();
 
   // ===== giroscopio móvil (relativo: tu vista actual es el ancla) =====
@@ -717,7 +729,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
     if(wallMesh && now-lastDash>55){ lastDash=now; drawDash(wallHk, now/1000); dashTex.needsUpdate=true; }
-    composer.render();
+    renderComposited();
   }
   loop();
 })();
