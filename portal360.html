@@ -345,7 +345,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 </div>
 
 <script src="vendor/three.min.js"></script>
-<script src="vendor/CSS3DRenderer.js"></script>
+<script src="vendor/postproc.js"></script>
 <script>
 var HOLOS={"intro": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-hero-1080.jpg\" src=\"media/scene-hero.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Estudio CruzTRD · en vivo</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov bc\"><div class=\"rowp\"><span class=\"vchip\" style=\"--d:0.6s\"><b>7</b> capas</span><span class=\"vchip\" style=\"--d:0.7s\"><b>8</b> especialistas</span><span class=\"vchip\" style=\"--d:0.8s\">animación · video · 3D</span></div></div></div>", "infra": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-infra-1080.jpg\" src=\"media/scene-infra.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Infra · tiempo real</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov cluster\"><div class=\"rail\"><div class=\"vkpi\" style=\"--d:0.5s\"><div class=\"l\">Nodos activos</div><div class=\"v\">12</div><div class=\"d\">auto-escala</div></div><div class=\"vkpi\" style=\"--d:0.6s\"><div class=\"l\">Req/min</div><div class=\"v\">8.5K</div><div class=\"d\">▲ 6%</div></div></div><div class=\"gaugelive\"><div class=\"gauge\"><svg viewBox=\"0 0 120 120\"><circle class=\"garc\" cx=\"60\" cy=\"60\" r=\"52\"/><circle class=\"gfill\" cx=\"60\" cy=\"60\" r=\"52\" style=\"--c:327;--o:0.1;transform:rotate(-90deg);transform-origin:center\"/><g class=\"gspin\"><circle class=\"gping\" cx=\"60\" cy=\"8\" r=\"3.4\"/></g></svg><div class=\"gaugev\"><b>99.98%</b><span>uptime</span></div></div><div class=\"latlive\"><div class=\"latwrap\"><span class=\"ll\">latencia · en vivo</span><span class=\"lv\"><b data-lat>42</b><u>ms</u></span></div><svg class=\"latwave\" viewBox=\"0 0 120 26\" preserveAspectRatio=\"none\"><polyline class=\"lwscroll\" points=\"0,18 10,21 20,18 30,18 40,20 50,22 60,10 70,9 80,20 90,19 100,9 110,7 120,18 130,21 140,18 150,18 160,20 170,22 180,10 190,9 200,20 210,19 220,9 230,7 240,18\"/></svg></div></div></div></div>", "seg": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-seg-1080.jpg\" src=\"media/scene-seg.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Seguridad · 24h</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov cluster cr\"><div class=\"bigmini\"><div class=\"radar\"><svg viewBox=\"0 0 120 120\"><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"18\"/><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"36\"/><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"54\"/><g class=\"sweep\"><defs><linearGradient id=\"sw2\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2DD4A7\" stop-opacity=\"0\"/><stop offset=\"1\" stop-color=\"#2DD4A7\" stop-opacity=\".55\"/></linearGradient></defs><path d=\"M60 60 L114 60 A54 54 0 0 0 78 12 Z\" fill=\"url(#sw2)\"/></g><circle class=\"rblip\" cx=\"54\" cy=\"93\" r=\"3\"/><circle class=\"rblip\" cx=\"40\" cy=\"71\" r=\"3\"/><circle class=\"rblip\" cx=\"84\" cy=\"32\" r=\"3\"/><circle class=\"rblip\" cx=\"25\" cy=\"84\" r=\"3\"/><circle class=\"rblip\" cx=\"57\" cy=\"94\" r=\"3\"/></svg><div class=\"radarv\"><b>0</b><span>brechas · 24h</span></div></div></div><div class=\"rowp\"><span class=\"vchip\" style=\"--d:0.6s\">Cifrado <b>AES-256</b></span><span class=\"vchip\" style=\"--d:0.7s\"><b>2FA</b></span><span class=\"vchip\" style=\"--d:0.8s\">1.2K bloqueos</span></div></div></div>", "pagos": "<div class=\"vsplit\"><div class=\"vtop\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-pagos-1080.jpg\" src=\"media/scene-pagos.mp4\"></video><div class=\"vtsh\"></div><div class=\"vhead\"><span>Pagos · hoy</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"vtag\">▲ 24% <small>vs. ayer</small></div></div><div class=\"vbot\"><div class=\"bigmini\"><div class=\"donut\"><svg viewBox=\"0 0 120 120\"><circle class=\"dntrack\" cx=\"60\" cy=\"60\" r=\"52\"/><circle class=\"dnfill\" cx=\"60\" cy=\"60\" r=\"52\" style=\"--c:327;--o:9.8\"/></svg><div class=\"donutv\"><b>97%</b><span>aprob.</span></div></div></div><div class=\"txlist\" style=\"flex:1\"><div class=\"txrow\" style=\"--d:0.5s\"><span class=\"am\">Pago · $34</span><span class=\"ok\">✓</span></div><div class=\"txrow\" style=\"--d:0.58s\"><span class=\"am\">Suscripción · $120</span><span class=\"ok\">✓</span></div><div class=\"txrow\" style=\"--d:0.66s\"><span class=\"am\">Transferencia · $212</span><span class=\"ok\">✓</span></div></div></div></div>", "susc": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-susc-1080.jpg\" src=\"media/scene-susc.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Suscripciones · 12m</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov tl\"><div class=\"hugen\">$48.2K<small>MRR · ▲ 12% mes a mes</small></div></div><div class=\"ov tr\"><div class=\"rail\"><div class=\"vkpi\" style=\"--d:0.5s\"><div class=\"l\">Churn</div><div class=\"v\">2.1%</div><div class=\"d\">bajo</div></div><div class=\"vkpi\" style=\"--d:0.6s\"><div class=\"l\">Activas</div><div class=\"v\">3.4K</div><div class=\"d\">▲</div></div></div></div><div class=\"ov bl\" style=\"right:15px;left:15px\"><div class=\"cohstrip\"><i style=\"--a:0.62;--d:0.4s\"></i><i style=\"--a:0.62;--d:0.41000000000000003s\"></i><i style=\"--a:0.62;--d:0.42000000000000004s\"></i><i style=\"--a:0.55;--d:0.43000000000000005s\"></i><i style=\"--a:0.54;--d:0.44s\"></i><i style=\"--a:0.48;--d:0.45s\"></i><i style=\"--a:0.41;--d:0.46s\"></i><i style=\"--a:0.41;--d:0.47000000000000003s\"></i><i style=\"--a:0.32;--d:0.48000000000000004s\"></i><i style=\"--a:0.31;--d:0.49s\"></i><i style=\"--a:0.24;--d:0.5s\"></i><i style=\"--a:0.19;--d:0.51s\"></i><i style=\"--a:0.17;--d:0.52s\"></i><i style=\"--a:0.16;--d:0.53s\"></i><i style=\"--a:0.62;--d:0.54s\"></i><i style=\"--a:0.62;--d:0.55s\"></i><i style=\"--a:0.62;--d:0.56s\"></i><i style=\"--a:0.62;--d:0.5700000000000001s\"></i><i style=\"--a:0.55;--d:0.5800000000000001s\"></i><i style=\"--a:0.49;--d:0.5900000000000001s\"></i><i style=\"--a:0.49;--d:0.6000000000000001s\"></i><i style=\"--a:0.37;--d:0.61s\"></i><i style=\"--a:0.39;--d:0.62s\"></i><i style=\"--a:0.30;--d:0.63s\"></i><i style=\"--a:0.24;--d:0.64s\"></i><i style=\"--a:0.19;--d:0.65s\"></i><i style=\"--a:0.16;--d:0.66s\"></i><i style=\"--a:0.16;--d:0.67s\"></i><i style=\"--a:0.62;--d:0.68s\"></i><i style=\"--a:0.62;--d:0.69s\"></i><i style=\"--a:0.62;--d:0.7s\"></i><i style=\"--a:0.57;--d:0.71s\"></i><i style=\"--a:0.54;--d:0.72s\"></i><i style=\"--a:0.46;--d:0.73s\"></i><i style=\"--a:0.41;--d:0.74s\"></i><i style=\"--a:0.38;--d:0.75s\"></i><i style=\"--a:0.37;--d:0.76s\"></i><i style=\"--a:0.31;--d:0.77s\"></i><i style=\"--a:0.26;--d:0.78s\"></i><i style=\"--a:0.23;--d:0.79s\"></i><i style=\"--a:0.18;--d:0.8s\"></i><i style=\"--a:0.12;--d:0.81s\"></i></div></div></div>", "mkt": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-mkt-1080.jpg\" src=\"media/scene-mkt.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Campañas · embudo</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov lc\"><div class=\"wfunnel\"><i style=\"width:100%;--d:0.5s\">Alcance 480K</i><i style=\"width:82%;--d:0.6s\">Clics 21K</i><i style=\"width:66%;--d:0.7s\">Leads 4.3K</i><i style=\"width:52%;--d:0.8s\">Ventas 1.1K</i></div></div><div class=\"ov rc\"><div class=\"rail\"><div class=\"vkpi\" style=\"--d:0.5s\"><div class=\"l\">CTR</div><div class=\"v\">4.3%</div><div class=\"d\">▲</div></div><div class=\"vkpi\" style=\"--d:0.6s\"><div class=\"l\">CAC</div><div class=\"v\">$6.20</div><div class=\"d\">▼</div></div><div class=\"vkpi\" style=\"--d:0.7s\"><div class=\"l\">ROAS</div><div class=\"v\">2.8x</div><div class=\"d\">▲</div></div></div></div></div>", "fidel": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-fidel-1080.jpg\" src=\"media/scene-fidel.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Lealtad · 90 días</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov cluster cr\"><div class=\"bigmini\"><div class=\"rings\"><svg viewBox=\"0 0 120 120\"><circle class=\"rtrack\" cx=\"60\" cy=\"60\" r=\"52\"/><circle class=\"rfill\" cx=\"60\" cy=\"60\" r=\"52\" style=\"--c:327;--o:127.5;stroke:#2DD4A7\"/><circle class=\"rtrack\" cx=\"60\" cy=\"60\" r=\"38\"/><circle class=\"rfill\" cx=\"60\" cy=\"60\" r=\"38\" style=\"--c:238.8;--o:66.9;stroke:#5BF3C0\"/></svg><div class=\"donutv\"><b>61%</b><span>recurrencia</span></div></div></div><div class=\"rowp\"><div class=\"stat\" style=\"--d:0.5s\"><b>72</b><span>NPS</span></div><div class=\"stat\" style=\"--d:0.6s\"><b>1.1K</b><span>referidos</span></div><div class=\"vbadge\"><b>▲ 18%</b><span>recompra</span></div></div></div></div>", "dash": "<div class=\"vpanel\"><video class=\"cvid\" autoplay muted loop playsinline preload=\"metadata\" poster=\"media/poster-dash-1080.jpg\" src=\"media/scene-dash.mp4\"></video><div class=\"vtsh\"></div><div class=\"vbsh\"></div><div class=\"vhead\"><span>Panel · tiempo real</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"ov tl\" style=\"right:15px\"><div class=\"vkpis\"><div class=\"vkpi\" style=\"--d:0.5s\"><div class=\"l\">Usuarios</div><div class=\"v\">12.4K</div><div class=\"d\">▲ 8%</div></div><div class=\"vkpi\" style=\"--d:0.6s\"><div class=\"l\">Conversión</div><div class=\"v\">3.7%</div><div class=\"d\">▲ 0.4</div></div><div class=\"vkpi\" style=\"--d:0.7s\"><div class=\"l\">Ticket prom.</div><div class=\"v\">$42</div><div class=\"d\">▲ 3%</div></div></div></div><div class=\"ov bl\" style=\"right:15px\"><div class=\"sparkbox\"><div class=\"spk-cap\">Ingresos · 12 meses</div><div class=\"spk-row\"><svg viewBox=\"0 0 300 64\" preserveAspectRatio=\"none\" style=\"height:58px\"><defs><linearGradient id=\"spg\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#2DD4A7\" stop-opacity=\".32\"/><stop offset=\"1\" stop-color=\"#2DD4A7\" stop-opacity=\"0\"/></linearGradient></defs><path d=\"M0,58 L27,54 55,46 82,50 109,37 136,39 164,27 191,23 218,16 245,11 273,7 300,4 L300,64 L0,64 Z\" fill=\"url(#spg)\"/><path d=\"M0,58 L27,54 55,46 82,50 109,37 136,39 164,27 191,23 218,16 245,11 273,7 300,4\" fill=\"none\" stroke=\"#2DD4A7\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"300\" cy=\"4\" r=\"3.4\" fill=\"#5BF3C0\"/></svg><div class=\"spk-end\">$48.2K<small>MRR actual</small></div></div></div></div></div>"};
 var VID={intro:{f:'hero',t:'Estudio CruzTRD · en vivo'},infra:{f:'infra',t:'Infraestructura · tiempo real'},seg:{f:'seg',t:'Seguridad · 24h'},pagos:{f:'pagos',t:'Pagos · hoy'},susc:{f:'susc',t:'Suscripciones · 12m'},mkt:{f:'mkt',t:'Campañas · en vivo'},fidel:{f:'fidel',t:'Lealtad · 90 días'},dash:{f:'dash',t:'Panel · tiempo real'}};
@@ -369,14 +369,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var geo=new THREE.SphereGeometry(RADIUS,80,50); geo.scale(-1,1,1);
   var sphere=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({map:null}));
   sphere.rotation.y=Math.PI/2; scene.add(sphere);
-  // capa CSS3D (para montar HTML/SVG — los cuadros — en 3D sobre la pared)
-  var cssScene=new THREE.Scene(), cssRenderer=null;
-  if(THREE.CSS3DRenderer){
-    cssRenderer=new THREE.CSS3DRenderer();
-    cssRenderer.setSize(innerWidth,innerHeight);
-    cssRenderer.domElement.id='css3d';
-    document.body.appendChild(cssRenderer.domElement);
-  }
+  // ===== compositing (motor VFX): bloom + grano de película sobre toda la escena =====
+  var composer=new THREE.EffectComposer(renderer);
+  composer.addPass(new THREE.RenderPass(scene,camera));
+  var bloomPass=new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),0.75,0.55,0.72); // strength, radius, threshold
+  composer.addPass(bloomPass);
+  var filmPass=new THREE.FilmPass(0.14,0.0,0,false); filmPass.renderToScreen=true; composer.addPass(filmPass); // grano sutil, sin scanlines globales
   var texLoader=new THREE.TextureLoader();
   // caché LRU de texturas: volver entre pisos ya vistos es instantáneo (sin re-decodificar 4K)
   var texCache=Object.create(null), texOrder=[], MAXTEX=4;
@@ -393,43 +391,78 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     });
   }
 
-  // ===== muro: tablero anclado a las 4 esquinas de una pantalla real (homografía) =====
-  var wallFx=document.createElement('div'); wallFx.id='wallfx'; document.body.appendChild(wallFx);
-  var wallEl=null, wallCorners=null, wallW=620, wallH=360;
+  // ===== muro: tablero renderizado en WebGL sobre una pantalla real (textura canvas + compositing) =====
   function lonlatToDir(lon,lat){var a=lon*Math.PI/180,b=lat*Math.PI/180;return new THREE.Vector3(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));}
   function dirToLonLat(d){var b=Math.asin(Math.max(-1,Math.min(1,d.y)));var a=Math.atan2(-d.x,d.z);return [a*180/Math.PI,b*180/Math.PI];}
-  function clearWall(){ if(wallEl&&wallEl.parentNode)wallEl.parentNode.removeChild(wallEl); wallEl=null; wallCorners=null; }
+  function screenToDir(px,py){var v=new THREE.Vector3(px/innerWidth*2-1,-(py/innerHeight*2-1),0.5).unproject(camera);return v.normalize();}
+  var DASHW=1280, DASHH=720;
+  var dashCanvas=document.createElement('canvas'); dashCanvas.width=DASHW; dashCanvas.height=DASHH;
+  var dctx=dashCanvas.getContext('2d');
+  var dashTex=new THREE.CanvasTexture(dashCanvas); dashTex.flipY=false; dashTex.minFilter=THREE.LinearFilter; dashTex.magFilter=THREE.LinearFilter; dashTex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  var wallMesh=null, wallHk=null;
+  function clearWall(){ if(wallMesh){scene.remove(wallMesh); if(wallMesh.geometry)wallMesh.geometry.dispose();} wallMesh=null; wallHk=null; }
   function buildWall(room){
     clearWall();
-    var w=room.wall; if(!w||!WDASH[w.hk]||!w.corners)return;
-    wallEl=document.createElement('div'); wallEl.className='wallscreen';
-    wallEl.innerHTML='<div class="holo in">'+WDASH[w.hk]+'<span class="cn tl"></span><span class="cn tr"></span><span class="cn bl"></span><span class="cn br"></span></div>';
-    wallFx.appendChild(wallEl);
-    // 4 direcciones 3D desde [lon,lat] en orden TL, TR, BR, BL
-    wallCorners=w.corners.map(function(c){return lonlatToDir(c[0],c[1]);});
+    var w=room.wall; if(!w||!w.corners||!DASHDRAW[w.hk])return;
+    var R=RADIUS*0.985;
+    var p=w.corners.map(function(c){return lonlatToDir(c[0],c[1]).multiplyScalar(R);}); // TL,TR,BR,BL
+    var g=new THREE.BufferGeometry();
+    g.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
+      p[0].x,p[0].y,p[0].z, p[1].x,p[1].y,p[1].z, p[2].x,p[2].y,p[2].z,
+      p[0].x,p[0].y,p[0].z, p[2].x,p[2].y,p[2].z, p[3].x,p[3].y,p[3].z]),3));
+    g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0, 1,0, 1,1,  0,0, 1,1, 0,1]),2));
+    var m=new THREE.MeshBasicMaterial({map:dashTex,transparent:true,depthTest:false,depthWrite:false,side:THREE.DoubleSide});
+    wallMesh=new THREE.Mesh(g,m); wallMesh.renderOrder=3; scene.add(wallMesh);
+    wallHk=w.hk; drawDash(wallHk, performance.now()/1000); dashTex.needsUpdate=true;
   }
-  // homografía: rectángulo fuente (wallW×wallH) -> 4 puntos de pantalla
-  function adjugate(m){return [m[4]*m[8]-m[5]*m[7],m[2]*m[7]-m[1]*m[8],m[1]*m[5]-m[2]*m[4],m[5]*m[6]-m[3]*m[8],m[0]*m[8]-m[2]*m[6],m[2]*m[3]-m[0]*m[5],m[3]*m[7]-m[4]*m[6],m[1]*m[6]-m[0]*m[7],m[0]*m[4]-m[1]*m[3]];}
-  function mmul(a,b){var c=[],i,j,k,s;for(i=0;i<3;i++)for(j=0;j<3;j++){s=0;for(k=0;k<3;k++)s+=a[3*i+k]*b[3*k+j];c[3*i+j]=s;}return c;}
-  function mvec(m,v){return [m[0]*v[0]+m[1]*v[1]+m[2]*v[2],m[3]*v[0]+m[4]*v[1]+m[5]*v[2],m[6]*v[0]+m[7]*v[1]+m[8]*v[2]];}
-  function basisMap(x1,y1,x2,y2,x3,y3,x4,y4){var m=[x1,x2,x3,y1,y2,y3,1,1,1];var v=mvec(adjugate(m),[x4,y4,1]);return mmul(m,[v[0],0,0,0,v[1],0,0,0,v[2]]);}
-  function homography(dst){
-    var s=basisMap(0,0,wallW,0,wallW,wallH,0,wallH);
-    var d=basisMap(dst[0][0],dst[0][1],dst[1][0],dst[1][1],dst[2][0],dst[2][1],dst[3][0],dst[3][1]);
-    var H=mmul(d,adjugate(s)),i; for(i=0;i<9;i++)H[i]/=H[8];
-    return 'matrix3d('+[H[0],H[3],0,H[6],H[1],H[4],0,H[7],0,0,1,0,H[2],H[5],0,H[8]].join(',')+')';
+  // ---- render del tablero en canvas (estilo pantalla emisiva, homologado) ----
+  var DASHDRAW={susc:1};
+  function rr(x,y,w,h,r){dctx.beginPath();dctx.moveTo(x+r,y);dctx.arcTo(x+w,y,x+w,y+h,r);dctx.arcTo(x+w,y+h,x,y+h,r);dctx.arcTo(x,y+h,x,y,r);dctx.arcTo(x,y,x+w,y,r);dctx.closePath();}
+  function drawDash(hk,t){
+    var c=dctx,W=DASHW,H=DASHH;
+    c.clearRect(0,0,W,H);
+    c.fillStyle='rgba(7,15,17,0.90)'; c.fillRect(0,0,W,H);                 // negros levantados (grade)
+    c.lineWidth=1; c.strokeStyle='rgba(45,212,167,0.055)';                  // grilla técnica
+    for(var gx=44;gx<W;gx+=58){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.stroke();}
+    for(var gy=44;gy<H;gy+=58){c.beginPath();c.moveTo(0,gy);c.lineTo(W,gy);c.stroke();}
+    c.lineJoin='round'; c.lineCap='round';
+    if(hk==='susc'){
+      c.font='600 26px monospace'; c.fillStyle='#d7fff0'; c.shadowColor='rgba(45,212,167,0.6)'; c.shadowBlur=10;
+      c.fillText('SUSCRIPCIONES · 12M',56,72); c.shadowBlur=0;
+      var pl=0.55+0.45*Math.sin(t*3.5);
+      c.fillStyle='rgba(54,240,191,'+pl+')'; c.beginPath(); c.arc(W-250,64,8,0,7); c.fill();
+      c.font='600 22px monospace'; c.fillStyle='#9fe9cf'; c.fillText('EN VIVO',W-228,72);
+      var pts=[0.12,0.16,0.14,0.22,0.28,0.25,0.35,0.42,0.54,0.62,0.74,0.88,1.0];
+      var cx0=56,cx1=W-56,cy0=H-70,cy1=300,n=pts.length;
+      function px(i){return cx0+(cx1-cx0)*i/(n-1);}
+      function py(i){return cy0-(cy0-cy1)*pts[i];}
+      c.beginPath(); c.moveTo(cx0,cy0);
+      for(var i=0;i<n;i++)c.lineTo(px(i),py(i));
+      c.lineTo(cx1,cy0); c.closePath();
+      var grd=c.createLinearGradient(0,cy1,0,cy0); grd.addColorStop(0,'rgba(45,212,167,0.30)'); grd.addColorStop(1,'rgba(45,212,167,0)'); c.fillStyle=grd; c.fill();
+      c.beginPath(); for(i=0;i<n;i++){if(i===0)c.moveTo(px(i),py(i));else c.lineTo(px(i),py(i));}
+      c.strokeStyle='#4df0c4'; c.lineWidth=4; c.shadowColor='rgba(77,240,196,0.9)'; c.shadowBlur=18; c.stroke(); c.shadowBlur=0;
+      var pp=(t*0.1)%1, fi=pp*(n-1), i0=Math.floor(fi), fr=fi-i0, i1=Math.min(i0+1,n-1);
+      var dx=px(i0)+(px(i1)-px(i0))*fr, dy=py(i0)+(py(i1)-py(i0))*fr;
+      c.fillStyle='#bafff0'; c.shadowColor='#4df0c4'; c.shadowBlur=16; c.beginPath(); c.arc(dx,dy,6,0,7); c.fill(); c.shadowBlur=0;
+      c.font='700 92px Poppins,system-ui,sans-serif'; c.fillStyle='#eafff6'; c.shadowColor='rgba(45,212,167,0.45)'; c.shadowBlur=20; c.fillText('$48.2K',56,210); c.shadowBlur=0;
+      c.font='600 22px monospace'; c.fillStyle='#9fe9cf'; c.fillText('MRR · ▲ 12% mes a mes',60,246);
+      var kp=[['Churn','2.1%'],['Activas','3.4K'],['Retención','97.9%']], kw=372,kh=86,kx=W-kw-40,ky=112,gp=14;
+      for(i=0;i<3;i++){var yy=ky+i*(kh+gp); c.fillStyle='rgba(6,15,16,0.66)'; rr(kx,yy,kw,kh,15); c.fill(); c.strokeStyle='rgba(45,212,167,0.33)'; c.lineWidth=1.5; c.stroke();
+        c.font='600 15px monospace'; c.fillStyle='#7fd8bf'; c.fillText(kp[i][0].toUpperCase(),kx+22,yy+34);
+        c.font='700 40px Poppins,system-ui,sans-serif'; c.fillStyle='#eafff6'; c.fillText(kp[i][1],kx+22,yy+74);}
+    }
+    // scanlines locales (sutiles)
+    c.globalAlpha=0.05; c.fillStyle='#000'; for(var sy=0;sy<H;sy+=4)c.fillRect(0,sy,W,2); c.globalAlpha=1;
+    // viñeta
+    var vg=c.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.35)'); c.fillStyle=vg; c.fillRect(0,0,W,H);
+    // brackets
+    c.strokeStyle='rgba(45,212,167,0.7)'; c.lineWidth=3; var b=28,mg=18;
+    c.beginPath();c.moveTo(mg,mg+b);c.lineTo(mg,mg);c.lineTo(mg+b,mg);c.stroke();
+    c.beginPath();c.moveTo(W-mg-b,mg);c.lineTo(W-mg,mg);c.lineTo(W-mg,mg+b);c.stroke();
+    c.beginPath();c.moveTo(W-mg,H-mg-b);c.lineTo(W-mg,H-mg);c.lineTo(W-mg-b,H-mg);c.stroke();
+    c.beginPath();c.moveTo(mg+b,H-mg);c.lineTo(mg,H-mg);c.lineTo(mg,H-mg-b);c.stroke();
   }
-  var cproj=new THREE.Vector3();
-  function updateWall(fwd){
-    if(!wallEl||!wallCorners)return;
-    var pts=[],ok=true,i;
-    for(i=0;i<4;i++){ var d=wallCorners[i]; if(d.dot(fwd)<=0.08){ok=false;break;} cproj.copy(d).project(camera); pts.push([(cproj.x*0.5+0.5)*innerWidth,(-cproj.y*0.5+0.5)*innerHeight]); }
-    if(!ok){wallEl.style.visibility='hidden';return;}
-    wallEl.style.visibility='visible';
-    wallEl.style.transform=homography(pts);
-  }
-  // convierte un punto de pantalla (px cliente) a dirección 3D
-  function screenToDir(px,py){var v=new THREE.Vector3(px/innerWidth*2-1,-(py/innerHeight*2-1),0.5).unproject(camera);return v.normalize();}
 
   // ===== salas del recorrido =====
   var ROOMS=[
@@ -635,7 +668,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var hint=document.getElementById('hint'), hintHid=false;
   function hideHint(){if(!hintHid){hintHid=true;hint.style.opacity='0';}}
   setTimeout(hideHint,6500);
-  function fit(){renderer.setSize(innerWidth,innerHeight,false);if(cssRenderer)cssRenderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+  function fit(){renderer.setSize(innerWidth,innerHeight,false);composer.setSize(innerWidth,innerHeight);bloomPass.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
   addEventListener('resize',fit); fit();
 
   // ===== giroscopio móvil (relativo: tu vista actual es el ancla) =====
@@ -665,7 +698,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     gyroBtn.onclick=function(){ if(gyro.on)disableGyro(); else enableGyro(); };
   }
 
-  var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800, proj=new THREE.Vector3(), fwd=new THREE.Vector3();
+  var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800, proj=new THREE.Vector3(), fwd=new THREE.Vector3(), lastDash=0;
   function loop(){
     requestAnimationFrame(loop);
     var now=performance.now(), e=now-t0;
@@ -683,8 +716,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
       } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
-    renderer.render(scene,camera);
-    updateWall(fwd);
+    if(wallMesh && now-lastDash>55){ lastDash=now; drawDash(wallHk, now/1000); dashTex.needsUpdate=true; }
+    composer.render();
   }
   loop();
 })();
