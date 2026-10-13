@@ -407,73 +407,92 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function lonlatToDir(lon,lat){var a=lon*Math.PI/180,b=lat*Math.PI/180;return new THREE.Vector3(-Math.cos(b)*Math.sin(a),Math.sin(b),Math.cos(b)*Math.cos(a));}
   function dirToLonLat(d){var b=Math.asin(Math.max(-1,Math.min(1,d.y)));var a=Math.atan2(-d.x,d.z);return [a*180/Math.PI,b*180/Math.PI];}
   function screenToDir(px,py){var v=new THREE.Vector3(px/innerWidth*2-1,-(py/innerHeight*2-1),0.5).unproject(camera);return v.normalize();}
-  var DASHW=1280, DASHH=720;
-  var dashCanvas=document.createElement('canvas'); dashCanvas.width=DASHW; dashCanvas.height=DASHH;
-  var dctx=dashCanvas.getContext('2d');
-  var dashTex=new THREE.CanvasTexture(dashCanvas); dashTex.flipY=false; dashTex.minFilter=THREE.LinearFilter; dashTex.magFilter=THREE.LinearFilter; dashTex.anisotropy=renderer.capabilities.getMaxAnisotropy();
-  var wallMesh=null, wallHk=null;
-  function clearWall(){ if(wallMesh){scene.remove(wallMesh); if(wallMesh.geometry)wallMesh.geometry.dispose();} wallMesh=null; wallHk=null; }
-  function buildWall(room){
-    clearWall();
-    var w=room.wall; if(!w||!w.corners||!DASHDRAW[w.hk])return;
-    var R=RADIUS*0.985;
-    var p=w.corners.map(function(c){return lonlatToDir(c[0],c[1]).multiplyScalar(R);}); // TL,TR,BR,BL
+  // ---- paleta de acentos (multicolor, no solo verde) ----
+  var ACC={g:'#2DD4A7',c:'#38E5FF',b:'#5AA0FF',a:'#FFB84D',m:'#FF6FA5',v:'#B98CFF'};
+  function hx(h,a){var n=parseInt(h.slice(1),16);return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}
+  // ---- varias pantallas vivas por sala (textura canvas en WebGL) ----
+  var screens=[];
+  function clearWall(){ screens.forEach(function(s){scene.remove(s.mesh); if(s.mesh.geometry)s.mesh.geometry.dispose();}); screens=[]; }
+  function makeScreen(sc){
+    var cv=document.createElement('canvas'); cv.width=640; cv.height=384; var cx=cv.getContext('2d');
+    var tex=new THREE.CanvasTexture(cv); tex.flipY=false; tex.minFilter=THREE.LinearFilter; tex.magFilter=THREE.LinearFilter; tex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    var R=RADIUS*0.985, p=sc.corners.map(function(c){return lonlatToDir(c[0],c[1]).multiplyScalar(R);});
     var g=new THREE.BufferGeometry();
-    g.setAttribute('position',new THREE.BufferAttribute(new Float32Array([
-      p[0].x,p[0].y,p[0].z, p[1].x,p[1].y,p[1].z, p[2].x,p[2].y,p[2].z,
-      p[0].x,p[0].y,p[0].z, p[2].x,p[2].y,p[2].z, p[3].x,p[3].y,p[3].z]),3));
-    g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0, 1,0, 1,1,  0,0, 1,1, 0,1]),2));
-    var m=new THREE.MeshBasicMaterial({map:dashTex,transparent:true,depthTest:false,depthWrite:false,side:THREE.DoubleSide});
-    wallMesh=new THREE.Mesh(g,m); wallMesh.renderOrder=3; wallMesh.layers.enable(BLOOM_LAYER); scene.add(wallMesh);
-    wallHk=w.hk; drawDash(wallHk, performance.now()/1000); dashTex.needsUpdate=true;
+    g.setAttribute('position',new THREE.BufferAttribute(new Float32Array([p[0].x,p[0].y,p[0].z,p[1].x,p[1].y,p[1].z,p[2].x,p[2].y,p[2].z, p[0].x,p[0].y,p[0].z,p[2].x,p[2].y,p[2].z,p[3].x,p[3].y,p[3].z]),3));
+    g.setAttribute('uv',new THREE.BufferAttribute(new Float32Array([0,0,1,0,1,1, 0,0,1,1,0,1]),2));
+    var mesh=new THREE.Mesh(g,new THREE.MeshBasicMaterial({map:tex,transparent:true,depthTest:false,depthWrite:false,side:THREE.DoubleSide}));
+    mesh.renderOrder=3; mesh.layers.enable(BLOOM_LAYER); scene.add(mesh);
+    var s={mesh:mesh,cx:cx,tex:tex,type:sc.type,acc:ACC[sc.acc]||sc.acc||ACC.g,title:sc.title||'',seed:sc.seed||Math.random()*7,last:0};
+    drawPanel(s,performance.now()/1000); s.tex.needsUpdate=true; screens.push(s);
   }
-  // ---- render del tablero en canvas (estilo pantalla emisiva, homologado) ----
-  var DASHDRAW={susc:1};
-  function rr(x,y,w,h,r){dctx.beginPath();dctx.moveTo(x+r,y);dctx.arcTo(x+w,y,x+w,y+h,r);dctx.arcTo(x+w,y+h,x,y+h,r);dctx.arcTo(x,y+h,x,y,r);dctx.arcTo(x,y,x+w,y,r);dctx.closePath();}
-  function drawDash(hk,t){
-    var c=dctx,W=DASHW,H=DASHH;
-    c.clearRect(0,0,W,H);
-    c.fillStyle='rgba(7,15,17,0.90)'; c.fillRect(0,0,W,H);                 // negros levantados (grade)
-    c.lineWidth=1; c.strokeStyle='rgba(45,212,167,0.055)';                  // grilla técnica
-    for(var gx=44;gx<W;gx+=58){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.stroke();}
-    for(var gy=44;gy<H;gy+=58){c.beginPath();c.moveTo(0,gy);c.lineTo(W,gy);c.stroke();}
-    c.lineJoin='round'; c.lineCap='round';
-    if(hk==='susc'){
-      c.font='600 26px monospace'; c.fillStyle='#d7fff0'; c.shadowColor='rgba(45,212,167,0.6)'; c.shadowBlur=10;
-      c.fillText('SUSCRIPCIONES · 12M',56,72); c.shadowBlur=0;
-      var pl=0.55+0.45*Math.sin(t*3.5);
-      c.fillStyle='rgba(54,240,191,'+pl+')'; c.beginPath(); c.arc(W-250,64,8,0,7); c.fill();
-      c.font='600 22px monospace'; c.fillStyle='#9fe9cf'; c.fillText('EN VIVO',W-228,72);
-      var pts=[0.12,0.16,0.14,0.22,0.28,0.25,0.35,0.42,0.54,0.62,0.74,0.88,1.0];
-      var cx0=56,cx1=W-56,cy0=H-70,cy1=300,n=pts.length;
-      function px(i){return cx0+(cx1-cx0)*i/(n-1);}
-      function py(i){return cy0-(cy0-cy1)*pts[i];}
-      c.beginPath(); c.moveTo(cx0,cy0);
-      for(var i=0;i<n;i++)c.lineTo(px(i),py(i));
-      c.lineTo(cx1,cy0); c.closePath();
-      var grd=c.createLinearGradient(0,cy1,0,cy0); grd.addColorStop(0,'rgba(45,212,167,0.30)'); grd.addColorStop(1,'rgba(45,212,167,0)'); c.fillStyle=grd; c.fill();
-      c.beginPath(); for(i=0;i<n;i++){if(i===0)c.moveTo(px(i),py(i));else c.lineTo(px(i),py(i));}
-      c.strokeStyle='#4df0c4'; c.lineWidth=4; c.shadowColor='rgba(77,240,196,0.9)'; c.shadowBlur=18; c.stroke(); c.shadowBlur=0;
-      var pp=(t*0.1)%1, fi=pp*(n-1), i0=Math.floor(fi), fr=fi-i0, i1=Math.min(i0+1,n-1);
-      var dx=px(i0)+(px(i1)-px(i0))*fr, dy=py(i0)+(py(i1)-py(i0))*fr;
-      c.fillStyle='#bafff0'; c.shadowColor='#4df0c4'; c.shadowBlur=16; c.beginPath(); c.arc(dx,dy,6,0,7); c.fill(); c.shadowBlur=0;
-      c.font='700 92px Poppins,system-ui,sans-serif'; c.fillStyle='#eafff6'; c.shadowColor='rgba(45,212,167,0.45)'; c.shadowBlur=20; c.fillText('$48.2K',56,210); c.shadowBlur=0;
-      c.font='600 22px monospace'; c.fillStyle='#9fe9cf'; c.fillText('MRR · ▲ 12% mes a mes',60,246);
-      var kp=[['Churn','2.1%'],['Activas','3.4K'],['Retención','97.9%']], kw=372,kh=86,kx=W-kw-40,ky=112,gp=14;
-      for(i=0;i<3;i++){var yy=ky+i*(kh+gp); c.fillStyle='rgba(6,15,16,0.66)'; rr(kx,yy,kw,kh,15); c.fill(); c.strokeStyle='rgba(45,212,167,0.33)'; c.lineWidth=1.5; c.stroke();
-        c.font='600 15px monospace'; c.fillStyle='#7fd8bf'; c.fillText(kp[i][0].toUpperCase(),kx+22,yy+34);
-        c.font='700 40px Poppins,system-ui,sans-serif'; c.fillStyle='#eafff6'; c.fillText(kp[i][1],kx+22,yy+74);}
-    }
-    // scanlines locales (sutiles)
+  function buildWall(room){ clearWall(); if(room.screens)room.screens.forEach(makeScreen); }
+  // ---- librería de paneles (estilo pantalla emisiva, animados, multicolor) ----
+  function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+  function frame(c,W,H,acc,title,t){
+    c.clearRect(0,0,W,H); c.fillStyle='rgba(7,14,16,0.9)'; c.fillRect(0,0,W,H);
+    c.lineWidth=1; c.strokeStyle=hx(acc,0.05);
+    for(var gx=34;gx<W;gx+=42){c.beginPath();c.moveTo(gx,0);c.lineTo(gx,H);c.stroke();}
+    for(var gy=34;gy<H;gy+=42){c.beginPath();c.moveTo(0,gy);c.lineTo(W,gy);c.stroke();}
+    c.lineJoin='round';c.lineCap='round';c.textBaseline='alphabetic';c.textAlign='left';
+    c.font='600 17px monospace'; c.fillStyle='#e6fff7'; c.shadowColor=hx(acc,0.7); c.shadowBlur=8; c.fillText(title,22,40); c.shadowBlur=0;
+    var pl=0.5+0.5*Math.sin(t*3.5); c.fillStyle=hx(acc,0.35+0.55*pl); c.beginPath(); c.arc(W-74,34,6,0,7); c.fill();
+    c.font='600 13px monospace'; c.fillStyle='#9fe9cf'; c.fillText('LIVE',W-60,39);
+  }
+  function finish(c,W,H,acc){
     c.globalAlpha=0.05; c.fillStyle='#000'; for(var sy=0;sy<H;sy+=4)c.fillRect(0,sy,W,2); c.globalAlpha=1;
-    // viñeta
-    var vg=c.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.8); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.35)'); c.fillStyle=vg; c.fillRect(0,0,W,H);
-    // brackets
-    c.strokeStyle='rgba(45,212,167,0.7)'; c.lineWidth=3; var b=28,mg=18;
-    c.beginPath();c.moveTo(mg,mg+b);c.lineTo(mg,mg);c.lineTo(mg+b,mg);c.stroke();
-    c.beginPath();c.moveTo(W-mg-b,mg);c.lineTo(W-mg,mg);c.lineTo(W-mg,mg+b);c.stroke();
-    c.beginPath();c.moveTo(W-mg,H-mg-b);c.lineTo(W-mg,H-mg);c.lineTo(W-mg-b,H-mg);c.stroke();
-    c.beginPath();c.moveTo(mg+b,H-mg);c.lineTo(mg,H-mg);c.lineTo(mg,H-mg-b);c.stroke();
+    var vg=c.createRadialGradient(W/2,H/2,H*0.3,W/2,H/2,H*0.85); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,0.4)'); c.fillStyle=vg; c.fillRect(0,0,W,H);
+    c.strokeStyle=hx(acc,0.75); c.lineWidth=2.5; var b=18,m=12;
+    c.beginPath();c.moveTo(m,m+b);c.lineTo(m,m);c.lineTo(m+b,m);c.stroke();
+    c.beginPath();c.moveTo(W-m-b,m);c.lineTo(W-m,m);c.lineTo(W-m,m+b);c.stroke();
+    c.beginPath();c.moveTo(W-m,H-m-b);c.lineTo(W-m,H-m);c.lineTo(W-m-b,H-m);c.stroke();
+    c.beginPath();c.moveTo(m+b,H-m);c.lineTo(m,H-m);c.lineTo(m,H-m-b);c.stroke();
+  }
+  function drawPanel(s,t){
+    var c=s.cx,W=640,H=384,acc=s.acc,sd=s.seed,i,x,y,n;
+    frame(c,W,H,acc,s.title,t);
+    if(s.type==='bigline'){
+      n=16; var cx0=22,cx1=W-22,cy0=H-26,cy1=118;
+      function X(i){return cx0+(cx1-cx0)*i/(n-1);} function Y(v){return cy0-(cy0-cy1)*Math.max(0.04,Math.min(1,v));}
+      var pv=[]; for(i=0;i<n;i++)pv.push(0.18+0.62*(i/(n-1))+0.1*Math.sin(i*1.2+sd+t*0.5));
+      c.beginPath();c.moveTo(cx0,cy0);for(i=0;i<n;i++)c.lineTo(X(i),Y(pv[i]));c.lineTo(cx1,cy0);c.closePath();
+      var g=c.createLinearGradient(0,cy1,0,cy0);g.addColorStop(0,hx(acc,0.32));g.addColorStop(1,hx(acc,0));c.fillStyle=g;c.fill();
+      c.beginPath();for(i=0;i<n;i++){i?c.lineTo(X(i),Y(pv[i])):c.moveTo(X(i),Y(pv[i]));}
+      c.strokeStyle=hx(acc,1);c.lineWidth=3;c.shadowColor=hx(acc,0.9);c.shadowBlur=16;c.stroke();c.shadowBlur=0;
+      var pp=(t*0.12+sd)%1,fi=pp*(n-1),i0=Math.floor(fi),fr=fi-i0,i1=Math.min(i0+1,n-1);
+      var dx=X(i0)+(X(i1)-X(i0))*fr,dy=Y(pv[i0])+(Y(pv[i1])-Y(pv[i0]))*fr;
+      c.fillStyle='#fff';c.shadowColor=hx(acc,1);c.shadowBlur=14;c.beginPath();c.arc(dx,dy,5,0,7);c.fill();c.shadowBlur=0;
+      c.font='700 58px Poppins,system-ui,sans-serif';c.fillStyle='#eafff6';c.shadowColor=hx(acc,0.5);c.shadowBlur=16;c.fillText(s.big||'$48.2K',22,96);c.shadowBlur=0;
+      c.font='600 14px monospace';c.fillStyle=hx(acc,0.85);c.fillText(s.sub||'MRR · ▲ 12%',24,118);
+    } else if(s.type==='bars'){
+      n=18; var bw=(W-44)/n, base=H-26, top=96;
+      for(i=0;i<n;i++){var h=(0.15+0.75*Math.abs(Math.sin(i*0.8+sd+t*0.9)))*(base-top);var bx=22+i*bw,by=base-h;
+        var g=c.createLinearGradient(0,by,0,base);g.addColorStop(0,hx(acc,1));g.addColorStop(1,hx(acc,0.12));
+        c.fillStyle=g;c.shadowColor=hx(acc,0.5);c.shadowBlur=6;c.fillRect(bx+2,by,bw-5,h);c.shadowBlur=0;}
+      c.font='700 46px Poppins,system-ui,sans-serif';c.fillStyle='#eafff6';c.shadowColor=hx(acc,0.5);c.shadowBlur=14;c.fillText(s.big||'8.5K',24,80);c.shadowBlur=0;
+    } else if(s.type==='radar'){
+      var cr=W/2,cy=H/2+20,rad=Math.min(W,H)/2-44;
+      c.strokeStyle=hx(acc,0.22);for(i=1;i<=3;i++){c.beginPath();c.arc(cr,cy,rad*i/3,0,7);c.stroke();}
+      c.beginPath();c.moveTo(cr-rad,cy);c.lineTo(cr+rad,cy);c.moveTo(cr,cy-rad);c.lineTo(cr,cy+rad);c.stroke();
+      c.save();c.translate(cr,cy);c.rotate(t*1.1);var wg=c.createLinearGradient(0,0,rad,0);wg.addColorStop(0,hx(acc,0));wg.addColorStop(1,hx(acc,0.5));c.fillStyle=wg;c.beginPath();c.moveTo(0,0);c.arc(0,0,rad,-0.55,0);c.closePath();c.fill();c.restore();
+      for(i=0;i<5;i++){var ba=sd+i*1.6,br=rad*(0.3+0.6*((i*0.41)%1)),bx=cr+Math.cos(ba)*br,by=cy+Math.sin(ba)*br,pu=0.4+0.6*Math.abs(Math.sin(t*3+i));c.fillStyle=hx(acc,pu);c.shadowColor=hx(acc,1);c.shadowBlur=10;c.beginPath();c.arc(bx,by,4,0,7);c.fill();c.shadowBlur=0;}
+      c.textAlign='center';c.font='700 40px Poppins,system-ui,sans-serif';c.fillStyle='#eafff6';c.fillText(s.big||'0',cr,cy+12);c.font='600 12px monospace';c.fillStyle=hx(acc,0.85);c.fillText(s.sub||'EVENTOS',cr,cy+34);c.textAlign='left';
+    } else if(s.type==='ring'){
+      var cr2=W/2,cy2=H/2+16,rad2=Math.min(W,H)/2-46,val=s.val||0.9;
+      c.lineWidth=16;c.strokeStyle=hx(acc,0.12);c.beginPath();c.arc(cr2,cy2,rad2,0,7);c.stroke();
+      var fillp=val*(0.6+0.4*Math.min(1,t*0.25));
+      c.strokeStyle=hx(acc,1);c.shadowColor=hx(acc,0.85);c.shadowBlur=16;c.beginPath();c.arc(cr2,cy2,rad2,-Math.PI/2,-Math.PI/2+fillp*2*Math.PI);c.stroke();c.shadowBlur=0;
+      var ea=-Math.PI/2+fillp*2*Math.PI;c.fillStyle='#fff';c.shadowColor=hx(acc,1);c.shadowBlur=12;c.beginPath();c.arc(cr2+Math.cos(ea)*rad2,cy2+Math.sin(ea)*rad2,6,0,7);c.fill();c.shadowBlur=0;
+      c.textAlign='center';c.font='700 '+Math.round(rad2*0.72)+'px Poppins,system-ui,sans-serif';c.fillStyle='#eafff6';c.fillText(Math.round(val*100)+'%',cr2,cy2+rad2*0.24);c.font='600 13px monospace';c.fillStyle=hx(acc,0.85);c.fillText(s.sub||'APROB.',cr2,cy2+rad2*0.55);c.textAlign='left';
+    } else if(s.type==='wave'){
+      for(var k=0;k<3;k++){var yb=96+k*((H-120)/3)+((H-120)/3)/2;c.beginPath();for(x=22;x<W-22;x+=3){var yy=yb+Math.sin(x*0.05+t*(2.2+k*0.7)+sd+k)*16*Math.sin(x*0.012+t*0.6);(x===22)?c.moveTo(x,yy):c.lineTo(x,yy);}c.strokeStyle=hx(acc,0.85-k*0.22);c.lineWidth=2;c.shadowColor=hx(acc,0.55);c.shadowBlur=7;c.stroke();c.shadowBlur=0;}
+      c.font='700 40px Poppins,system-ui,sans-serif';c.fillStyle='#eafff6';c.shadowColor=hx(acc,0.5);c.shadowBlur=12;c.fillText(s.big||'42ms',24,82);c.shadowBlur=0;
+    } else if(s.type==='stream'){
+      var rows=s.rows||['AUTH · ok','SYNC · 12ms','TX #'+(1480+Math.floor(t*4)),'NODE · up','CACHE · hit','RT · 38ms','QUEUE · 2'];
+      c.font='15px monospace';var rh=30,off=(t*26)%rh,rn=Math.floor((H-110)/rh)+2;
+      for(i=0;i<rn;i++){y=96+i*rh-off;var r=rows[(i+Math.floor(t*0.9))%rows.length];var al=Math.max(0,Math.min(1,(y-90)/40))*Math.max(0,Math.min(1,(H-30-y)/40));
+        c.fillStyle=hx(acc,0.9*al);c.fillText('› '+r,24,y);c.fillStyle=hx(acc,0.5*al);c.beginPath();c.arc(16,y-5,3,0,7);c.fill();}
+    }
+    finish(c,W,H,acc);
   }
 
   // ===== salas del recorrido =====
@@ -484,43 +503,43 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
        sheet:'media/strip-host.webp', cls:'hosta'},
       {type:'dir', lon:92,lat:-4, label:'Llamar el ascensor'}
     ]},
-    {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg', entryYaw:0, wall:{hk:'infra',corners:[[-43,16],[-7,16],[-7,-6],[-43,-6]]}, spots:[
+    {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg', entryYaw:0, spots:[
       {type:'char', lon:46,lat:-8, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'ESPECIALISTA · INFRA',
        text:'La base que se auto-escala para que tu app no se caiga, del primer usuario al millón.',
        sheet:'media/strip-infra.webp', cls:'infraa'},
       {type:'door', lon:180,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 02 · Seguridad', pano:'media/sala3.jpg', entryYaw:0, wall:{hk:'seg',corners:[[-17.35,8.23],[-1.67,8.38],[-1.62,-2.37],[-17.64,-2.45]]}, spots:[
+    {name:'Capa 02 · Seguridad', pano:'media/sala3.jpg', entryYaw:0, screens:[{corners:[[-17.35,8.23],[-1.67,8.38],[-1.62,-2.37],[-17.64,-2.45]],type:'radar',acc:'c',title:'SEGURIDAD · 24H',big:'0',sub:'BRECHAS'}], spots:[
       {type:'char', lon:-8,lat:-8, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'ESPECIALISTA · SEGURIDAD',
        text:'Cifrado, 2FA y vigilancia continua: tus datos y los de tus usuarios, blindados.',
        sheet:'media/strip-seg.webp', cls:'sega'},
       {type:'door', lon:130,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 03 · Pagos', pano:'media/sala4.jpg', entryYaw:0, wall:{hk:'pagos',corners:[[-68.09,17.56],[-54.61,17.41],[-54.71,8.02],[-68.22,7.64]]}, spots:[
+    {name:'Capa 03 · Pagos', pano:'media/sala4.jpg', entryYaw:0, screens:[{corners:[[-68.09,17.56],[-54.61,17.41],[-54.71,8.02],[-68.22,7.64]],type:'ring',acc:'b',title:'PAGOS · APROB',val:0.97,sub:'APROBACIÓN'}], spots:[
       {type:'char', lon:8,lat:-8, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'ESPECIALISTA · PAGOS',
        text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
        sheet:'media/strip-pagos.webp', cls:'pagosa'},
       {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 04 · Suscripciones', pano:'media/sala5.jpg', entryYaw:0, wall:{hk:'susc',corners:[[-24.42,15.32],[-4.8,15.54],[-4.95,6.5],[-24.58,5.94]]}, spots:[
+    {name:'Capa 04 · Suscripciones', pano:'media/sala5.jpg', entryYaw:0, screens:[{corners:[[-24.42,15.32],[-4.8,15.54],[-4.95,6.5],[-24.58,5.94]],type:'bigline',acc:'g',title:'SUSCRIPCIONES · MRR',big:'$48.2K',sub:'MRR · ▲ 12%'}], spots:[
       {type:'char', lon:-15,lat:-8, hk:'susc', eye:'Capa 04', title:'Suscripciones', who:'ESPECIALISTA · SUSCRIPCIONES',
        text:'Ingresos recurrentes: planes, renovaciones y reintentos que crecen mes a mes.',
        sheet:'media/strip-susc.webp', cls:'susca'},
       {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 05 · Marketing', pano:'media/sala6.jpg', entryYaw:0, wall:{hk:'mkt'}, spots:[
+    {name:'Capa 05 · Marketing', pano:'media/sala6.jpg', entryYaw:0, spots:[
       {type:'char', lon:-30,lat:-8, hk:'mkt', eye:'Capa 05', title:'Marketing', who:'ESPECIALISTA · MARKETING',
        text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.',
        sheet:'media/strip-mkt.webp', cls:'mkta'},
       {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 06 · Fidelización', pano:'media/sala7.jpg', entryYaw:0, wall:{hk:'fidel'}, spots:[
+    {name:'Capa 06 · Fidelización', pano:'media/sala7.jpg', entryYaw:0, spots:[
       {type:'char', lon:-6,lat:-10, hk:'fidel', eye:'Capa 06', title:'Fidelización', who:'ESPECIALISTA · FIDELIZACIÓN',
        text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.',
        sheet:'media/strip-fidel.webp', cls:'fidela'},
       {type:'door', lon:150,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg', entryYaw:0, wall:{hk:'dash'}, spots:[
+    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg', entryYaw:0, spots:[
       {type:'char', lon:8,lat:-10, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'ESPECIALISTA · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
        sheet:'media/strip-dash.webp', cls:'dasha'},
@@ -667,10 +686,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   window.__T={ROOMS:ROOMS, go:goRoom, curRoom:function(){return cur;},
     yaw:function(v){tyaw=yaw=v;},
     freeze:function(on){noDrift=(on!==false);return noDrift;},
-    // calibración: fija las 4 esquinas del tablero a puntos de pantalla (px cliente) en orden TL,TR,BR,BL
-    setCornersPx:function(a){var rm=ROOMS[cur];if(!rm.wall)return 'sin muro';rm.wall.corners=a.map(function(p){return dirToLonLat(screenToDir(p[0],p[1]));});buildWall(rm);return rm.wall.corners;},
-    dumpWall:function(){var rm=ROOMS[cur];return rm.wall?JSON.stringify(rm.wall.corners):'sin muro';},
-    vp:function(){return [innerWidth,innerHeight];}};
+    vp:function(){return [innerWidth,innerHeight];},
+    // calibración multi-pantalla: agrega una pantalla desde 4 puntos de pantalla (client px) TL,TR,BR,BL
+    sAdd:function(type,acc,title,pts,extra){var rm=ROOMS[cur];if(!rm.screens)rm.screens=[];var sc={corners:pts.map(function(p){return dirToLonLat(screenToDir(p[0],p[1]));}),type:type,acc:acc,title:title};if(extra)for(var k in extra)sc[k]=extra[k];rm.screens.push(sc);buildWall(rm);return rm.screens.length;},
+    sClear:function(){var rm=ROOMS[cur];rm.screens=[];buildWall(rm);return 0;},
+    sDel:function(i){var rm=ROOMS[cur];if(rm.screens)rm.screens.splice(i,1);buildWall(rm);return rm.screens?rm.screens.length:0;},
+    sDump:function(){var rm=ROOMS[cur];return rm.screens?JSON.stringify(rm.screens):'sin screens';},
+    sHide:function(b){screens.forEach(function(s){s.mesh.visible=!b;});}};
 
   var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
@@ -728,7 +750,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
       } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
     }
-    if(wallMesh && now-lastDash>55){ lastDash=now; drawDash(wallHk, now/1000); dashTex.needsUpdate=true; }
+    for(var wi=0;wi<screens.length;wi++){var sc=screens[wi]; if(now-sc.last>60){sc.last=now; drawPanel(sc, now/1000); sc.tex.needsUpdate=true;}}
     renderComposited();
   }
   loop();
