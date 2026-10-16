@@ -139,6 +139,29 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .pBtn.soon{background:rgba(255,255,255,.03);color:#9fb3ae;border:1px dashed rgba(45,212,167,.35);cursor:default;pointer-events:none}
 .pBtn .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:rgba(45,212,167,.14);color:var(--accent2)}
 .pNote{font-size:12.5px;line-height:1.45;color:#8fa29d}
+.pHead{display:flex;align-items:center;gap:16px;padding:6px 40px 18px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.pNum{flex:none;width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font:700 26px var(--mono);color:#eafff6;background:linear-gradient(160deg,rgba(45,212,167,.22),rgba(45,212,167,.05));border:1px solid rgba(45,212,167,.45);box-shadow:0 0 24px rgba(45,212,167,.18),inset 0 0 18px rgba(45,212,167,.08)}
+.pHt{min-width:0}.pHead h2{font-size:26px}
+.pLead2{font-family:'Poppins';font-weight:600;font-size:19px;line-height:1.35;color:#f2fbf8;margin-top:18px;text-wrap:balance}
+.pWhy{margin-top:12px;padding:12px 14px;border-left:3px solid var(--accent2);background:rgba(45,212,167,.06);border-radius:0 10px 10px 0;font-size:14px;line-height:1.55;color:#cfe0dc}
+.pCards{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.pCard{display:flex;gap:12px;align-items:flex-start;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07)}
+.pCard .pK{flex:none;font:600 12px var(--mono);color:var(--accent2);padding-top:2px;min-width:16px}
+.pCard .pK:empty{display:none}
+.pCard b{display:block;font-family:'Poppins';font-weight:600;font-size:14.5px;color:#eafff6}
+.pCard p{margin:3px 0 0;font-size:13.5px;line-height:1.45;color:#b9cbc6}
+.pWins{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.pWins li{position:relative;padding-left:28px;font-size:14px;line-height:1.4;color:#dbe9e5}
+.pWins li::before{content:"✓";position:absolute;left:0;top:-1px;width:19px;height:19px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#03110b;background:var(--accent2)}
+.pNext{display:flex;align-items:center;gap:10px;width:100%;margin-top:4px;padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:transparent;color:var(--ink);cursor:pointer;text-align:left;font-family:'Poppins';transition:background .2s,border-color .2s}
+.pNext:hover{background:rgba(45,212,167,.07);border-color:rgba(45,212,167,.4)}
+.pNext span{font:11px var(--mono);letter-spacing:2px;text-transform:uppercase;color:#8fa29d}
+.pNext b{flex:1;font-weight:600;font-size:14.5px}
+.pNext i{font-style:normal;color:var(--accent2);font-size:16px}
+.charwrap{display:none}
+.panel.open ~ .clubtoast{top:auto;bottom:96px}
+@media(max-width:520px){.pNum{width:52px;height:52px;font-size:21px;border-radius:13px}.pHead h2{font-size:22px}.pLead2{font-size:17px}}
+
 
 
 /* holo (video + cuadros) */
@@ -371,10 +394,9 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 <aside class="panel" id="panel">
   <button class="x" id="panelX" aria-label="Cerrar">✕</button>
-  <div class="charwrap"><div class="charspr" id="pChar"></div></div>
-  <div class="pEye" id="pEye">Capa</div>
+  <div class="pHead"><div class="pNum" id="pNum">00</div><div class="pHt"><div class="pEye" id="pEye">Capa</div>
   <h2 id="pTitle">—</h2>
-  <div class="pWho" id="pWho">—</div>
+  <div class="pWho" id="pWho">—</div></div></div>
   <div id="pBody"></div>
 </aside>
 
@@ -429,6 +451,8 @@ var INFO={
  dash:{lead:'Todo tu negocio en una sola pantalla. Métricas en vivo, cohortes y alertas para decidir con datos y actuar a tiempo, no con corazonadas.',
   items:['<b>Panel en tiempo real.</b> Usuarios, ventas, conversión e ingresos recurrentes.','<b>Cohortes y retención.</b> Qué clientes se quedan, cuáles se van y por qué.','<b>Alertas.</b> Te avisamos cuando algo se sale de lo normal.','<b>Exportes.</b> CSV y Excel para tu contabilidad y tu equipo.']}
 };
+var SPEC={"intro": {"n": "00", "lead": "Bienvenido al estudio donde tu idea se convierte en una app D2C lista para vender.", "why": "Una app que vende directo a tus clientes necesita siete capas funcionando juntas. Aquí recorres cada una, piso por piso, con el especialista que la construye.", "sec": "Las capas del estudio", "items": [["01 · Infraestructura", "La base que aguanta todo, del primer usuario al millón."], ["02 · Seguridad", "Tus datos y los de tus usuarios, protegidos por defecto."], ["03 · Pagos", "Cobros directos a tu cuenta, sin fricción."], ["04 · Suscripciones", "Ingresos que se repiten mes a mes."], ["05 · Marketing", "Las personas correctas, al menor costo."], ["06 · Fidelización", "Clientes que vuelven y recomiendan."], ["07 · Dashboards", "Todo tu negocio en una pantalla."]], "wins": ["Entiendes en minutos cómo se arma tu producto completo", "Ganas puntos del Club CruzTRD en cada piso", "Al final eliges con qué capa empezar"], "cta": "Quiero mi app D2C"}, "infra": {"n": "01", "lead": "La base sobre la que corre toda tu app, lista desde el primer día.", "why": "Cuando la base falla, falla todo: ventas, pagos y confianza. Por eso la dejamos preparada para crecer sin tener que rehacerla.", "items": [["Despliegue automático", "Cada mejora sale a producción en minutos, sin cortar el servicio."], ["Datos rápidos y ordenados", "PostgreSQL guarda tu información y Redis hace que todo responda al instante."], ["Autoescalado", "Más capacidad cuando llegan usuarios y menos costo cuando bajan."], ["Respaldos y monitoreo", "Copias de seguridad programadas y alertas antes de que un problema llegue a tus clientes."]], "wins": ["Tu app aguanta picos de tráfico", "Pagas solo por la capacidad que usas", "Lanzas mejoras sin miedo a romper nada"]}, "seg": {"n": "02", "lead": "Seguridad desde el diseño, no como parche al final.", "why": "Un solo incidente puede costarte la confianza de tus clientes. Definimos desde el inicio quién entra, qué puede ver y cómo viajan los datos.", "items": [["Acceso seguro", "Inicio de sesión con OAuth 2.0, contraseñas cifradas y verificación en dos pasos (2FA)."], ["Roles y permisos", "Cada persona de tu equipo ve y edita solo lo que le corresponde."], ["Datos cifrados", "La información viaja y se guarda protegida."], ["Defensa activa", "Límite de intentos, cabeceras seguras y registro de accesos para auditar."]], "wins": ["Tus clientes confían en dejarte sus datos", "Tu equipo trabaja con accesos ordenados", "Cada acceso queda registrado"]}, "pagos": {"n": "03", "lead": "Cobra desde el primer día, directo a tu cuenta.", "why": "Cada paso de más en el checkout es una venta que se pierde. Integramos pasarelas globales y locales para que tus clientes paguen como prefieren.", "items": [["Checkout sin fricción", "Pago en pocos pasos, en web y en móvil."], ["Pasarelas globales y locales", "Stripe, PayPhone, Kushki o Datafast, según tu mercado."], ["Facturación automática", "Comprobantes generados y enviados en cada venta."], ["Todo conectado", "Cada pago confirmado activa lo que sigue: acceso, envío o aviso."]], "wins": ["Menos carritos abandonados", "El dinero llega directo a tu cuenta", "Cero facturas hechas a mano"]}, "susc": {"n": "04", "lead": "Clientes que se convierten en ingresos que se repiten.", "why": "Vender una vez es bueno; cobrar cada mes es un negocio. Planes, renovaciones y cobros funcionan solos, y recuperamos los pagos fallidos antes de que se conviertan en bajas.", "items": [["Planes a tu medida", "Mensuales o anuales, con pruebas gratis y cupones."], ["Renovación automática", "Cambios de plan con prorrateo, sin cálculos manuales."], ["Recuperación de pagos", "Reintentos y avisos cuando una tarjeta falla (dunning)."], ["Autogestión", "Tus clientes cambian o pausan su plan sin escribirte."]], "wins": ["Ingresos previsibles mes a mes", "Menos bajas por tarjetas rechazadas", "Menos soporte por cambios de plan"]}, "mkt": {"n": "05", "lead": "Las personas correctas, al menor costo y con datos reales.", "why": "Invertir en anuncios sin medir es adivinar. Conectamos cada campaña con tus ventas para invertir solo en lo que funciona, con IA para encontrar audiencias y probar mensajes.", "items": [["Analítica de todo el embudo", "De la primera visita a la compra, con datos reales."], ["SEO técnico", "Que te encuentren en Google sin pagar cada clic."], ["Campañas conectadas a ventas", "Meta y Google optimizados con lo que de verdad vende."], ["Email y automatizaciones", "Mensajes personalizados con IA, en el momento justo."]], "wins": ["Sabes qué canal trae ventas y cuál no", "Bajas el costo de conseguir cada cliente", "Tu marca aparece cuando te buscan"]}, "fidel": {"n": "06", "lead": "Clientes que vuelven por gusto y recomiendan tu marca.", "why": "Conseguir un cliente cuesta; que vuelva vale más. Lo estás viviendo en esta sala: el Club CruzTRD te reconoce, te premia y te da un motivo para regresar.", "items": [["Recompensas", "Puntos, niveles y beneficios que premian cada compra."], ["Referidos", "Tus clientes traen clientes, con premio para ambos."], ["Soporte cercano", "Chat y WhatsApp integrados a tu app."], ["Escucha activa", "Encuestas NPS para mejorar antes de perder a alguien."]], "wins": ["Más compras repetidas por cliente", "Crecimiento por recomendación", "Detectas a tiempo a quien está por irse"]}, "dash": {"n": "07", "lead": "Todo tu negocio en una sola pantalla.", "why": "Decidir con corazonadas sale caro. Métricas en vivo, cohortes y alertas para actuar a tiempo, con los datos de todas las capas anteriores.", "items": [["Panel en tiempo real", "Usuarios, ventas, conversión e ingresos recurrentes."], ["Cohortes y retención", "Qué clientes se quedan, cuáles se van y por qué."], ["Alertas", "Te avisamos cuando algo se sale de lo normal."], ["Exportes", "CSV y Excel para tu contabilidad y tu equipo."]], "wins": ["Ves el estado de tu negocio en segundos", "Detectas problemas antes que tus clientes", "Todo tu equipo decide con los mismos datos"]}};
+var SPNEXT={"intro": 1, "infra": 2, "seg": 3, "pagos": 4, "susc": 5, "mkt": 6, "fidel": 7, "dash": 0};
 var VID={intro:{f:'hero',t:'Estudio CruzTRD · en vivo'},infra:{f:'infra',t:'Infraestructura · tiempo real'},seg:{f:'seg',t:'Seguridad · 24h'},pagos:{f:'pagos',t:'Pagos · hoy'},susc:{f:'susc',t:'Suscripciones · 12m'},mkt:{f:'mkt',t:'Campañas · en vivo'},fidel:{f:'fidel',t:'Lealtad · 90 días'},dash:{f:'dash',t:'Panel · tiempo real'}};
 var WDASH={"seg":"<div class=\"wdash\"><div class=\"wdhead\"><span>Seguridad · 24h</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"wdbody\"><div class=\"wdradar\"><div class=\"radar\"><svg viewBox=\"0 0 120 120\"><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"18\"/><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"36\"/><circle class=\"rgrid\" cx=\"60\" cy=\"60\" r=\"54\"/><g class=\"sweep\"><defs><linearGradient id=\"swW\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2DD4A7\" stop-opacity=\"0\"/><stop offset=\"1\" stop-color=\"#2DD4A7\" stop-opacity=\".55\"/></linearGradient></defs><path d=\"M60 60 L114 60 A54 54 0 0 0 78 12 Z\" fill=\"url(#swW)\"/></g><circle class=\"rblip\" cx=\"54\" cy=\"93\" r=\"3\"/><circle class=\"rblip\" cx=\"84\" cy=\"32\" r=\"3\"/><circle class=\"rblip\" cx=\"40\" cy=\"71\" r=\"3\"/></svg><div class=\"radarv\"><b>0</b><span>brechas · 24h</span></div></div></div><div class=\"wdkpis\"><div class=\"vkpi\"><div class=\"l\">Cifrado</div><div class=\"v\">AES-256</div></div><div class=\"vkpi\"><div class=\"l\">Acceso</div><div class=\"v\">2FA activo</div></div><div class=\"vkpi\"><div class=\"l\">Bloqueos · 24h</div><div class=\"v\">1.2K</div></div></div></div></div>"};
 WDASH.infra="<div class=\"wdash\"><div class=\"wdhead\"><span>Infraestructura · tiempo real</span><span class=\"live\"><i></i>en vivo</span></div><div class=\"wdbody\"><div class=\"wdhero\"><div class=\"gauge\"><svg viewBox=\"0 0 120 120\"><circle class=\"garc\" cx=\"60\" cy=\"60\" r=\"52\"/><circle class=\"gfill\" cx=\"60\" cy=\"60\" r=\"52\" style=\"--c:327;--o:0.1;transform:rotate(-90deg);transform-origin:center\"/><g class=\"gspin\"><circle class=\"gping\" cx=\"60\" cy=\"8\" r=\"3.4\"/></g></svg><div class=\"gaugev\"><b>99.98%</b><span>uptime</span></div></div></div><div class=\"wdkpis\"><div class=\"vkpi\"><div class=\"l\">Nodos activos</div><div class=\"v\">12</div></div><div class=\"vkpi\"><div class=\"l\">Req / min</div><div class=\"v\">8.5K</div></div><div class=\"vkpi\"><div class=\"l\">Latencia</div><div class=\"v\">42 ms</div></div></div></div></div>";
@@ -1104,7 +1128,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var TREW=['Bienvenida al Club','Guía de capas para tu app (PDF)','Diagnóstico de tu app con IA','Sesión 1:1 con el equipo'];
   function wrapL(c,txt,maxW){ var w=txt.split(' '),L=[],cur=''; for(var i=0;i<w.length;i++){ var tt=cur?cur+' '+w[i]:w[i]; if(c.measureText(tt).width>maxW&&cur){L.push(cur);cur=w[i];} else cur=tt; } if(cur)L.push(cur); return L; }
   function star(c,x,y,R,col){ c.beginPath(); for(var i=0;i<10;i++){ var a=-Math.PI/2+i*Math.PI/5, r=i%2?R*0.45:R; c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);} c.closePath(); c.fillStyle=col; c.fill(); }
-  function hola(){ var h=new Date().getHours(); return h<12?'Buenos días':(h<19?'Buenas tardes':'Buenas noches'); }
+  function hola(){ var h=new Date().getHours(); return (h<5||h>=19)?'Buenas noches':(h<12?'Buenos días':'Buenas tardes'); }
   // TV principal: tu tarjeta de socio, en vivo
   UIK.cardtv=function(c,W,H,t,s){
     var u=H/20, p=CLUB.pts(), me=CLUB.tier(), T=CLUB.TIERS, nx=T[me+1], pr=CLUB.progress(), v=CLUB.st.v||1, M=TMET[me];
@@ -1385,27 +1409,36 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   ];
   var cur=0;
 
-  var panel=document.getElementById('panel'), pChar=document.getElementById('pChar');
+  var panel=document.getElementById('panel');
+  panel.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.pNext'); if(b){ goRoom(+b.getAttribute('data-go')); }});
   function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function panelBody(s){
-    var I=INFO[s.hk]||{lead:s.text,items:[]}, h='<p class="pLead">'+I.lead+'</p>';
-    if(I.items&&I.items.length){h+='<div class="pSec">'+(I.sec||'Qué construimos')+'</div><ul class="pList">'+I.items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';}
+    var D=SPEC[s.hk], I=INFO[s.hk]||{lead:s.text,items:[]}, h='';
+    if(!D){ h='<p class="pLead">'+I.lead+'</p>'; }
+    else {
+      h+='<p class="pLead2">'+esc(D.lead)+'</p>';
+      h+='<div class="pWhy">'+esc(D.why)+'</div>';
+      h+='<div class="pSec">'+esc(D.sec||'Qué construimos')+'</div><div class="pCards">';
+      D.items.forEach(function(it,k){ h+='<div class="pCard"><span class="pK">'+(D.sec?'':('0'+(k+1)))+'</span><div><b>'+esc(it[0])+'</b><p>'+esc(it[1])+'</p></div></div>'; });
+      h+='</div><div class="pSec">Lo que ganas</div><ul class="pWins">'+D.wins.map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+'</ul>';
+    }
     var L=LIBS[s.hk];
-    if(L){h+='<div class="pSec">Librerías e integraciones</div><div class="pLibs">'+L.map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>';}
+    if(L){h+='<div class="pSec">Tecnología que usamos</div><div class="pLibs">'+L.map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>';}
     h+='<div class="pCta">';
+    h+='<a class="pBtn pri" href="/index.html#formula">'+esc((D&&D.cta)||'Quiero esta capa en mi app')+'<span>→</span></a>';
     var lib=LINKS.libs?LINKS.libs.replace('{k}',s.hk==='intro'?'todas':s.hk):'';
     var libTxt=s.hk==='intro'?'Descargar librerías del estudio':'Descargar librerías de '+s.title;
-    h+= lib ? '<a class="pBtn pri" href="'+esc(lib)+'" target="_blank" rel="noopener">'+libTxt+'<span>↓</span></a>'
+    h+= lib ? '<a class="pBtn sec" href="'+esc(lib)+'" target="_blank" rel="noopener">'+libTxt+'<span>↓</span></a>'
             : '<span class="pBtn soon" aria-disabled="true">'+libTxt+'<span class="tag">Próximamente</span></span>';
     if(LINKS.live) h+='<a class="pBtn sec" href="'+esc(LINKS.live)+'" target="_blank" rel="noopener">Ver la plataforma en vivo<span>↗</span></a>';
+    var nx=SPNEXT[s.hk]; if(nx!=null&&ROOMS[nx]) h+='<button class="pNext" data-go="'+nx+'"><span>'+(nx===0?'Volver a':'Siguiente capa')+'</span><b>'+esc(nx===0?'Recepción':ROOMS[nx].name.replace(/^Capa /,''))+'</b><i>→</i></button>';
     h+='</div>';
-    if(I.note) h+='<p class="pNote" style="margin-top:14px">'+I.note+'</p>';
+    if(s.hk==='intro'&&I.note) h+='<p class="pNote" style="margin-top:14px">'+I.note+'</p>';
     return h;
   }
   function openPanel(s){
     CLUB.spec(s.hk);
-    pChar.className='charspr '+s.cls; pChar.style.backgroundImage='url('+s.sheet+')';
-    void pChar.offsetWidth; pChar.classList.add('go','reveal');
+    var D=SPEC[s.hk]; document.getElementById('pNum').textContent=D?D.n:'';
     document.getElementById('pEye').textContent=s.eye;
     document.getElementById('pTitle').textContent=s.title;
     document.getElementById('pWho').textContent=s.who;
