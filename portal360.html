@@ -1930,7 +1930,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     pm:'Popular Mechanics (Chicago) · Wikimedia Commons · Dominio público.',
     psm:'Popular Science Monthly · Wikimedia Commons / Wikisource · Dominio público.'};
   function hLoad(){ if(HD&&Date.now()-HDt<1800000) return Promise.resolve(HD);
-    return fetch('/api/hemeroteca?v=3').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
+    return fetch('/api/hemeroteca?v=4').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
   function hThumb(it,page,w){ return String(it.thumb).replace(/\?.*$/,'').replace(/page1-\d+px/,'page'+page+'-'+(w||960)+'px'); }
   function hPick(list,n){ if(!list||!list.length) return []; var wk=Math.floor(Date.now()/604800000), out=[]; for(var i=0;i<Math.min(n,list.length);i++) out.push(list[(wk*7+i*Math.max(1,Math.floor(list.length/n)))%list.length]); return out; }
   var PDFJS=null;
@@ -1952,7 +1952,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     [['byn','Hemeroteca en español · Blanco y Negro (Madrid)'],['ilus','Hemeroteca en español · La Ilustración Española y Americana (Madrid)'],['ilart','Hemeroteca en español · La Ilustración Artística (Barcelona)'],
      ['sciam','Hemeroteca de ciencia y tecnología · Scientific American'],['pm','Hemeroteca de ciencia y tecnología · Popular Mechanics'],['psm','Hemeroteca de ciencia y tecnología · Popular Science Monthly']].forEach(function(c){
       var C=HD[c[0]]; if(!C||!C.issues||!C.issues.length) return;
-      C.issues.forEach(function(it,i){ it.__i=i; it.__img=hThumb(it,1,500); });
+      var cnt={}; C.issues.forEach(function(it){ cnt[it.label]=(cnt[it.label]||0)+1; });
+      C.issues.forEach(function(it,i){ it.__i=i; it.__img=hThumb(it,1,500); if(cnt[it.label]>1||/encuadernado/.test(it.label||'')) it.label=(/^Año/.test(it.label)?it.label+' · ':'')+'Tomo '+(i+1)+' de '+C.issues.length; });
       h+=row(c[1], hPick(C.issues,4).map(function(it){ return hCover(it,c[0],it.label||C.name,it.pages+' páginas · '+(C.lang==='ES'?'español':'inglés')); })); });
     h+='<div class="knote">Full Circle se publica bajo licencia CC BY-SA 3.0. La hemeroteca reúne escaneos de dominio público de Wikimedia Commons. Las publicaciones comerciales actuales no permiten mostrar su edición completa sin un acuerdo.</div></div>';
     magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;

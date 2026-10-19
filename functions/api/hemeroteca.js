@@ -45,6 +45,8 @@ async function commonsCol(key, debug) {
     const ym = (strip(em.DateTimeOriginal && em.DateTimeOriginal.value) + ' ' + strip(em.ImageDescription && em.ImageDescription.value) + ' ' + strip(em.ObjectName && em.ObjectName.value)).match(/\b(1[789]\d\d)\b/);
     const date = ym ? ym[1] : '';
     const pc = ii.pagecount || 0;
+    const meta = ['Credit', 'ImageDescription', 'Artist', 'Attribution'].map(k => strip(em[k] && em[k].value)).join(' ');
+    if (/google/i.test(meta)) { rej.push(p.title + ' | digitalizado por Google (pide uso no comercial)'); continue; }   // respetamos la petición de Google Books
     if (!OK_LIC.test(lic) || !pc || !ii.thumburl) { rej.push(p.title + ' | ' + lic + ' | pages ' + pc); continue; }
     const t = p.title.replace(/^File:/, '').replace(/\.(pdf|djvu)$/i, '');
     out.push({ title: t, label: label(key, t, date), file: p.title, pages: pc, thumb: ii.thumburl, desc: ii.descriptionurl, license: lic, date, size: ii.size });
@@ -81,7 +83,7 @@ export async function onRequestGet({ request, waitUntil }) {
     rh.set('cache-control', 'public, max-age=' + 30 * DAY); rh.set('access-control-expose-headers', 'content-range, accept-ranges, content-length');
     return new Response(r.body, { status: r.status, headers: rh });
   }
-  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v3' + (debug ? '&debug' : ''));
+  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v4' + (debug ? '&debug' : ''));
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const res = await Promise.all([fullCircle(debug).catch(e => ({ key: 'fc', error: e.message, issues: [] })),
     ...Object.keys(COLS).map(k => commonsCol(k, debug).catch(e => ({ key: k, error: e.message, issues: [] })))]);
