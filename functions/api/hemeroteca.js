@@ -31,7 +31,8 @@ async function commonsCol(key, debug) {
     const ii = p.imageinfo && p.imageinfo[0]; if (!ii) continue;
     const em = ii.extmetadata || {};
     const lic = strip(em.LicenseShortName && em.LicenseShortName.value);
-    const date = strip(em.DateTimeOriginal && em.DateTimeOriginal.value);
+    const ym = (strip(em.DateTimeOriginal && em.DateTimeOriginal.value) + ' ' + strip(em.ImageDescription && em.ImageDescription.value) + ' ' + strip(em.ObjectName && em.ObjectName.value)).match(/\b(1[789]\d\d)\b/);
+    const date = ym ? ym[1] : '';
     const pc = ii.pagecount || 0;
     if (!OK_LIC.test(lic) || !pc || !ii.thumburl) { rej.push(p.title + ' | ' + lic + ' | pages ' + pc); continue; }
     out.push({ title: p.title.replace(/^File:/, '').replace(/\.(pdf|djvu)$/i, ''), file: p.title, pages: pc, thumb: ii.thumburl, desc: ii.descriptionurl, license: lic, date, size: ii.size });
@@ -55,8 +56,20 @@ async function fullCircle(debug) {
   }
   return { key: 'fc', name: 'Full Circle Magazine', place: 'Revista de tecnología · Linux y software libre', lang: 'EN', kind: 'revista', license: 'CC BY-SA 3.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/deed.es', home: 'https://fullcirclemagazine.org', issues, ...(debug ? { tried } : {}) };
 }
+
+const TRY = ['intitle:"La Ilustración Española y Americana" filemime:application/pdf', 'intitle:"Caras y caretas" filemime:application/pdf', 'intitle:"Nuevo mundo" filemime:application/pdf',
+  'intitle:"La Esfera" filemime:application/pdf', 'intitle:"Popular Mechanics" filemime:application/pdf', 'intitle:"Electrical Experimenter" filemime:application/pdf',
+  'intitle:"Radio News" filemime:application/pdf', 'intitle:"Scientific American" intitle:"Series 2" filemime:application/pdf', 'intitle:"Mundo gráfico" filemime:application/pdf',
+  'intitle:"Hojas Selectas" filemime:application/pdf', 'intitle:"La Ilustración Artística" filemime:application/pdf', 'intitle:"Popular Science" filemime:application/pdf'];
+async function tryCands() {
+  return Promise.all(TRY.map(async q => { try {
+    const j = await cj(COMMONS + '?action=query&format=json&origin=*&list=search&srnamespace=6&srlimit=5&srinfo=totalhits&srsearch=' + encodeURIComponent(q));
+    return { q, hits: j.query && j.query.searchinfo ? j.query.searchinfo.totalhits : 0, sample: (j.query.search || []).slice(0, 3).map(x => x.title) }; } catch (e) { return { q, err: e.message }; } }));
+}
+
 export async function onRequestGet({ request, waitUntil }) {
   const url = new URL(request.url), debug = url.searchParams.has('debug');
+  if (url.searchParams.has('try')) return new Response(JSON.stringify(await tryCands()), { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
   // proxy del PDF original de Full Circle (solo ese dominio y ese patrón: no es un proxy abierto)
   if (url.searchParams.get('pdf') === 'fc') {
     const n = parseInt(url.searchParams.get('n'), 10), lang = url.searchParams.get('lang') === 'es' ? 'es' : 'en';
@@ -67,7 +80,7 @@ export async function onRequestGet({ request, waitUntil }) {
     rh.set('cache-control', 'public, max-age=' + 30 * DAY); rh.set('access-control-expose-headers', 'content-range, accept-ranges, content-length');
     return new Response(r.body, { status: r.status, headers: rh });
   }
-  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v1' + (debug ? '&debug' : ''));
+  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v2' + (debug ? '&debug' : ''));
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const res = await Promise.all([fullCircle(debug).catch(e => ({ key: 'fc', error: e.message, issues: [] })),
     ...Object.keys(COLS).map(k => commonsCol(k, debug).catch(e => ({ key: k, error: e.message, issues: [] })))]);
