@@ -8,7 +8,7 @@
 const TTL = 1800;
 const SOURCES = {
   sinc: { name: 'Agencia SINC', home: 'https://www.agenciasinc.es', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es',
-          feeds: ['https://www.agenciasinc.es/Quienes-somos/RSS', 'https://www.agenciasinc.es/'] },
+          merge: true, feeds: ['https://www.agenciasinc.es/feed/Tecnologia', 'https://www.agenciasinc.es/feed/Innova', 'https://www.agenciasinc.es/feed/Noticias'] },
   gv:   { name: 'Global Voices', home: 'https://es.globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es',
           feeds: ['https://es.globalvoices.org/feed/'] },
   tc:   { name: 'The Conversation', home: 'https://theconversation.com/es', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es',
@@ -54,7 +54,7 @@ function parse(xml, key) {
   }).filter(x => x.title && /^https?:\/\//.test(x.url));
 }
 async function getSource(key, debug) {
-  const S = SOURCES[key], tried = [];
+  const S = SOURCES[key], tried = [], acc = [];
   for (const u of S.feeds) {
     try {
       const r = await fetch(u, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)', accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml' }, cf: { cacheTtl: TTL, cacheEverything: true } });
@@ -78,9 +78,13 @@ async function getSource(key, debug) {
         if (!got) continue; xml = got;
       }
       const items = parse(xml, key);
+      if (S.merge && items.length) { acc.push(...items); continue; }
       if (items.length) return { key, name: S.name, home: S.home, license: S.license, licenseUrl: S.licenseUrl, feed: u, items, ...(debug ? { tried } : {}) };
     } catch (e) { tried.push(u + ' ERR ' + e.message); }
   }
+  if (acc.length) { const seen = new Set();
+    const items = acc.filter(x => !seen.has(x.url) && seen.add(x.url)).sort((a, b) => (b.date || '').localeCompare(a.date || '')).slice(0, 12);
+    return { key, name: S.name, home: S.home, license: S.license, licenseUrl: S.licenseUrl, items, ...(debug ? { tried } : {}) }; }
   return { key, name: S.name, home: S.home, license: S.license, licenseUrl: S.licenseUrl, items: [], error: 'sin datos', ...(debug ? { tried } : {}) };
 }
 export async function onRequestGet({ request, waitUntil }) {
