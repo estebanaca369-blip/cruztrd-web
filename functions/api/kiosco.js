@@ -64,7 +64,7 @@ async function getSource(key, debug) {
       if (!/<(rss|feed|rdf:RDF)[\s>]/i.test(xml)) {            // pagina HTML: autodescubrir su feed RSS/Atom
         const m = xml.match(/<link[^>]+type=["']application\/(?:rss|atom)\+xml["'][^>]*>/i);
         const h = m && m[0].match(/href=["']([^"']+)["']/i);
-        if (debug) tried.push('html; feed link: ' + (h ? h[1] : 'none') + ' | ' + xml.slice(0, 160).replace(/\s+/g, ' '));
+        if (debug) tried.push('html; feed link: ' + (h ? h[1] : 'none') + ' | rss hrefs: ' + ((xml.match(/href=["'][^"']*(?:rss|feed|xml)[^"']*["']/gi) || []).slice(0, 12).join(' ')));
         if (!h) continue;
         const fu = new URL(decode(h[1]), u).toString();
         const r2 = await fetch(fu, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)' }, cf: { cacheTtl: TTL, cacheEverything: true } });
