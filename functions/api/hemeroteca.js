@@ -83,7 +83,23 @@ export async function onRequestGet({ request, waitUntil }) {
     rh.set('cache-control', 'public, max-age=' + 30 * DAY); rh.set('access-control-expose-headers', 'content-range, accept-ranges, content-length');
     return new Response(r.body, { status: r.status, headers: rh });
   }
-  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v4' + (debug ? '&debug' : ''));
+  const cache = caches.default;
+  // ?img=<miniatura de Commons> → misma miniatura servida desde nuestro dominio y cacheada en el borde 30 días
+  // (Commons genera cada página la primera vez que se pide: 2–10 s; después la sirve la caché para todos)
+  const img = url.searchParams.get('img');
+  if (img) {
+    let u; try { u = new URL(img); } catch (e) { return new Response('bad img', { status: 400 }); }
+    if (!/^(upload|thumb)\.wikimedia\.org$/.test(u.hostname) || !/^\/wikipedia\/commons\/thumb\/[0-9a-f]\/[0-9a-f]{2}\/[^/]+\.(pdf|djvu)\/page\d+-(330|500|960|1280|1920)px-[^/]+\.(jpg|jpeg|png)$/i.test(u.pathname))
+      return new Response('not allowed', { status: 403 });
+    const ik = new Request(url.origin + '/api/hemeroteca?img=' + encodeURIComponent(u.href));
+    const hit = await cache.match(ik); if (hit) return hit;
+    const r = await fetch(u.href, { headers: { 'user-agent': UA }, cf: { cacheTtl: 30 * DAY, cacheEverything: true } });
+    if (!r.ok) return new Response('upstream ' + r.status, { status: 502, headers: { 'cache-control': 'no-store', 'retry-after': '3' } });
+    const out = new Response(r.body, { headers: { 'content-type': r.headers.get('content-type') || 'image/jpeg', 'cache-control': 'public, max-age=' + 30 * DAY + ', immutable' } });
+    waitUntil(cache.put(ik, out.clone()));
+    return out;
+  }
+  const ck = new Request(url.origin + '/api/hemeroteca?v4' + (debug ? '&debug' : ''));
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const res = await Promise.all([fullCircle(debug).catch(e => ({ key: 'fc', error: e.message, issues: [] })),
     ...Object.keys(COLS).map(k => commonsCol(k, debug).catch(e => ({ key: k, error: e.message, issues: [] })))]);
