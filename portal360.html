@@ -142,6 +142,25 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hs.act.mag .mk{width:40px;height:40px;border-color:rgba(255,236,200,.95);background:rgba(20,16,10,.45);box-shadow:0 0 18px rgba(255,220,160,.35)}
 .hs.act.mag .mk .ic{color:#fff3dc;display:flex}
 .hs.act.mag .lbl{opacity:1;transform:translateX(-50%);top:50px;background:rgba(18,14,8,.62);border-color:rgba(255,220,160,.4)}
+.krow{margin-top:34px}.krow:first-of-type{margin-top:0}
+.krt{font:600 13px 'Poppins',sans-serif;letter-spacing:.3px;color:#e9f1ee;margin:0 0 12px;display:flex;align-items:center;gap:10px}.krt::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.14)}
+.klang{position:absolute;top:8px;right:8px;z-index:2;font:700 9px 'Share Tech Mono',monospace;letter-spacing:1px;padding:2px 5px;border-radius:3px;background:#17150f;color:#f1ece0;font-style:normal}
+.kmz{aspect-ratio:3/4;border-radius:3px;padding:0;display:flex;flex-direction:column;overflow:hidden;position:relative;box-shadow:inset 6px 0 10px -6px rgba(0,0,0,.6);color:#fff}
+.kmz.m1{background:linear-gradient(170deg,#14324a,#0b1a28)}.kmz.m2{background:linear-gradient(170deg,#2b1c43,#150d23)}.kmz.m3{background:linear-gradient(170deg,#f2efe8,#e6e0d4);color:#14171c}
+.kmz.m4{background:radial-gradient(120% 70% at 70% 20%,#1d2a4a,#05070d 70%)}.kmz.m5{background:linear-gradient(170deg,#1f3a2b,#0f1f16)}
+.kzt{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;padding:12px 12px 0}.kzt span{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:22px;line-height:.95;letter-spacing:-.5px}
+.kzt i{font-style:normal;font:700 9px 'Share Tech Mono',monospace;letter-spacing:1px;padding:2px 5px;border-radius:3px;background:rgba(255,255,255,.18)}.kmz.m3 .kzt i{background:rgba(0,0,0,.1)}
+.kzs{margin:6px 12px 0;padding:4px 0;border-top:1px solid currentColor;border-bottom:1px solid currentColor;opacity:.75;font:8.5px 'Share Tech Mono',monospace;letter-spacing:1.3px;text-transform:uppercase}
+.kzh{margin:auto 12px 0;font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:16px;line-height:1.12;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.kzh.sk{height:60px}
+.kzl{margin:8px 12px 0;font-size:9.5px;line-height:1.35;opacity:.8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.kzf{margin:10px 12px 12px;font:7.5px 'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;opacity:.6}
+.kloc{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}
+.klm{display:flex;flex-direction:column;gap:3px;padding:14px 14px 12px;border-radius:4px;text-decoration:none;color:#17150f;background:#efe9dc;box-shadow:2px 2px 0 #d9d0bf;transition:transform .25s,box-shadow .25s}
+.klm:hover{transform:translateY(-4px);box-shadow:4px 8px 18px rgba(0,0,0,.35)}
+.klm b{font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:21px;line-height:1}.klm span{font:10px 'Share Tech Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:#6d6656}
+.klm i{font-style:normal;margin-top:8px;font:600 12px 'Inter',sans-serif;color:#118a6b}
+.kbroad.mag .kbm{border-bottom-style:solid}.kbroad.mag .kbt{font-family:'Poppins',sans-serif;letter-spacing:-2px}
 .kbar{max-width:1080px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;color:#cfd8d5;font:11px 'Share Tech Mono',monospace;letter-spacing:2px;text-transform:uppercase}
 .kbar.in{color:#6d6656;margin-bottom:18px}
 .kback{border:1px solid rgba(255,255,255,.25);background:rgba(8,10,12,.4);color:#f2f5f4;border-radius:999px;padding:7px 14px;font:600 13px 'Inter',sans-serif;cursor:pointer;letter-spacing:0;text-transform:none}
@@ -199,7 +218,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 @media(max-width:900px){.kgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 20px}.kcols{grid-template-columns:repeat(2,minmax(0,1fr))}.klead{grid-template-columns:1fr}}
 @media(max-width:560px){.khead h2{font-size:34px}.kgrid{padding:18px 12px 0;gap:26px 14px}.kpm{font-size:15px}.kph{font-size:12.5px}.kmm span{font-size:21px}.kmh{font-size:17px}
  .vbroad .kbroad{padding:16px 18px 26px}.kbt{font-size:38px}.klead h1{font-size:30px}.kcols{grid-template-columns:1fr}}
-.magopen .navhub,.magopen .gyrobtn,.magopen .topr,.magopen #roomtag,.magopen .badge,.magopen .clubtoast,opacity:0!important;pointer-events:none!important}
+.magopen .navhub,.magopen .gyrobtn,.magopen .topr,.magopen #roomtag,.magopen .badge,.magopen .clubtoast,.magopen .hs,.magopen .edgeh,.magopen .clubpill{opacity:0!important;pointer-events:none!important}
 .magback{position:fixed;inset:0;z-index:9;background:rgba(3,6,8,.62);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s}
 .magback.open{opacity:1;pointer-events:auto}
 .mag{position:fixed;inset:0;z-index:10;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .35s;padding:56px 16px 40px;-webkit-overflow-scrolling:touch}
@@ -1813,30 +1832,49 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   }
 
   // ===== Kiosco: periódicos en vivo con licencia abierta (vía /api/kiosco) =====
-  var KD=null, KDt=0, KP={sinc:{mast:'Ciencia & Tecnología',sub:'Noticias de Agencia SINC',tone:'k1',credit:'Contenido de la Agencia SINC, publicado bajo licencia Creative Commons 4.0. Fuente: Agencia SINC.'},
-    gv:{mast:'El Mundo en Voces',sub:'Noticias de Global Voices',tone:'k2',credit:'Publicado originalmente en Global Voices en español, bajo licencia CC BY 3.0. Cada nota indica su autor.'},
-    tc:{mast:'Ideas & Economía',sub:'Análisis de The Conversation',tone:'k3',credit:'Títulos y entradillas de The Conversation, sin modificaciones (licencia CC BY-ND 4.0). Lee cada artículo completo en su sitio.'}};
+  var KD=null, KDt=0, KP={
+    sinc:{mast:'Ciencia & Tecnología',sub:'Agencia SINC',tone:'k1',kind:'paper',lang:'ES',credit:'Contenido de la Agencia SINC, publicado bajo licencia Creative Commons 4.0. Fuente: Agencia SINC.'},
+    tc:{mast:'Ideas & Economía',sub:'The Conversation',tone:'k3',kind:'paper',lang:'ES',credit:'Títulos y entradillas de The Conversation, sin modificaciones (licencia CC BY-ND 4.0). Lee cada artículo completo en su sitio.'},
+    gv:{mast:'El Mundo en Voces',sub:'Global Voices',tone:'k2',kind:'paper',lang:'ES',credit:'Publicado originalmente en Global Voices en español, bajo licencia CC BY 3.0. Cada nota indica su autor.'},
+    tctec:{mast:'Tech & Society',sub:'The Conversation · Tecnología',tone:'m1',kind:'mag',lang:'EN',credit:'Títulos y entradillas de The Conversation (EE. UU.), sin modificaciones (licencia CC BY-ND 4.0). En inglés. Lee cada artículo completo en su sitio.'},
+    eff:{mast:'Derechos Digitales',sub:'EFF · Deeplinks',tone:'m2',kind:'mag',lang:'EN',credit:'Contenido de la Electronic Frontier Foundation (EFF), licencia CC BY 4.0. En inglés.'},
+    owid:{mast:'El Mundo en Datos',sub:'Our World in Data',tone:'m3',kind:'mag',lang:'EN',credit:'Contenido de Our World in Data, licencia CC BY 4.0. En inglés.'},
+    nasa:{mast:'Espacio & Ciencia',sub:'NASA',tone:'m4',kind:'mag',lang:'EN',credit:'Información de la NASA, obra del Gobierno de EE. UU. en dominio público. La NASA no patrocina ni respalda este sitio. En inglés.'},
+    mongabay:{mast:'Planeta',sub:'Mongabay',tone:'m5',kind:'mag',lang:'EN',credit:'Títulos y entradillas de Mongabay, sin modificaciones (licencia CC BY-ND 4.0). En inglés.'},
+    gven:{mast:'World Voices',sub:'Global Voices',tone:'k2',kind:'paper',lang:'EN',credit:'Publicado originalmente en Global Voices, bajo licencia CC BY 3.0. En inglés.'},
+    tcbr:{mast:'Ideias',sub:'The Conversation Brasil',tone:'k1',kind:'paper',lang:'PT',credit:'Títulos y entradillas de The Conversation Brasil, sin modificaciones (licencia CC BY-ND 4.0). En portugués.'},
+    tcfr:{mast:'Idées',sub:'The Conversation France',tone:'k3',kind:'paper',lang:'FR',credit:'Títulos y entradillas de The Conversation France, sin modificaciones (licencia CC BY-ND 4.0).'}};
+  var KSHELVES=[['En español',['rev','sinc','tc','gv']],['Tecnología del mundo',['tctec','eff','owid','nasa']],['Ciencia, planeta y mundo',['mongabay','gven','tcbr','tcfr']]];
+  var KLOCAL=[['El Comercio','Quito · diario','https://www.elcomercio.com/'],['El Universo','Guayaquil · diario','https://www.eluniverso.com/'],['Expreso','Guayaquil · diario','https://www.expreso.ec/'],
+    ['Extra','Guayaquil · diario','https://www.extra.ec/'],['Primicias','Digital · noticias','https://www.primicias.ec/'],['GK','Digital · periodismo','https://gk.city/'],
+    ['Plan V','Digital · investigación','https://www.planv.com.ec/'],['Vistazo','Revista · actualidad','https://www.vistazo.com/'],['Cosas','Revista · estilo de vida','https://www.cosas.com.ec/']];
   function kLoad(){ if(KD&&Date.now()-KDt<600000) return Promise.resolve(KD);
     return fetch('/api/kiosco').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ KD={}; j.sources.forEach(function(x){ KD[x.key]=x; }); KDt=Date.now(); return KD; }); }
   function kAgo(iso){ if(!iso) return ''; var m=Math.max(1,Math.round((Date.now()-Date.parse(iso))/60000)); if(m<60) return 'hace '+m+' min'; var h=Math.round(m/60); if(h<24) return 'hace '+h+' h'; var d=Math.round(h/24); return 'hace '+d+(d===1?' día':' días'); }
   function kToday(){ try{ return new Date().toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }catch(e){ return new Date().toDateString(); } }
   function kMini(k,src){ var P=KP[k], it=src&&src.items&&src.items[0], it2=src&&src.items&&src.items[1];
-    return '<div class="kpaper '+P.tone+'"><div class="kpm">'+P.mast+'</div><div class="kpd">'+kToday()+'</div>'+
+    if(P.kind==='mag') return '<div class="kmz '+P.tone+'"><div class="kzt"><span>'+P.mast+'</span><i>'+P.lang+'</i></div><div class="kzs">'+esc(P.sub)+'</div>'+(it?'<div class="kzh">'+esc(it.title)+'</div><div class="kzl">'+(it2?esc(it2.title):'')+'</div>':'<div class="kzh sk"></div>')+'<div class="kzf">'+kToday()+'</div></div>';
+    return '<div class="kpaper '+P.tone+'">'+(P.lang!=='ES'?'<i class="klang">'+P.lang+'</i>':'')+'<div class="kpm">'+P.mast+'</div><div class="kpd">'+kToday()+'</div>'+
       (it?'<div class="kph">'+esc(it.title)+'</div><div class="kpcols"><p>'+esc(it.summary||'')+'</p><p>'+(it2?'<b>'+esc(it2.title)+'</b> '+esc(it2.summary||''):'')+'</p></div>'
          :'<div class="kph sk"></div><div class="kpcols"><p class="sk"></p><p class="sk"></p></div>')+'<i class="kfold"></i></div>'; }
   function kShelf(){
-    var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Lee mientras esperas. Una revista propia y tres periódicos con licencia abierta, actualizados cada 30 minutos.</p></div><div class="kgrid">';
-    h+='<button class="kpub rev" data-pub="rev"><div class="kobj"><div class="kmag"><div class="kmm">Revista<span>Cruz<b>TRD</b></span></div><div class="kmd">Edición 01 · Octubre 2026</div><div class="kmb">D2C</div><div class="kmh">Vender directo ya no es opcional</div></div></div><div class="klab"><b>Revista CruzTRD</b><span>Edición 01 · '+MAG.length+' artículos · +25 pts c/u</span></div></button>';
-    ['sinc','gv','tc'].forEach(function(k){ var src=KD&&KD[k]; h+='<button class="kpub" data-pub="'+k+'"><div class="kobj">'+kMini(k,src)+'</div><div class="klab"><b>'+KP[k].mast+'</b><span id="kl-'+k+'">'+KP[k].sub+(src&&src.items.length?' · '+kAgo(src.items[0].date):'')+'</span></div></button>'; });
-    h+='</div><div class="knote">Los periódicos muestran títulos y resúmenes de medios que permiten reutilizar su contenido. Cada nota enlaza a su fuente original.</div></div>';
+    var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Lee mientras esperas: una revista propia, periódicos y revistas de tecnología, ciencia y mundo que se actualizan solos, y la prensa de Ecuador a un toque.</p></div>';
+    KSHELVES.forEach(function(sh){ h+='<div class="krow"><div class="krt">'+sh[0]+'</div><div class="kgrid">';
+      sh[1].forEach(function(k){
+        if(k==='rev'){ h+='<button class="kpub rev" data-pub="rev"><div class="kobj"><div class="kmag"><div class="kmm">Revista<span>Cruz<b>TRD</b></span></div><div class="kmd">Edición 01 · Octubre 2026</div><div class="kmb">D2C</div><div class="kmh">Vender directo ya no es opcional</div></div></div><div class="klab"><b>Revista CruzTRD</b><span>Edición 01 · '+MAG.length+' artículos · +25 pts c/u</span></div></button>'; return; }
+        var src=KD&&KD[k]; h+='<button class="kpub" data-pub="'+k+'"><div class="kobj">'+kMini(k,src)+'</div><div class="klab"><b>'+KP[k].mast+'</b><span>'+esc(KP[k].sub)+(src&&src.items.length?' · '+kAgo(src.items[0].date):'')+'</span></div></button>'; });
+      h+='</div></div>'; });
+    h+='<div class="krow"><div class="krt">Prensa de Ecuador</div><div class="kloc">'+KLOCAL.map(function(m){ return '<a class="klm" href="'+m[2]+'" target="_blank" rel="noopener"><b>'+m[0]+'</b><span>'+m[1]+'</span><i>Abrir su sitio ↗</i></a>'; }).join('')+'</div>'+
+       '<div class="knote">Enlaces a los sitios oficiales de cada medio. No reproducimos su contenido ni sus marcas: para eso hace falta su autorización.</div></div>';
+    h+='<div class="knote">Las publicaciones de tecnología, ciencia y mundo muestran títulos y resúmenes de medios que permiten reutilizar su contenido. Cada nota enlaza a su fuente original y lleva su crédito.</div></div>';
     magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
     if(!KD) kLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){});
   }
   function kPaper(k){
     var P=KP[k];
     function render(src){
-      var h='<article class="kbroad '+P.tone+'"><div class="kbar in"><button class="kback" data-shelf="1">← Kiosco</button><span>'+esc(src?src.name:'')+'</span></div>';
-      h+='<header class="kbm"><div class="kbt">'+P.mast+'</div><div class="kbl"><span>'+kToday()+'</span><span>Edición en línea · '+esc(P.sub)+'</span><span>Actualizado '+kAgo(src&&src.items[0]&&src.items[0].date)+'</span></div></header>';
+      var h='<article class="kbroad '+P.tone+' '+P.kind+'"><div class="kbar in"><button class="kback" data-shelf="1">← Kiosco</button><span>'+esc(src?src.name:'')+'</span></div>';
+      h+='<header class="kbm"><div class="kbt">'+P.mast+'</div><div class="kbl"><span>'+kToday()+'</span><span>Edición en línea · '+esc(P.sub)+(P.lang!=='ES'?' · en '+({EN:'inglés',PT:'portugués',FR:'francés'}[P.lang]||P.lang):'')+'</span><span>Actualizado '+kAgo(src&&src.items[0]&&src.items[0].date)+'</span></div></header>';
       if(!src||!src.items.length){ h+='<div class="kerr"><b>No pudimos traer las noticias en este momento.</b><span>Puede ser un corte temporal de la fuente. Intenta de nuevo en unos minutos.</span><button data-retry="'+k+'">Reintentar</button></div></article>'; magView.innerHTML=h; return; }
       var L=src.items[0];
       h+='<section class="klead"><div class="kk">'+kAgo(L.date)+(L.author?' · '+esc(L.author):'')+'</div><h1>'+esc(L.title)+'</h1><p>'+esc(L.summary||'')+'</p><a href="'+esc(L.url)+'" target="_blank" rel="noopener">Leer la nota completa en '+esc(src.name)+' ↗</a></section>';
