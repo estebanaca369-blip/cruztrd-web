@@ -218,6 +218,37 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 @media(max-width:900px){.kgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 20px}.kcols{grid-template-columns:repeat(2,minmax(0,1fr))}.klead{grid-template-columns:1fr}}
 @media(max-width:560px){.khead h2{font-size:34px}.kgrid{padding:18px 12px 0;gap:26px 14px}.kpm{font-size:15px}.kph{font-size:12.5px}.kmm span{font-size:21px}.kmh{font-size:17px}
  .vbroad .kbroad{padding:16px 18px 26px}.kbt{font-size:38px}.klead h1{font-size:30px}.kcols{grid-template-columns:1fr}}
+.hgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:26px 22px;padding:22px 20px 0;position:relative;border-radius:14px 14px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.05))}
+.hgrid::after{content:"";position:absolute;left:-10px;right:-10px;bottom:-16px;height:16px;border-radius:4px;background:linear-gradient(180deg,#6b5236,#3e2e1d);box-shadow:0 18px 30px rgba(0,0,0,.55)}
+.hcov{border:0;background:transparent;padding:0;cursor:pointer;text-align:left;color:#f2f5f4;display:flex;flex-direction:column;gap:4px;min-width:0}
+.hci{display:block;aspect-ratio:3/4;position:relative;border-radius:2px;overflow:hidden;background:#1b1f22;box-shadow:0 16px 24px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
+.hcov:hover .hci{transform:translateY(-10px);box-shadow:0 28px 34px rgba(0,0,0,.6)}
+.hci img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.hci .hsk,.fbp .hsk,.fbzi .hsk{position:absolute;inset:0;border-radius:0}
+.hci .kmag.hmini{position:absolute;inset:0;aspect-ratio:auto}
+.hcov b{font:600 14px 'Poppins',sans-serif;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hcov em{font-style:normal;font-size:12px;color:#a9b8b4}
+.vfb .fbw{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:12px;animation:mIn .4s both}
+.fbtop{display:flex;align-items:center;gap:14px;color:#e9f1ee}.fbtop b{flex:1;min-width:0;font:600 15px 'Poppins',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fbtop span{font:11px 'Share Tech Mono',monospace;letter-spacing:1.5px;color:#a9b8b4;white-space:nowrap}
+.fbstage{position:relative;height:calc(100vh - 210px);min-height:360px;display:flex;align-items:center;justify-content:center;perspective:2200px;touch-action:pan-y}
+.fbbook{position:relative;height:100%;aspect-ratio:1.42/1;max-width:100%;display:flex;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
+.fbbook.one{aspect-ratio:.71/1}
+.fbp{position:relative;flex:1;height:100%;background:#f4f1ea;overflow:hidden;cursor:zoom-in}
+.fbp.l{box-shadow:inset -18px 0 24px -14px rgba(0,0,0,.35)}.fbp.r{box-shadow:inset 18px 0 24px -14px rgba(0,0,0,.35)}
+.fbp.blank{background:transparent;box-shadow:none;cursor:default}
+.fbp img,.fbleaf img{width:100%;height:100%;object-fit:contain;display:block;background:#f4f1ea}
+.fbleaf{position:absolute;top:0;height:100%;width:50%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.45,.05,.25,1);z-index:3}
+.fbleaf.r{left:50%;transform-origin:left center}.fbleaf.l{left:0;transform-origin:right center}.fbleaf.s{left:0;width:100%;transform-origin:left center}
+.fbleaf.r.go{transform:rotateY(-180deg)}.fbleaf.l.go{transform:rotateY(180deg)}.fbleaf.s.fwd.go{transform:rotateY(-110deg);opacity:0;transition:transform .6s,opacity .6s}.fbleaf.s.back{transform:rotateY(-110deg);opacity:0}.fbleaf.s.back.go{transform:none;opacity:1}
+.fbf,.fbb{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#f4f1ea;overflow:hidden}.fbb{transform:rotateY(180deg)}
+.fbnav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:72px;border-radius:12px;border:1px solid rgba(255,255,255,.2);background:rgba(8,10,12,.55);color:#fff;font-size:34px;line-height:1;cursor:pointer;z-index:5}
+.fbnav.prev{left:0}.fbnav.next{right:0}.fbnav:disabled{opacity:.2;cursor:default}
+.fbbar{display:flex;align-items:center;gap:16px;color:#a9b8b4;font-size:12.5px}.fbbar input{flex:1;accent-color:#2DD4A7}
+.fbcred{font-size:12px;color:#8fa29d}
+.fbzoom{position:fixed;inset:0;z-index:12;background:rgba(3,5,7,.94);overflow:auto;display:flex;flex-direction:column;align-items:center;padding:60px 12px 30px}
+.fbzoom .kback{position:fixed;top:16px;right:18px}
+.fbzi{position:relative;width:min(1100px,100%);min-height:60vh}.fbzi img{width:100%;height:auto;display:block}
+@media(max-width:900px){.hgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.hgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 14px;padding:16px 12px 0}.fbstage{height:calc(100vh - 230px)}.fbnav{width:38px;height:56px;font-size:26px}.fbhint{display:none}}
 .magopen .navhub,.magopen .gyrobtn,.magopen .topr,.magopen #roomtag,.magopen .badge,.magopen .clubtoast,.magopen .hs,.magopen .edgeh,.magopen .clubpill{opacity:0!important;pointer-events:none!important}
 .magback{position:fixed;inset:0;z-index:9;background:rgba(3,6,8,.62);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s}
 .magback.open{opacity:1;pointer-events:auto}
@@ -1887,6 +1918,91 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     magView.innerHTML='<article class="kbroad '+P.tone+'"><header class="kbm"><div class="kbt">'+P.mast+'</div><div class="kbl"><span>Cargando la edición de hoy…</span></div></header><section class="kcols">'+'<div class="kst sk"></div>'.repeat(6)+'</section></article>';
     kLoad().then(function(D){ render(D[k]); }).catch(function(){ render(null); });
   }
+
+  // ===== Hemeroteca: ediciones digitales originales + lector de páginas =====
+  var HD=null, HDt=0, FCC={};
+  var HCRED={fc:'Full Circle Magazine · fullcirclemagazine.org · Licencia CC BY-SA 3.0. Revista independiente, sin relación con Canonical.',
+    byn:'Blanco y Negro (Madrid) · escaneo de Internet Archive publicado en Wikimedia Commons · Dominio público.',
+    sciam:'Scientific American, serie 1 · Wikimedia Commons · Dominio público.',
+    psm:'Popular Science Monthly · Wikimedia Commons / Wikisource · Dominio público.'};
+  function hLoad(){ if(HD&&Date.now()-HDt<1800000) return Promise.resolve(HD);
+    return fetch('/api/hemeroteca?v=1').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
+  function hThumb(it,page,w){ return String(it.thumb).replace(/\?.*$/,'').replace(/page1-\d+px/,'page'+page+'-'+(w||960)+'px'); }
+  function hPick(list,n){ if(!list||!list.length) return []; var wk=Math.floor(Date.now()/604800000), out=[]; for(var i=0;i<Math.min(n,list.length);i++) out.push(list[(wk*7+i*Math.max(1,Math.floor(list.length/n)))%list.length]); return out; }
+  var PDFJS=null;
+  function hPdfLib(){ if(PDFJS) return PDFJS; PDFJS=new Promise(function(ok,ko){ var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      sc.onload=function(){ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; ok(window.pdfjsLib); }; sc.onerror=ko; document.head.appendChild(sc); }); return PDFJS; }
+  function hFcDoc(n,lang){ var k=n+'_'+lang; if(FCC[k]) return FCC[k];
+    FCC[k]=hPdfLib().then(function(L){ return L.getDocument({url:'/api/hemeroteca?pdf=fc&n='+n+'&lang='+lang, disableAutoFetch:true, disableStream:false, rangeChunkSize:262144}).promise; }); return FCC[k]; }
+  var PCACHE={};
+  function hPdfPage(doc,key,i,w){ var ck=key+':'+i+':'+w; if(PCACHE[ck]) return PCACHE[ck];
+    PCACHE[ck]=doc.getPage(i+1).then(function(pg){ var v=pg.getViewport({scale:1}), sc=w/v.width, vp=pg.getViewport({scale:sc}), cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
+      return pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){ return cv.toDataURL('image/jpeg',0.86); }); }); return PCACHE[ck]; }
+  function hCover(it,k,title,sub){ return '<button class="hcov" data-hem="'+k+'" data-hi="'+it.__i+'"><span class="hci">'+(it.__img?'<img loading="lazy" alt="" src="'+esc(it.__img)+'">':'<i class="hsk sk" data-fccov="'+it.n+'"></i>')+'</span><b>'+esc(title)+'</b><em>'+esc(sub)+'</em></button>'; }
+  function kShelf(){
+    var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Revistas y periódicos en su edición original, página por página. Solo publicaciones que permiten mostrarse completas.</p></div>';
+    if(!HD){ h+='<div class="krow"><div class="hgrid">'+'<span class="hcov"><span class="hci"><i class="hsk sk"></i></span></span>'.repeat(6)+'</div></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ magView.querySelector('.hgrid').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir el kiosco ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
+    var fc=HD.fc, row=function(t,items){ return '<div class="krow"><div class="krt">'+t+'</div><div class="hgrid">'+items.join('')+'</div></div>'; };
+    if(fc&&fc.issues&&fc.issues.length) h+=row('Tecnología · Full Circle Magazine (mensual)', fc.issues.map(function(it,i){ it.__i=i; return hCover(it,'fc','Full Circle #'+it.n,(i===0?'Última edición':'Edición anterior')+' · inglés'); }));
+    h+='<div class="krow"><div class="krt">De la casa</div><div class="hgrid"><button class="hcov" data-pub="rev"><span class="hci"><span class="kmag hmini"><span class="kmm">Revista<span>Cruz<b>TRD</b></span></span><span class="kmd">Edición 01 · Octubre 2026</span><span class="kmb">D2C</span><span class="kmh">Vender directo ya no es opcional</span></span></span><b>Revista CruzTRD</b><em>Edición 01 · +25 pts por artículo</em></button></div></div>';
+    [['byn','Blanco y Negro · Madrid, revista ilustrada'],['sciam','Scientific American · el periódico de ciencia desde 1845'],['psm','Popular Science Monthly · revista de ciencia']].forEach(function(c){
+      var C=HD[c[0]]; if(!C||!C.issues||!C.issues.length) return;
+      C.issues.forEach(function(it,i){ it.__i=i; it.__img=hThumb(it,1,500); });
+      h+=row('Hemeroteca · '+c[1], hPick(C.issues,4).map(function(it){ return hCover(it,c[0],it.title.replace(/^Scientific American - Series 1 - /,'').replace(/^Popular Science Monthly /,'').replace(/^Blanco y negro \(IA blancoynegro(\d+)unse\)$/,'Tomo $1'),(it.date?it.date+' · ':'')+it.pages+' páginas'); })); });
+    h+='<div class="knote">Full Circle se publica bajo licencia CC BY-SA 3.0. La hemeroteca reúne escaneos de dominio público de Wikimedia Commons. Las publicaciones comerciales actuales no permiten mostrar su edición completa sin un acuerdo.</div></div>';
+    magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
+    [].slice.call(magView.querySelectorAll('[data-fccov]')).forEach(function(el){ var n=+el.getAttribute('data-fccov');
+      hFcDoc(n,'en').then(function(doc){ return hPdfPage(doc,'fc'+n,0,420); }).then(function(u){ var it=fc.issues.filter(function(x){return x.n===n;})[0]; if(it) it.__img=u; var im=new Image(); im.alt=''; im.src=u; el.replaceWith(im); }).catch(function(){ el.classList.remove('sk'); }); });
+  }
+  // ---- lector: doble página en escritorio, una página en móvil, con giro de página ----
+  var FB=null;
+  function fbOpen(k,idx){
+    var C=HD[k], it=C.issues[idx]; FB={k:k,it:it,i:0,n:it.pages||0,doc:null,busy:false,single:innerWidth<760};
+    var title=k==='fc'?('Full Circle Magazine #'+it.n):(C.name+' — '+it.title.replace(/^Scientific American - /,''));
+    magView.className='magview vfb'; magEl.scrollTop=0;
+    magView.innerHTML='<div class="fbw"><div class="fbtop"><button class="kback" data-shelf="1">← Kiosco</button><b>'+esc(title)+'</b><span id="fbPg"></span></div>'+
+      '<div class="fbstage" id="fbStage"><div class="fbbook" id="fbBook"></div><button class="fbnav prev" id="fbPrev" aria-label="Página anterior">‹</button><button class="fbnav next" id="fbNext" aria-label="Página siguiente">›</button></div>'+
+      '<div class="fbbar"><input type="range" id="fbRange" min="0" value="0" aria-label="Ir a página"><span class="fbhint">Toca una página para ampliarla · flechas del teclado o desliza para pasar</span></div>'+
+      '<div class="fbcred">'+esc(HCRED[k]||'')+(it.license&&k!=='fc'?' ('+esc(it.license)+')':'')+'</div></div>';
+    document.getElementById('fbPrev').onclick=function(){ fbTurn(-1); }; document.getElementById('fbNext').onclick=function(){ fbTurn(1); };
+    var rg=document.getElementById('fbRange'); rg.oninput=function(){ FB.i=fbNorm(+rg.value); fbDraw(); };
+    var st=document.getElementById('fbStage'), sx=null; st.addEventListener('pointerdown',function(e){ sx=e.clientX; }); st.addEventListener('pointerup',function(e){ if(sx==null)return; var d=e.clientX-sx; sx=null; if(Math.abs(d)>45) fbTurn(d<0?1:-1); });
+    if(k==='fc'){ hFcDoc(it.n,'en').then(function(doc){ FB.doc=doc; FB.n=doc.numPages; fbDraw(); }).catch(function(){ document.getElementById('fbBook').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir esta edición.</b><span>Intenta de nuevo en unos minutos.</span></div>'; }); }
+    else fbDraw();
+  }
+  function fbNorm(i){ if(FB.single) return Math.max(0,Math.min(FB.n-1,i)); if(i<=0) return 0; if(i%2===0) i--; return Math.max(0,Math.min(FB.n%2?FB.n-2:FB.n-1,i)); }
+  function fbPages(i){ return FB.single?[i]:(i===0?[-1,0]:[i,i+1]); }
+  function fbSrc(p){ if(p<0||p>=FB.n) return Promise.resolve(null); if(FB.k==='fc') return FB.doc?hPdfPage(FB.doc,'fc'+FB.it.n,p,980):Promise.resolve(null); return Promise.resolve(hThumb(FB.it,p+1,960)); }
+  function fbImg(el,p){ el.innerHTML=''; if(p<0||p>=FB.n){ el.classList.add('blank'); return; } el.classList.remove('blank'); el.setAttribute('data-p',p); el.innerHTML='<i class="hsk sk"></i>';
+    fbSrc(p).then(function(u){ if(!u||el.getAttribute('data-p')!=String(p)) return; var im=new Image(); im.alt='Página '+(p+1); im.onload=function(){ el.innerHTML=''; el.appendChild(im); }; im.src=u; }); }
+  function fbDraw(){
+    var bk=document.getElementById('fbBook'); if(!bk||!FB.n) return; var P=fbPages(FB.i);
+    bk.className='fbbook'+(FB.single?' one':''); bk.innerHTML=P.map(function(_,j){ return '<div class="fbp '+(FB.single?'s':(j?'r':'l'))+'"></div>'; }).join('');
+    [].slice.call(bk.children).forEach(function(el,j){ fbImg(el,P[j]); el.onclick=function(){ if(P[j]>=0&&P[j]<FB.n) fbZoom(P[j]); }; });
+    var a=P.filter(function(x){return x>=0&&x<FB.n;}); document.getElementById('fbPg').textContent=(a.length>1?'Páginas '+(a[0]+1)+'–'+(a[1]+1):'Página '+(a[0]+1))+' de '+FB.n;
+    var rg=document.getElementById('fbRange'); rg.max=FB.n-1; rg.value=FB.i;
+    document.getElementById('fbPrev').disabled=FB.i<=0; document.getElementById('fbNext').disabled=(P[P.length-1]>=FB.n-1);
+    fbPages(fbNorm(FB.i+(FB.single?1:2))).concat(fbPages(fbNorm(FB.i-(FB.single?1:2)))).forEach(function(p){ fbSrc(p); });   // precarga
+  }
+  function fbTurn(d){
+    if(!FB||FB.busy||!FB.n) return; var step=FB.single?1:(FB.i===0?1:2), ni=fbNorm(d>0?FB.i+step:FB.i-(FB.i===1?1:step)); if(ni===FB.i) return;
+    var bk=document.getElementById('fbBook'), cur=fbPages(FB.i), nxt=fbPages(ni); FB.busy=true;
+    var leaf=document.createElement('div'); leaf.className='fbleaf '+(FB.single?'s':(d>0?'r':'l'))+(d>0?' fwd':' back');
+    leaf.innerHTML='<div class="fbf"></div><div class="fbb"></div>'; bk.appendChild(leaf);
+    var under=FB.single?bk.children[0]:bk.children[d>0?1:0];
+    fbImg(leaf.children[0],FB.single?cur[0]:(d>0?cur[1]:cur[0])); if(!FB.single) fbImg(leaf.children[1],d>0?nxt[0]:nxt[1]);
+    fbImg(under,FB.single?nxt[0]:(d>0?nxt[1]:nxt[0]));
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ leaf.classList.add('go'); }); });
+    setTimeout(function(){ FB.i=ni; FB.busy=false; fbDraw(); },620);
+  }
+  function fbZoom(p){
+    var z=document.createElement('div'); z.className='fbzoom'; z.innerHTML='<button class="kback">✕ Cerrar</button><div class="fbzi"><i class="hsk sk"></i></div>'; magEl.appendChild(z);
+    var src=FB.k==='fc'?hPdfPage(FB.doc,'fc'+FB.it.n,p,1800):Promise.resolve(hThumb(FB.it,p+1,1920));
+    src.then(function(u){ var im=new Image(); im.alt='Página '+(p+1); im.src=u; var c=z.querySelector('.fbzi'); c.innerHTML=''; c.appendChild(im); });
+    z.onclick=function(e){ if(e.target.closest('.kback')||e.target===z) z.remove(); };
+  }
+  addEventListener('keydown',function(e){ if(!magEl.classList.contains('open')||!FB||magView.className.indexOf('vfb')<0) return; if(e.key==='ArrowRight') fbTurn(1); if(e.key==='ArrowLeft') fbTurn(-1); });
+  magView.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-hem]'); if(!t) return; e.stopPropagation(); fbOpen(t.getAttribute('data-hem'),+t.getAttribute('data-hi')); });
   function openMag(){ closeDir(); panel.classList.remove('open'); kShelf(); magBack.classList.add('open'); magEl.classList.add('open'); document.body.classList.add('magopen'); }
   function closeMag(){ magEl.classList.remove('open'); magBack.classList.remove('open'); document.body.classList.remove('magopen'); }
   magView.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-art],[data-idx],[data-room],[data-shelf],[data-pub],[data-retry]'); if(!t)return;
