@@ -7,13 +7,24 @@
 
 const TTL = 1800;
 const SOURCES = {
-  sinc: { name: 'Agencia SINC', home: 'https://www.agenciasinc.es', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es',
-          merge: true, feeds: ['https://www.agenciasinc.es/feed/Tecnologia', 'https://www.agenciasinc.es/feed/Innova', 'https://www.agenciasinc.es/feed/Noticias'] },
-  gv:   { name: 'Global Voices', home: 'https://es.globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es',
-          feeds: ['https://es.globalvoices.org/feed/'] },
-  tc:   { name: 'The Conversation', home: 'https://theconversation.com/es', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es',
-          feeds: ['https://theconversation.com/es/articles.atom'] },
+  sinc:  { name: 'Agencia SINC', home: 'https://www.agenciasinc.es', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es',
+           merge: true, feeds: ['https://www.agenciasinc.es/feed/Tecnologia', 'https://www.agenciasinc.es/feed/Innova', 'https://www.agenciasinc.es/feed/Noticias'] },
+  gv:    { name: 'Global Voices', home: 'https://es.globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es', feeds: ['https://es.globalvoices.org/feed/'] },
+  tc:    { name: 'The Conversation', home: 'https://theconversation.com/es', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es', feeds: ['https://theconversation.com/es/articles.atom'] },
+  tctec: { name: 'The Conversation', home: 'https://theconversation.com/us/technology', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es',
+           feeds: ['https://theconversation.com/us/technology/articles.atom', 'https://theconversation.com/global/technology/articles.atom', 'https://theconversation.com/uk/technology/articles.atom'] },
+  eff:   { name: 'EFF', home: 'https://www.eff.org/deeplinks', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es', feeds: ['https://www.eff.org/rss/updates.xml', 'https://www.eff.org/rss/deeplinks.xml'] },
+  owid:  { name: 'Our World in Data', home: 'https://ourworldindata.org', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es', feeds: ['https://ourworldindata.org/atom.xml', 'https://ourworldindata.org/feed'] },
+  nasa:  { name: 'NASA', home: 'https://www.nasa.gov', license: 'Dominio público (EE. UU.)', licenseUrl: 'https://www.nasa.gov/nasa-brand-center/images-and-media/',
+           feeds: ['https://www.nasa.gov/news-release/feed/', 'https://www.nasa.gov/feed/'] },
+  mongabay: { name: 'Mongabay', home: 'https://news.mongabay.com', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es', feeds: ['https://news.mongabay.com/feed/'] },
+  gven:  { name: 'Global Voices', home: 'https://globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es', feeds: ['https://globalvoices.org/feed/'] },
+  tcbr:  { name: 'The Conversation Brasil', home: 'https://theconversation.com/br', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es', feeds: ['https://theconversation.com/br/articles.atom'] },
+  tcfr:  { name: 'The Conversation France', home: 'https://theconversation.com/fr', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es', feeds: ['https://theconversation.com/fr/articles.atom'] },
 };
+// Prensa de Ecuador: solo nombre y enlace a su sitio (sin logos ni contenido: no tienen licencia abierta)
+const LOCAL = ['https://www.elcomercio.com/', 'https://www.eluniverso.com/', 'https://www.expreso.ec/', 'https://www.primicias.ec/', 'https://gk.city/', 'https://www.vistazo.com/',
+  'https://www.cosas.com.ec/', 'https://www.elmercurio.com.ec/', 'https://www.planv.com.ec/', 'https://www.extra.ec/'];
 
 const ENT = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', laquo: '«', raquo: '»', ndash: '–', mdash: '—', hellip: '…', rsquo: '’', lsquo: '‘', rdquo: '”', ldquo: '“' };
 function decode(s) {
@@ -50,7 +61,7 @@ function parse(xml, key) {
     const author = clean(tag(b, ['dc:creator', 'name', 'author']));
     const date = clean(tag(b, ['pubDate', 'published', 'updated', 'dc:date']));
     const d = Date.parse(date);
-    return { title, summary: cut(sum, key === 'tc' ? 320 : 280), author: cut(author, 60), url: link(b), date: isNaN(d) ? null : new Date(d).toISOString() };
+    return { title, summary: cut(sum, /^tc/.test(key) ? 320 : 280), author: cut(author, 60), url: link(b), date: isNaN(d) ? null : new Date(d).toISOString() };
   }).filter(x => x.title && /^https?:\/\//.test(x.url));
 }
 async function getSource(key, debug) {
@@ -89,9 +100,11 @@ async function getSource(key, debug) {
 }
 export async function onRequestGet({ request, waitUntil }) {
   const url = new URL(request.url), debug = url.searchParams.has('debug');
-  const cache = caches.default, ck = new Request(url.origin + '/api/kiosco' + (debug ? '?debug' : ''));
+  const cache = caches.default, ck = new Request(url.origin + '/api/kiosco?v2' + (debug ? '&debug' : ''));
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const out = await Promise.all(Object.keys(SOURCES).map(k => getSource(k, debug)));
+  if (debug) { const loc = await Promise.all(LOCAL.map(async u => { try { const r = await fetch(u, { headers: { 'user-agent': 'Mozilla/5.0 (compatible; CruzTRD-Kiosco/1.0)' } }); return u + ' ' + r.status + ' -> ' + r.url; } catch (e) { return u + ' ERR'; } }));
+    return new Response(JSON.stringify({ local: loc, sources: out.map(x => ({ key: x.key, n: x.items.length, tried: x.tried, first: x.items[0] && x.items[0].title })) }), { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } }); }
   const body = JSON.stringify({ updated: new Date().toISOString(), sources: out });
   const res = new Response(body, { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'public, max-age=' + TTL } });
   if (!debug && out.some(s => s.items.length)) waitUntil(cache.put(ck, res.clone()));
