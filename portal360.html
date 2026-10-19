@@ -2325,14 +2325,14 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       .then(function(buf){ return L.getDocument({data:buf}).promise; }); });
     FCF[n].catch(function(){ delete FCF[n]; }); return FCF[n]; }
   var FCR={}, FCQ=[], FCN=0;
-  function fcRender(doc,n,p,w){ w=Math.max(400,Math.min(2600,Math.round(w/200)*200)); var k=n+':'+p+':'+w; if(FCR[k]) return FCR[k];
+  function fcRender(doc,n,p,w,front){ w=Math.max(400,Math.min(2600,Math.round(w/200)*200)); var k=n+':'+p+':'+w; if(FCR[k]){ if(front){ for(var qi=0;qi<FCQ.length;qi++) if(FCQ[qi].k===k){ FCQ.unshift(FCQ.splice(qi,1)[0]); break; } } return FCR[k]; }
     FCR[k]=new Promise(function(ok,ko){ var job=function(){ return doc.getPage(p+1).then(function(pg){ var v=pg.getViewport({scale:1}), vp=pg.getViewport({scale:w/v.width}), cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
-        return pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){ return new Promise(function(r2){ if(cv.toBlob) cv.toBlob(function(b){ r2(b?URL.createObjectURL(b):cv.toDataURL('image/jpeg',.86)); },'image/jpeg',.86); else r2(cv.toDataURL('image/jpeg',.86)); }); }); }).then(function(u){ ok({u:u,w:w}); },ko); }; job.k=k; FCQ.push(job); fcPump(); });
+        return pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){ return new Promise(function(r2){ if(cv.toBlob) cv.toBlob(function(b){ r2(b?URL.createObjectURL(b):cv.toDataURL('image/jpeg',.86)); },'image/jpeg',.86); else r2(cv.toDataURL('image/jpeg',.86)); }); }); }).then(function(u){ ok({u:u,w:w}); },ko); }; job.k=k; if(front) FCQ.unshift(job); else FCQ.push(job); fcPump(); });
     FCR[k].catch(function(){ delete FCR[k]; }); return FCR[k]; }
   function fcPump(){ while(FCN<2&&FCQ.length){ var j=FCQ.shift(); FCN++; j().then(function(){ FCN--; fcPump(); },function(){ FCN--; fcPump(); }); } }
   // devuelve la mejor imagen disponible de la página p con al menos w px de ancho
   function pgLoad(p,w,front){ var me=FB, key=FB.key+':'+p;
-    if(FB.k==='fc') return fcRender(FB.doc,FB.it.n,p,w).then(function(r){ var h=FBU[key]; if(!h||h.w<r.w) FBU[key]=r; return FBU[key]; });
+    if(FB.k==='fc') return fcRender(FB.doc,FB.it.n,p,w,front).then(function(r){ var h=FBU[key]; if(!h||h.w<r.w) FBU[key]=r; return FBU[key]; });
     var sw=stdW(w), u=hImg(FB.it,p+1,sw);
     return new Promise(function(ok,ko){ fq(function(){ return fbLoad(u).then(function(im){ var h=FBU[key]; if(!h||h.w<sw) FBU[key]={u:u,w:sw}; if(me.blank&&p<18&&me.blank[p]==null) me.blank[p]=isBlank(inkOf(im)); ok(FBU[key]); },function(){ ko(); }); },front); }); }
   function pgSet(el,r,p){ var im=el.querySelector('img.pg'); if(im&&+im.getAttribute('data-w')>=r.w) return; if(!im){ im=document.createElement('img'); im.className='pg'; im.alt='Página '+(p+1); im.draggable=false; el.appendChild(im); }
@@ -2340,7 +2340,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function pgFill(el,p,w){ el.setAttribute('data-p',p); el.classList.remove('blank');
     if(FB.k==='rev'){ if(!el.querySelector('.rvp')) el.innerHTML='<div class="rvp">'+rvPage(p)+'</div>'; return; }
     var key=FB.key+':'+p, h=FBU[key]; if(h) pgSet(el,h,p);
-    if(h&&h.w>=w*.9) return; if(!el.querySelector('img.pg')&&!el.querySelector('.pgl')){ var l=document.createElement('span'); l.className='pgl'; l.innerHTML='<i></i>Cargando página '+(p+1); el.appendChild(l); }
+    if(h&&h.w>=w*.9) return; if(!h&&FB.k==='fc'&&w>700) pgLoad(p,600,true).then(function(r){ if(el.getAttribute('data-p')===String(p)) pgSet(el,r,p); },function(){});
+    if(!el.querySelector('img.pg')&&!el.querySelector('.pgl')){ var l=document.createElement('span'); l.className='pgl'; l.innerHTML='<i></i>Cargando página '+(p+1); el.appendChild(l); }
     pgLoad(p,w,true).then(function(r){ if(el.getAttribute('data-p')===String(p)) pgSet(el,r,p); },function(){ var l=el.querySelector('.pgl'); if(l) l.innerHTML='No se pudo cargar · toca para reintentar'; }); }
   function pgWarm(p){ if(!FB||FB.k==='rev'||p<0||p>=FB.n) return; var h=FBU[FB.key+':'+p], w=FB.mode==='scroll'?FB.sw:FB.rw; if(h&&h.w>=w*.9) return; pgLoad(p,w,false).catch(function(){}); }
   // ---------- kiosco ----------
@@ -2583,7 +2584,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         if(head!==cur.h||(!col&&gap>L.h*1.75)||(col&&endS)){ cur={h:head,t:''}; B.push(cur); }
         else if(/[a-zà-ü]-$/i.test(cur.t)&&/^[a-zà-ü]/.test(s)) cur.t=cur.t.slice(0,-1); else if(!/\s$/.test(cur.t)) cur.t+=' '; }
       cur.t+=s; L={y:y,x0:nl?x:L.x0,xe:x+(i.width||0),h:h,eol:!!i.hasEOL}; });
-    return B.map(function(b){ b.t=b.t.replace(/\s+/g,' ').trim(); return b; }).filter(function(b){ return b.t.length>1&&!/^(contents\s*\^?|full circle magazine #?\d*|\d{1,3})$/i.test(b.t); }); }
+    // títulos con contorno duplican cada letra («BBuuiilldd» → «Build»); la letra capital llega suelta y se une al párrafo
+    var dd=function(w){ return w.length>=4&&w.length%2===0&&/^(?:([^\s])\1)+$/.test(w)?w.replace(/(.)\1/g,'$1'):w; };
+    B=B.map(function(b){ b.t=b.t.replace(/\s+/g,' ').trim().split(' ').map(dd).join(' '); return b; });
+    for(var i=0;i<B.length-1;i++) if(/^[A-ZÁÉÍÓÚÑ]$/.test(B[i].t)&&!B[i+1].h){ B[i+1].t=B[i].t+B[i+1].t; B[i].t=''; }
+    return B.filter(function(b){ return b.t.length>1&&!/^(contents\s*\^?|full circle magazine #?\d*|\d{1,3})$/i.test(b.t); }); }
   function txFc(w,p){ var h='<div class="txin"><div class="txhead"><span>Full Circle Magazine #'+FB.it.n+' · en inglés</span><b>Modo texto</b><em>Texto extraído del PDF original, página por página. Las imágenes, tablas y capturas se ven en modo Revista.</em></div>';
     for(var i=0;i<FB.n;i++) h+='<section class="txp" id="txp'+i+'" data-p="'+i+'"><div class="txpn"><span>Página '+(i+1)+'</span><button data-txpage="'+i+'">Ver la página →</button></div><div class="txpb"><p class="txsk"></p><p class="txsk"></p></div></section>';
     w.innerHTML=h+'</div>'; var me=FB, pin=p>0?performance.now():0; ['wheel','touchstart','keydown'].forEach(function(ev){ w.addEventListener(ev,function(){ pin=0; },{passive:true,once:true}); });
