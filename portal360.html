@@ -1849,7 +1849,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     ['Extra','Guayaquil · diario','https://www.extra.ec/'],['Primicias','Digital · noticias','https://www.primicias.ec/'],['GK','Digital · periodismo','https://gk.city/'],
     ['Plan V','Digital · investigación','https://www.planv.com.ec/'],['Vistazo','Revista · actualidad','https://www.vistazo.com/'],['Cosas','Revista · estilo de vida','https://www.cosas.com.ec/']];
   function kLoad(){ if(KD&&Date.now()-KDt<600000) return Promise.resolve(KD);
-    return fetch('/api/kiosco').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ KD={}; j.sources.forEach(function(x){ KD[x.key]=x; }); KDt=Date.now(); return KD; }); }
+    return fetch('/api/kiosco?v=2').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ KD={}; j.sources.forEach(function(x){ KD[x.key]=x; }); KDt=Date.now(); return KD; }); }
   function kAgo(iso){ if(!iso) return ''; var m=Math.max(1,Math.round((Date.now()-Date.parse(iso))/60000)); if(m<60) return 'hace '+m+' min'; var h=Math.round(m/60); if(h<24) return 'hace '+h+' h'; var d=Math.round(h/24); return 'hace '+d+(d===1?' día':' días'); }
   function kToday(){ try{ return new Date().toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }catch(e){ return new Date().toDateString(); } }
   function kMini(k,src){ var P=KP[k], it=src&&src.items&&src.items[0], it2=src&&src.items&&src.items[1];
