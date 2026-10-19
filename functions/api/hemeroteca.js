@@ -7,10 +7,21 @@ const UA = 'CruzTRD-Hemeroteca/1.0 (+https://cruztrd.com)';
 const DAY = 86400;
 const COMMONS = 'https://commons.wikimedia.org/w/api.php';
 const COLS = {
-  byn:  { name: 'Blanco y Negro', place: 'Madrid · revista ilustrada', lang: 'ES', search: 'intitle:"Blanco y negro (IA"', kind: 'revista' },
-  sciam:{ name: 'Scientific American', place: 'Nueva York · periódico de ciencia', lang: 'EN', search: 'intitle:"Scientific American" intitle:"Series 1" filemime:application/pdf', kind: 'periodico' },
-  psm:  { name: 'Popular Science Monthly', place: 'Nueva York · revista de ciencia', lang: 'EN', search: 'intitle:"Popular Science Monthly Volume" filemime:image/vnd.djvu', kind: 'revista' },
+  byn:   { name: 'Blanco y Negro', place: 'Madrid · revista ilustrada', lang: 'ES', search: 'intitle:"Blanco y negro (IA"', kind: 'revista' },
+  ilus:  { name: 'La Ilustración Española y Americana', place: 'Madrid · revista ilustrada', lang: 'ES', search: 'intitle:"La Ilustración Española y Americana" filemime:application/pdf', kind: 'revista' },
+  ilart: { name: 'La Ilustración Artística', place: 'Barcelona · revista de arte y actualidad', lang: 'ES', search: 'intitle:"La Ilustración Artística" filemime:application/pdf', kind: 'revista' },
+  sciam: { name: 'Scientific American', place: 'Nueva York · periódico de ciencia e inventos', lang: 'EN', search: 'intitle:"Scientific American - Series" filemime:application/pdf', kind: 'periodico' },
+  pm:    { name: 'Popular Mechanics', place: 'Chicago · revista de mecánica y tecnología', lang: 'EN', search: 'intitle:"Popular Mechanics" filemime:application/pdf', kind: 'revista' },
+  psm:   { name: 'Popular Science Monthly', place: 'Nueva York · revista de ciencia', lang: 'EN', search: 'intitle:"Popular Science Monthly Volume" filemime:image/vnd.djvu', kind: 'revista' },
 };
+const MES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+function label(key, t, year) {
+  let m;
+  if (key === 'sciam' && (m = t.match(/Series (\d+) - Volume 0*(\d+) - Issue 0*(\d+)/))) return 'Serie ' + m[1] + ' · vol. ' + m[2] + ' · n.º ' + m[3] + (year ? ' · ' + year : '');
+  if (key === 'psm' && (m = t.match(/Volume (\d+)/))) return 'Volumen ' + m[1] + (year ? ' · ' + year : '');
+  if (key === 'pm' && (m = t.match(/(19[0-3]\d)[-_ .]?(\d\d)/))) return MES[(+m[2] - 1) % 12] + ' de ' + m[1];
+  return year ? 'Año ' + year : 'Volumen encuadernado';
+}
 const OK_LIC = /^(public domain|pd|cc0|cc by(-sa)? \d|cc-by(-sa)?-\d|no restrictions)/i;
 
 async function cj(u, ttl = DAY) {
@@ -35,7 +46,8 @@ async function commonsCol(key, debug) {
     const date = ym ? ym[1] : '';
     const pc = ii.pagecount || 0;
     if (!OK_LIC.test(lic) || !pc || !ii.thumburl) { rej.push(p.title + ' | ' + lic + ' | pages ' + pc); continue; }
-    out.push({ title: p.title.replace(/^File:/, '').replace(/\.(pdf|djvu)$/i, ''), file: p.title, pages: pc, thumb: ii.thumburl, desc: ii.descriptionurl, license: lic, date, size: ii.size });
+    const t = p.title.replace(/^File:/, '').replace(/\.(pdf|djvu)$/i, '');
+    out.push({ title: t, label: label(key, t, date), file: p.title, pages: pc, thumb: ii.thumburl, desc: ii.descriptionurl, license: lic, date, size: ii.size });
   }
   out.sort((a, b) => a.title.localeCompare(b.title, 'es', { numeric: true }));
   return { key, ...C, source: 'Wikimedia Commons', issues: out, ...(debug ? { rejected: rej.slice(0, 15), total: pages.length } : {}) };
@@ -57,19 +69,8 @@ async function fullCircle(debug) {
   return { key: 'fc', name: 'Full Circle Magazine', place: 'Revista de tecnología · Linux y software libre', lang: 'EN', kind: 'revista', license: 'CC BY-SA 3.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/3.0/deed.es', home: 'https://fullcirclemagazine.org', issues, ...(debug ? { tried } : {}) };
 }
 
-const TRY = ['intitle:"La Ilustración Española y Americana" filemime:application/pdf', 'intitle:"Caras y caretas" filemime:application/pdf', 'intitle:"Nuevo mundo" filemime:application/pdf',
-  'intitle:"La Esfera" filemime:application/pdf', 'intitle:"Popular Mechanics" filemime:application/pdf', 'intitle:"Electrical Experimenter" filemime:application/pdf',
-  'intitle:"Radio News" filemime:application/pdf', 'intitle:"Scientific American" intitle:"Series 2" filemime:application/pdf', 'intitle:"Mundo gráfico" filemime:application/pdf',
-  'intitle:"Hojas Selectas" filemime:application/pdf', 'intitle:"La Ilustración Artística" filemime:application/pdf', 'intitle:"Popular Science" filemime:application/pdf'];
-async function tryCands() {
-  return Promise.all(TRY.map(async q => { try {
-    const j = await cj(COMMONS + '?action=query&format=json&origin=*&list=search&srnamespace=6&srlimit=5&srinfo=totalhits&srsearch=' + encodeURIComponent(q));
-    return { q, hits: j.query && j.query.searchinfo ? j.query.searchinfo.totalhits : 0, sample: (j.query.search || []).slice(0, 3).map(x => x.title) }; } catch (e) { return { q, err: e.message }; } }));
-}
-
 export async function onRequestGet({ request, waitUntil }) {
   const url = new URL(request.url), debug = url.searchParams.has('debug');
-  if (url.searchParams.has('try')) return new Response(JSON.stringify(await tryCands()), { headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
   // proxy del PDF original de Full Circle (solo ese dominio y ese patrón: no es un proxy abierto)
   if (url.searchParams.get('pdf') === 'fc') {
     const n = parseInt(url.searchParams.get('n'), 10), lang = url.searchParams.get('lang') === 'es' ? 'es' : 'en';
@@ -80,7 +81,7 @@ export async function onRequestGet({ request, waitUntil }) {
     rh.set('cache-control', 'public, max-age=' + 30 * DAY); rh.set('access-control-expose-headers', 'content-range, accept-ranges, content-length');
     return new Response(r.body, { status: r.status, headers: rh });
   }
-  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v2' + (debug ? '&debug' : ''));
+  const cache = caches.default, ck = new Request(url.origin + '/api/hemeroteca?v3' + (debug ? '&debug' : ''));
   if (!debug) { const hit = await cache.match(ck); if (hit) return hit; }
   const res = await Promise.all([fullCircle(debug).catch(e => ({ key: 'fc', error: e.message, issues: [] })),
     ...Object.keys(COLS).map(k => commonsCol(k, debug).catch(e => ({ key: k, error: e.message, issues: [] })))]);

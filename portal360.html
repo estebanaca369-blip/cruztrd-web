@@ -231,7 +231,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .fbtop{display:flex;align-items:center;gap:14px;color:#e9f1ee}.fbtop b{flex:1;min-width:0;font:600 15px 'Poppins',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fbtop span{font:11px 'Share Tech Mono',monospace;letter-spacing:1.5px;color:#a9b8b4;white-space:nowrap}
 .fbstage{position:relative;height:calc(100vh - 210px);min-height:360px;display:flex;align-items:center;justify-content:center;perspective:2200px;touch-action:pan-y}
 .fbbook{position:relative;height:100%;aspect-ratio:1.42/1;max-width:100%;display:flex;filter:drop-shadow(0 30px 40px rgba(0,0,0,.55))}
-.fbbook.one{aspect-ratio:.71/1}
+.fbbook.one{aspect-ratio:.71/1}.fbbook.one.land{aspect-ratio:1.414/1}
+.hci.land{aspect-ratio:1.414/1}
 .fbp{position:relative;flex:1;height:100%;background:#f4f1ea;overflow:hidden;cursor:zoom-in}
 .fbp.l{box-shadow:inset -18px 0 24px -14px rgba(0,0,0,.35)}.fbp.r{box-shadow:inset 18px 0 24px -14px rgba(0,0,0,.35)}
 .fbp.blank{background:transparent;box-shadow:none;cursor:default}
@@ -1923,10 +1924,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var HD=null, HDt=0, FCC={};
   var HCRED={fc:'Full Circle Magazine · fullcirclemagazine.org · Licencia CC BY-SA 3.0. Revista independiente, sin relación con Canonical.',
     byn:'Blanco y Negro (Madrid) · escaneo de Internet Archive publicado en Wikimedia Commons · Dominio público.',
-    sciam:'Scientific American, serie 1 · Wikimedia Commons · Dominio público.',
+    sciam:'Scientific American (Nueva York) · Wikimedia Commons · Dominio público.',
+    ilus:'La Ilustración Española y Americana (Madrid) · Wikimedia Commons · Dominio público.',
+    ilart:'La Ilustración Artística (Barcelona) · Wikimedia Commons · Dominio público.',
+    pm:'Popular Mechanics (Chicago) · Wikimedia Commons · Dominio público.',
     psm:'Popular Science Monthly · Wikimedia Commons / Wikisource · Dominio público.'};
   function hLoad(){ if(HD&&Date.now()-HDt<1800000) return Promise.resolve(HD);
-    return fetch('/api/hemeroteca?v=1').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
+    return fetch('/api/hemeroteca?v=3').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
   function hThumb(it,page,w){ return String(it.thumb).replace(/\?.*$/,'').replace(/page1-\d+px/,'page'+page+'-'+(w||960)+'px'); }
   function hPick(list,n){ if(!list||!list.length) return []; var wk=Math.floor(Date.now()/604800000), out=[]; for(var i=0;i<Math.min(n,list.length);i++) out.push(list[(wk*7+i*Math.max(1,Math.floor(list.length/n)))%list.length]); return out; }
   var PDFJS=null;
@@ -1938,17 +1942,18 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function hPdfPage(doc,key,i,w){ var ck=key+':'+i+':'+w; if(PCACHE[ck]) return PCACHE[ck];
     PCACHE[ck]=doc.getPage(i+1).then(function(pg){ var v=pg.getViewport({scale:1}), sc=w/v.width, vp=pg.getViewport({scale:sc}), cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
       return pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){ return cv.toDataURL('image/jpeg',0.86); }); }); return PCACHE[ck]; }
-  function hCover(it,k,title,sub){ return '<button class="hcov" data-hem="'+k+'" data-hi="'+it.__i+'"><span class="hci">'+(it.__img?'<img loading="lazy" alt="" src="'+esc(it.__img)+'">':'<i class="hsk sk" data-fccov="'+it.n+'"></i>')+'</span><b>'+esc(title)+'</b><em>'+esc(sub)+'</em></button>'; }
+  function hCover(it,k,title,sub){ return '<button class="hcov" data-hem="'+k+'" data-hi="'+it.__i+'"><span class="hci'+(k==='fc'?' land':'')+'">'+(it.__img?'<img loading="lazy" alt="" src="'+esc(it.__img)+'">':'<i class="hsk sk" data-fccov="'+it.n+'"></i>')+'</span><b>'+esc(title)+'</b><em>'+esc(sub)+'</em></button>'; }
   function kShelf(){
     var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Revistas y periódicos en su edición original, página por página. Solo publicaciones que permiten mostrarse completas.</p></div>';
     if(!HD){ h+='<div class="krow"><div class="hgrid">'+'<span class="hcov"><span class="hci"><i class="hsk sk"></i></span></span>'.repeat(6)+'</div></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ magView.querySelector('.hgrid').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir el kiosco ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
     var fc=HD.fc, row=function(t,items){ return '<div class="krow"><div class="krt">'+t+'</div><div class="hgrid">'+items.join('')+'</div></div>'; };
     if(fc&&fc.issues&&fc.issues.length) h+=row('Tecnología · Full Circle Magazine (mensual)', fc.issues.map(function(it,i){ it.__i=i; return hCover(it,'fc','Full Circle #'+it.n,(i===0?'Última edición':'Edición anterior')+' · inglés'); }));
     h+='<div class="krow"><div class="krt">De la casa</div><div class="hgrid"><button class="hcov" data-pub="rev"><span class="hci"><span class="kmag hmini"><span class="kmm">Revista<span>Cruz<b>TRD</b></span></span><span class="kmd">Edición 01 · Octubre 2026</span><span class="kmb">D2C</span><span class="kmh">Vender directo ya no es opcional</span></span></span><b>Revista CruzTRD</b><em>Edición 01 · +25 pts por artículo</em></button></div></div>';
-    [['byn','Blanco y Negro · Madrid, revista ilustrada'],['sciam','Scientific American · el periódico de ciencia desde 1845'],['psm','Popular Science Monthly · revista de ciencia']].forEach(function(c){
+    [['byn','Hemeroteca en español · Blanco y Negro (Madrid)'],['ilus','Hemeroteca en español · La Ilustración Española y Americana (Madrid)'],['ilart','Hemeroteca en español · La Ilustración Artística (Barcelona)'],
+     ['sciam','Hemeroteca de ciencia y tecnología · Scientific American'],['pm','Hemeroteca de ciencia y tecnología · Popular Mechanics'],['psm','Hemeroteca de ciencia y tecnología · Popular Science Monthly']].forEach(function(c){
       var C=HD[c[0]]; if(!C||!C.issues||!C.issues.length) return;
       C.issues.forEach(function(it,i){ it.__i=i; it.__img=hThumb(it,1,500); });
-      h+=row('Hemeroteca · '+c[1], hPick(C.issues,4).map(function(it){ return hCover(it,c[0],it.title.replace(/^Scientific American - Series 1 - /,'').replace(/^Popular Science Monthly /,'').replace(/^Blanco y negro \(IA blancoynegro(\d+)unse\)$/,'Tomo $1'),(it.date?it.date+' · ':'')+it.pages+' páginas'); })); });
+      h+=row(c[1], hPick(C.issues,4).map(function(it){ return hCover(it,c[0],it.label||C.name,it.pages+' páginas · '+(C.lang==='ES'?'español':'inglés')); })); });
     h+='<div class="knote">Full Circle se publica bajo licencia CC BY-SA 3.0. La hemeroteca reúne escaneos de dominio público de Wikimedia Commons. Las publicaciones comerciales actuales no permiten mostrar su edición completa sin un acuerdo.</div></div>';
     magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
     [].slice.call(magView.querySelectorAll('[data-fccov]')).forEach(function(el){ var n=+el.getAttribute('data-fccov');
@@ -1958,7 +1963,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var FB=null;
   function fbOpen(k,idx){
     var C=HD[k], it=C.issues[idx]; FB={k:k,it:it,i:0,n:it.pages||0,doc:null,busy:false,single:innerWidth<760};
-    var title=k==='fc'?('Full Circle Magazine #'+it.n):(C.name+' — '+it.title.replace(/^Scientific American - /,''));
+    var title=k==='fc'?('Full Circle Magazine #'+it.n):(C.name+' — '+(it.label||''));
     magView.className='magview vfb'; magEl.scrollTop=0;
     magView.innerHTML='<div class="fbw"><div class="fbtop"><button class="kback" data-shelf="1">← Kiosco</button><b>'+esc(title)+'</b><span id="fbPg"></span></div>'+
       '<div class="fbstage" id="fbStage"><div class="fbbook" id="fbBook"></div><button class="fbnav prev" id="fbPrev" aria-label="Página anterior">‹</button><button class="fbnav next" id="fbNext" aria-label="Página siguiente">›</button></div>'+
@@ -1967,8 +1972,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     document.getElementById('fbPrev').onclick=function(){ fbTurn(-1); }; document.getElementById('fbNext').onclick=function(){ fbTurn(1); };
     var rg=document.getElementById('fbRange'); rg.oninput=function(){ FB.i=fbNorm(+rg.value); fbDraw(); };
     var st=document.getElementById('fbStage'), sx=null; st.addEventListener('pointerdown',function(e){ sx=e.clientX; }); st.addEventListener('pointerup',function(e){ if(sx==null)return; var d=e.clientX-sx; sx=null; if(Math.abs(d)>45) fbTurn(d<0?1:-1); });
-    if(k==='fc'){ hFcDoc(it.n,'en').then(function(doc){ FB.doc=doc; FB.n=doc.numPages; fbDraw(); }).catch(function(){ document.getElementById('fbBook').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir esta edición.</b><span>Intenta de nuevo en unos minutos.</span></div>'; }); }
-    else fbDraw();
+    if(k==='fc'){ hFcDoc(it.n,'en').then(function(doc){ FB.doc=doc; FB.n=doc.numPages; return doc.getPage(1).then(function(pg){ var v=pg.getViewport({scale:1}); FB.land=v.width>v.height; if(FB.land) FB.single=true; fbDraw(); }); }).catch(function(){ document.getElementById('fbBook').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir esta edición.</b><span>Intenta de nuevo en unos minutos.</span></div>'; }); }
+    else { var im=new Image(); im.onload=function(){ if(im.naturalWidth>im.naturalHeight){ FB.land=true; FB.single=true; } fbDraw(); }; im.onerror=fbDraw; im.src=hThumb(it,1,500); }
   }
   function fbNorm(i){ if(FB.single) return Math.max(0,Math.min(FB.n-1,i)); if(i<=0) return 0; if(i%2===0) i--; return Math.max(0,Math.min(FB.n%2?FB.n-2:FB.n-1,i)); }
   function fbPages(i){ return FB.single?[i]:(i===0?[-1,0]:[i,i+1]); }
@@ -1977,7 +1982,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     fbSrc(p).then(function(u){ if(!u||el.getAttribute('data-p')!=String(p)) return; var im=new Image(); im.alt='Página '+(p+1); im.onload=function(){ el.innerHTML=''; el.appendChild(im); }; im.src=u; }); }
   function fbDraw(){
     var bk=document.getElementById('fbBook'); if(!bk||!FB.n) return; var P=fbPages(FB.i);
-    bk.className='fbbook'+(FB.single?' one':''); bk.innerHTML=P.map(function(_,j){ return '<div class="fbp '+(FB.single?'s':(j?'r':'l'))+'"></div>'; }).join('');
+    bk.className='fbbook'+(FB.single?' one':'')+(FB.land?' land':''); bk.innerHTML=P.map(function(_,j){ return '<div class="fbp '+(FB.single?'s':(j?'r':'l'))+'"></div>'; }).join('');
     [].slice.call(bk.children).forEach(function(el,j){ fbImg(el,P[j]); el.onclick=function(){ if(P[j]>=0&&P[j]<FB.n) fbZoom(P[j]); }; });
     var a=P.filter(function(x){return x>=0&&x<FB.n;}); document.getElementById('fbPg').textContent=(a.length>1?'Páginas '+(a[0]+1)+'–'+(a[1]+1):'Página '+(a[0]+1))+' de '+FB.n;
     var rg=document.getElementById('fbRange'); rg.max=FB.n-1; rg.value=FB.i;
