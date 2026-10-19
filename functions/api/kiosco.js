@@ -8,7 +8,7 @@
 const TTL = 1800;
 const SOURCES = {
   sinc: { name: 'Agencia SINC', home: 'https://www.agenciasinc.es', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es',
-          feeds: ['https://www.agenciasinc.es/feed', 'https://www.agenciasinc.es/'] },
+          feeds: ['https://www.agenciasinc.es/Quienes-somos/RSS', 'https://www.agenciasinc.es/'] },
   gv:   { name: 'Global Voices', home: 'https://es.globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es',
           feeds: ['https://es.globalvoices.org/feed/'] },
   tc:   { name: 'The Conversation', home: 'https://theconversation.com/es', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es',
@@ -61,14 +61,21 @@ async function getSource(key, debug) {
       tried.push(u + ' ' + r.status);
       if (!r.ok) continue;
       let xml = await r.text();
-      if (!/<(rss|feed|rdf:RDF)[\s>]/i.test(xml)) {            // pagina HTML: autodescubrir su feed RSS/Atom
+      if (!/<(rss|feed|rdf:RDF)[\s>]/i.test(xml)) {            // pagina HTML: buscar su feed RSS/Atom
         const m = xml.match(/<link[^>]+type=["']application\/(?:rss|atom)\+xml["'][^>]*>/i);
         const h = m && m[0].match(/href=["']([^"']+)["']/i);
-        if (debug) tried.push('html; feed link: ' + (h ? h[1] : 'none') + ' | rss hrefs: ' + ((xml.match(/href=["'][^"']*(?:rss|feed|xml)[^"']*["']/gi) || []).slice(0, 12).join(' ')));
-        if (!h) continue;
-        const fu = new URL(decode(h[1]), u).toString();
-        const r2 = await fetch(fu, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)' }, cf: { cacheTtl: TTL, cacheEverything: true } });
-        tried.push(fu + ' ' + r2.status); if (!r2.ok) continue; xml = await r2.text();
+        let cands = h ? [h[1]] : (xml.match(/href=["'][^"']*(?:rss|feed|\.xml)[^"']*["']/gi) || []).map(x => x.slice(6, -1));
+        cands = [...new Set(cands.map(c => new URL(decode(c), u).toString()))].filter(c => c !== u).slice(0, 6);
+        if (debug) tried.push('html; candidatos: ' + cands.join(' '));
+        let got = null;
+        for (const fu of cands) {
+          const r2 = await fetch(fu, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)' }, cf: { cacheTtl: TTL, cacheEverything: true } });
+          const t2 = r2.ok ? await r2.text() : '';
+          tried.push(fu + ' ' + r2.status + (/<(rss|feed|rdf:RDF)[\s>]/i.test(t2) ? ' feed' : ''));
+          if (/<(rss|feed|rdf:RDF)[\s>]/i.test(t2) && parse(t2, key).length) { got = t2; break; }
+          if (debug && t2 && !got) tried.push('  en esa pagina: ' + ((t2.match(/href=["'][^"']*(?:rss|feed|\.xml)[^"']*["']/gi) || []).slice(0, 15).join(' ')));
+        }
+        if (!got) continue; xml = got;
       }
       const items = parse(xml, key);
       if (items.length) return { key, name: S.name, home: S.home, license: S.license, licenseUrl: S.licenseUrl, feed: u, items, ...(debug ? { tried } : {}) };
