@@ -8,7 +8,7 @@
 const TTL = 1800;
 const SOURCES = {
   sinc: { name: 'Agencia SINC', home: 'https://www.agenciasinc.es', license: 'CC BY 4.0', licenseUrl: 'https://creativecommons.org/licenses/by/4.0/deed.es',
-          feeds: ['https://www.agenciasinc.es/rss/noticias', 'https://www.agenciasinc.es/rss', 'https://www.agenciasinc.es/rss/tecnologias', 'https://www.agenciasinc.es/feed'] },
+          feeds: ['https://www.agenciasinc.es/feed', 'https://www.agenciasinc.es/'] },
   gv:   { name: 'Global Voices', home: 'https://es.globalvoices.org', license: 'CC BY 3.0', licenseUrl: 'https://creativecommons.org/licenses/by/3.0/deed.es',
           feeds: ['https://es.globalvoices.org/feed/'] },
   tc:   { name: 'The Conversation', home: 'https://theconversation.com/es', license: 'CC BY-ND 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-nd/4.0/deed.es',
@@ -60,7 +60,17 @@ async function getSource(key, debug) {
       const r = await fetch(u, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)', accept: 'application/rss+xml, application/atom+xml, application/xml, text/xml' }, cf: { cacheTtl: TTL, cacheEverything: true } });
       tried.push(u + ' ' + r.status);
       if (!r.ok) continue;
-      const items = parse(await r.text(), key);
+      let xml = await r.text();
+      if (!/<(rss|feed|rdf:RDF)[\s>]/i.test(xml)) {            // pagina HTML: autodescubrir su feed RSS/Atom
+        const m = xml.match(/<link[^>]+type=["']application\/(?:rss|atom)\+xml["'][^>]*>/i);
+        const h = m && m[0].match(/href=["']([^"']+)["']/i);
+        if (debug) tried.push('html; feed link: ' + (h ? h[1] : 'none') + ' | ' + xml.slice(0, 160).replace(/\s+/g, ' '));
+        if (!h) continue;
+        const fu = new URL(decode(h[1]), u).toString();
+        const r2 = await fetch(fu, { headers: { 'user-agent': 'CruzTRD-Kiosco/1.0 (+https://cruztrd.com)' }, cf: { cacheTtl: TTL, cacheEverything: true } });
+        tried.push(fu + ' ' + r2.status); if (!r2.ok) continue; xml = await r2.text();
+      }
+      const items = parse(xml, key);
       if (items.length) return { key, name: S.name, home: S.home, license: S.license, licenseUrl: S.licenseUrl, feed: u, items, ...(debug ? { tried } : {}) };
     } catch (e) { tried.push(u + ' ERR ' + e.message); }
   }
