@@ -415,8 +415,6 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .krs::-webkit-scrollbar{display:none}
 .kc{--tint:200,210,206;position:relative;flex:none;width:156px;scroll-snap-align:start;border:0;background:transparent;padding:0;cursor:pointer;text-align:left;color:#f2f5f4;display:flex;flex-direction:column;gap:14px;perspective:900px}
 .kc.land{width:268px}
-.kc::before{content:"";position:absolute;left:-12px;right:-12px;top:212px;height:7px;border-radius:2px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.03));box-shadow:0 10px 18px rgba(0,0,0,.45)}
-.kc.land::before{top:189px}
 .kcv{position:relative;display:block;height:208px;border-radius:2px 3px 3px 2px;overflow:hidden;background:#1b1f22;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transform-origin:50% 100%;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s;box-shadow:0 12px 18px -6px rgba(0,0,0,.65)}
 .kc.land .kcv{height:185px}
 .kc:hover .kcv,.kc:focus-visible .kcv{--ty:-10px;box-shadow:0 26px 30px -10px rgba(0,0,0,.7),0 0 0 1px rgba(var(--tint),.5)}
@@ -438,7 +436,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
  .fbt.lab em{display:none}.fbt{padding:0 7px;min-width:36px}.fbtools{gap:1px;padding:4px}.fbsl input{width:clamp(60px,22vw,140px)}.fbsl{padding:0 4px;gap:6px}.fbsep{display:none}
  .fbcred{font-size:10.5px}.fbstage{margin:0 6px}.fbgl{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:20px 14px}.fbtoast{top:110px}
  .scin{gap:10px;padding:10px 6px 30px}.scn{display:none}.txin{padding:22px 18px 70px}
- .kf{gap:16px;padding:16px;min-height:0}.kfc{width:104px}.kfc.land{width:150px}.kfx b{font-size:21px}.kfd{font-size:12.5px}.kc{width:128px}.kcv{height:170px}.kc::before{top:174px}.kc.land{width:220px}.kc.land .kcv{height:155px}.kc.land::before{top:159px}.krb{display:none}.kmx{position:static;margin-top:16px;justify-content:flex-start}.kmx span{align-items:flex-start}.kr header .krk{font-size:30px}}
+ .kf{gap:16px;padding:16px;min-height:0}.kfc{width:104px}.kfc.land{width:150px}.kfx b{font-size:21px}.kfd{font-size:12.5px}.kc{width:128px}.kcv{height:170px}.kc.land{width:220px}.kc.land .kcv{height:155px}.krb{display:none}.kmx{position:static;margin-top:16px;justify-content:flex-start}.kmx span{align-items:flex-start}.kr header .krk{font-size:30px}}
 @media(max-width:760px){#fbFullB{display:none}.fbzl{display:none}.fbsl input{width:clamp(56px,20vw,130px)}}
 @media(max-width:560px){.kmx{gap:14px;flex-wrap:wrap}.kmx b{font-size:22px}.kf.fc{flex-direction:column;align-items:stretch}.kf.fc .kfs{justify-content:center}.kf.fc .kfc.land{width:min(100%,300px)}.kf.fc .kgo{margin-top:8px}}
 @media(max-width:420px){#fbSndB{display:none}.fbmodes button{font-size:12px;gap:5px}}
@@ -556,6 +554,65 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .bkf{position:absolute;left:4.6em;right:4.6em;bottom:3em;display:flex;justify-content:space-between;align-items:flex-end;text-align:left;font:.82em/1.6 'Share Tech Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#7f918c}
 /* portada en el estante */
 .hci.rvthumb .rvp{position:absolute;inset:0}
+
+/* ===== el kiosco como objeto: letrero, toldo, cinta de noticias, estantes y mostrador ===== */
+.kq{max-width:1220px;margin:0 auto;padding:0 6px 10px;--kpad:clamp(18px,4.5vw,64px)}
+.kqroof{position:relative;margin:0 4%;padding:12px 12px 0;background:linear-gradient(180deg,#2a3533,#141a1a);border-radius:10px 10px 0 0;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 -6px 30px rgba(0,0,0,.4)}
+.kqroof::before{content:"";position:absolute;left:-2%;right:-2%;top:-10px;height:12px;border-radius:6px;background:linear-gradient(180deg,#3d4a48,#1c2423);box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.kqsign{position:relative;text-align:center;padding:30px 20px 28px;border-radius:8px 8px 0 0;color:#f6efe0;background:radial-gradient(80% 120% at 50% 0%,rgba(45,212,167,.14),transparent 60%),linear-gradient(180deg,#0c1112,#070a0b);border:2px solid #34413f;border-bottom:0;box-shadow:inset 0 0 40px rgba(0,0,0,.7)}
+.kqsign::before,.kqsign::after{content:"";position:absolute;left:14px;right:14px;height:12px;background:radial-gradient(circle,#fff1c9 0 2.2px,rgba(255,206,120,.55) 3.2px,rgba(255,190,90,.12) 5px,transparent 6px) 0 50%/24px 12px repeat-x;animation:kqB 3.2s ease-in-out infinite}
+.kqsign::before{top:8px}.kqsign::after{bottom:8px;animation-delay:-1.6s}
+@keyframes kqB{50%{opacity:.55}}
+.kqk{display:block;font:11px 'Share Tech Mono',monospace;letter-spacing:4px;text-transform:uppercase;color:#2DD4A7;margin-top:6px}
+.kq .kqsign h2{margin:6px 0 4px;font:700 clamp(38px,6.4vw,78px)/.95 'Fraunces',Georgia,serif;letter-spacing:-.03em;color:#fbf5e8;text-shadow:0 0 28px rgba(255,214,150,.18)}
+.kq .kqsign h2 em{font-style:italic;font-weight:500;color:#7ff0cf;text-shadow:0 0 6px rgba(45,212,167,.9),0 0 26px rgba(45,212,167,.55)}
+.kqd{display:block;font:11px 'Share Tech Mono',monospace;letter-spacing:2.5px;text-transform:uppercase;color:#a9b8b4;margin-bottom:6px}
+.kqawn{position:relative;z-index:2;height:62px;margin:0 1%;background:repeating-linear-gradient(90deg,#0f5d4f 0 56px,#efe6d2 56px 112px);transform:perspective(700px) rotateX(-32deg);transform-origin:50% 0;box-shadow:0 26px 30px -14px rgba(0,0,0,.6)}
+.kqawn::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,.05) 45%,rgba(255,255,255,.12) 92%,rgba(0,0,0,.2))}
+.kqawn i{position:absolute;left:0;right:0;top:100%;height:26px;background:repeating-linear-gradient(90deg,#0c4d42 0 56px,#ddd3bd 56px 112px);-webkit-mask:radial-gradient(circle 28px at 28px 0,#000 97%,transparent 100%) 0 0/56px 26px repeat-x;mask:radial-gradient(circle 28px at 28px 0,#000 97%,transparent 100%) 0 0/56px 26px repeat-x;filter:drop-shadow(0 8px 6px rgba(0,0,0,.35))}
+.kqtick{position:relative;z-index:1;margin:6px 4% 0;height:34px;overflow:hidden;background:#050707;border:1px solid #1e2a28;border-radius:4px;box-shadow:inset 0 0 14px rgba(0,0,0,.9);display:flex;align-items:center}
+.kqtick div{display:flex;align-items:center;gap:18px;white-space:nowrap;padding-left:18px;animation:kqT 48s linear infinite;font:12.5px 'Share Tech Mono',monospace;letter-spacing:1.6px;text-transform:uppercase;color:#56f0c3;text-shadow:0 0 8px rgba(45,212,167,.7)}
+.kqtick i{font-style:normal;color:#ffcf7a;text-shadow:0 0 8px rgba(255,190,90,.7);font-size:9px}
+@keyframes kqT{to{transform:translateX(-50%)}}
+.kqbody{position:relative;margin:0 4%;padding:26px var(--kpad) 34px;background:radial-gradient(70% 260px at 50% 0%,rgba(255,214,150,.17),transparent 80%),repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 1px,transparent 1px 140px),linear-gradient(180deg,#152020,#0b1112 60%,#090d0e);box-shadow:inset 0 20px 40px -20px rgba(0,0,0,.8),0 30px 60px rgba(0,0,0,.45)}
+.kqpost{position:absolute;top:-40px;bottom:-14px;width:18px;z-index:3;border-radius:9px;background:linear-gradient(90deg,#232c2b,#7c8b88 35%,#c9d4d1 48%,#4a5654 70%,#1a2120);box-shadow:0 10px 20px rgba(0,0,0,.5)}
+.kqpost.l{left:-9px}.kqpost.r{right:-9px}
+.kqintro{margin:0 auto 22px;max-width:60ch;text-align:center;color:#c6d2ce;font-size:14.5px;line-height:1.55}
+.kq .kfeat{margin-bottom:12px}
+.kq .kf{background:radial-gradient(120% 140% at 0% 0%,rgba(var(--tint),.30),transparent 55%),linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0) 40%),rgba(6,9,10,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 20px 40px -18px rgba(0,0,0,.8)}
+.kq .kf::before{content:"";position:absolute;left:0;right:0;top:0;height:46%;pointer-events:none;background:linear-gradient(170deg,rgba(255,255,255,.07),transparent 60%);z-index:0}
+/* estantes */
+.kr.rack{position:relative;margin-top:28px}
+.kr.rack header{border:0;padding:0;margin-bottom:6px;align-items:center}
+.kr.rack header .krk{font:700 13px/1 'Share Tech Mono',monospace;-webkit-text-stroke:0;color:#0B0E14;background:#2DD4A7;border-radius:4px;padding:5px 7px;letter-spacing:1px}
+.kr.rack header div{position:relative;flex-direction:row;align-items:baseline;gap:12px;flex-wrap:wrap}
+.kr.rack header b{font:700 15px/1 'Poppins',sans-serif;letter-spacing:.3px;color:#17150f;background:linear-gradient(180deg,#f7f0df,#e6dcc4);padding:7px 14px 6px;border-radius:4px;box-shadow:0 3px 0 #b9ab8a,0 6px 12px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.08);text-transform:uppercase}
+.kr.rack header div span{font-size:12px;color:#9fb0ab}
+.kr.rack .krs{padding:14px 6px 34px;gap:22px;background:linear-gradient(180deg,#7a5634,#4a3220 55%,#2c1d12) 0 222px/100% 13px no-repeat local,linear-gradient(180deg,rgba(0,0,0,.55),transparent) 0 235px/100% 18px no-repeat local}
+.kr.rack.land .krs{background-position:0 199px,0 212px}
+.kr.rack .kcv{transform:rotateX(calc(9deg + var(--rx,0deg))) rotateY(var(--ry,0deg)) translateY(var(--ty,0px));transform-origin:50% 100%;box-shadow:0 14px 14px -8px rgba(0,0,0,.75),0 2px 0 rgba(0,0,0,.4)}
+.kr.rack .kc:hover .kcv,.kr.rack .kc:focus-visible .kcv{--ty:-12px;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateY(-12px)}
+.kr.rack .kct{padding-top:10px}
+/* mostrador */
+.kqcounter{position:relative;margin:0 2%;z-index:2}
+.kqtop{height:16px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,#a87a4c,#7a5532 60%,#5a3d23);box-shadow:0 -2px 0 rgba(255,255,255,.12) inset}
+.kqfront{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 28px;border-radius:0 0 8px 8px;background:repeating-linear-gradient(90deg,rgba(0,0,0,.12) 0 2px,transparent 2px 46px),linear-gradient(180deg,#3a2716,#24170c);box-shadow:0 30px 50px rgba(0,0,0,.55),inset 0 10px 20px -10px rgba(0,0,0,.6)}
+.kqfront b{font:700 22px 'Fraunces',Georgia,serif;color:#f6efe0}
+.kq .kmx{position:static;display:flex;gap:22px}
+.kq .kmx span{align-items:flex-end;color:#c9b99c}.kq .kmx b{font-size:24px;color:#f6efe0;margin-bottom:3px}
+.kq+.knote,.kq .knote{text-align:center;margin:26px auto 0}
+@media(prefers-reduced-motion:reduce){.kqtick div,.kqsign::before,.kqsign::after{animation:none}}
+@media(max-width:760px){.kqroof,.kqbody,.kqtick{margin-left:0;margin-right:0}.kqawn{height:40px;margin:0}.kqawn i{height:18px;-webkit-mask-size:56px 18px;mask-size:56px 18px}.kqbody{padding:20px 14px 24px}.kqpost{width:10px}.kqpost.l{left:-5px}.kqpost.r{right:-5px}
+ .kqsign{padding:24px 12px 22px}.kqk{letter-spacing:2.5px}.kqfront{padding:14px 16px}.kqfront b{font-size:18px}.kq .kmx{gap:14px;flex-wrap:wrap}.kq .kmx b{font-size:19px}
+ .kr.rack .krs{background-position:0 184px,0 197px}.kr.rack.land .krs{background-position:0 169px,0 182px}.kr.rack header div span{display:none}}
+.kq{--kpad:clamp(16px,2.6vw,38px)}
+.kq .kf{padding:20px 22px 20px 18px;gap:20px;min-height:250px}
+.kq .kfc{width:140px}.kq .kfc.land{width:220px}
+.kq .kfx b{font-size:26px}
+.kq .kfeat{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+@media(max-width:1100px){.kq .kfeat{grid-template-columns:1fr}}
+@media(max-width:760px){.kq .kfc{width:100px}.kq .kfc.land{width:min(100%,300px)}.kq .kfx b{font-size:21px}}
+@media(max-width:760px){.kq .kmx{width:100%;justify-content:space-between;flex-wrap:nowrap;gap:8px}.kq .kmx span{align-items:flex-start;font-size:9px;letter-spacing:1px}.kq .kmx b{font-size:18px}}
 .magopen .navhub,.magopen .gyrobtn,.magopen .topr,.magopen #roomtag,.magopen .badge,.magopen .clubtoast,.magopen .hs,.magopen .edgeh,.magopen .clubpill{opacity:0!important;pointer-events:none!important}
 .magback{position:fixed;inset:0;z-index:9;background:rgba(3,6,8,.62);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s}
 .magback.open{opacity:1;pointer-events:auto}
@@ -2396,24 +2453,27 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     return '<button class="kc'+(fc?' land':'')+'" data-hem="'+k+'" data-hi="'+it.__i+'" aria-label="'+esc((fc?'Full Circle #'+it.n:C.name)+' · '+kLabel(k,it))+'"><span class="kcv">'+cov+'<i class="kgl"></i><em class="kl">'+lang+'</em>'+(o.badge?'<em class="kb">'+o.badge+'</em>':'')+(saved>1?'<em class="kp"><i style="width:'+Math.min(100,Math.round((saved+1)/Math.max(1,it.pages||48)*100))+'%"></i>Seguir · pág. '+(saved+1)+'</em>':'')+'</span>'+
       '<span class="kct"><em>'+esc(o.pub||(fc?'Full Circle':C.name))+'</em><b>'+esc(o.sub||kLabel(k,it))+'</b><span>'+esc(o.meta||type)+'</span></span></button>'; }
   var KROWN=0;
-  function kRow(t,s,cards){ if(!cards.length) return ''; KROWN++; return '<section class="kr"><header><span class="krk">'+(KROWN<10?'0':'')+KROWN+'</span><div><b>'+t+'</b><span>'+s+'</span></div><span class="krb"><button class="krn" data-krs="-1" aria-label="Anteriores">'+FBIC.prev+'</button><button class="krn" data-krs="1" aria-label="Siguientes">'+FBIC.next+'</button></span></header><div class="krs">'+cards.join('')+'</div></section>'; }
+  function kRow(t,s,cards,land){ if(!cards.length) return ''; KROWN++; return '<section class="kr rack'+(land?' land':'')+'"><header><span class="krk">'+(KROWN<10?'0':'')+KROWN+'</span><div><b>'+t+'</b><span>'+s+'</span></div><span class="krb"><button class="krn" data-krs="-1" aria-label="Anteriores">'+FBIC.prev+'</button><button class="krn" data-krs="1" aria-label="Siguientes">'+FBIC.next+'</button></span></header><div class="krs">'+cards.join('')+'</div></section>'; }
   function kShelf(){ fbClose(); magEl.classList.remove('reading'); magEl.style.removeProperty('--tint'); KROWN=0;
     var hoy=''; try{ hoy=new Date().toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }catch(e){}
-    var h='<div class="kshelf v3"><header class="kmast"><div class="kmt"><span>Sala de espera</span><span>'+esc(hoy)+'</span><span>Quito · Ecuador</span></div><h2>Kiosco <em>del Estudio</em></h2>'+
-      '<p>Ediciones originales, página por página. Hojéalas como revista, desliza para leerlas en grande o pásalas a texto.</p><div class="kmx" id="kmx"></div></header>';
-    if(!HD){ h+='<div class="kfeat"><span class="kf sk"></span><span class="kf sk"></span></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ var f=magView.querySelector('.kfeat'); if(f) f.innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir el kiosco ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
+    var tk=['Hoy en el kiosco','Full Circle · la última edición ya llegó','Revista CruzTRD · Edición 01','Popular Mechanics · números completos de 1928','Scientific American · los primeros números de 1845','Léelas como revista, en continuo o en texto','+25 pts al Club por cada artículo'], tks='<span>'+tk.join('</span><i>◆</i><span>')+'</span><i>◆</i>';
+    var h='<div class="kshelf v3 kq"><div class="kqroof"><div class="kqsign"><span class="kqk">Sala de espera · Quito</span><h2>Kiosco <em>del Estudio</em></h2><span class="kqd">'+esc(hoy)+'</span></div></div>'+
+      '<div class="kqawn" aria-hidden="true"><i></i></div><div class="kqtick" aria-hidden="true"><div>'+tks+tks+'</div></div>'+
+      '<div class="kqbody"><i class="kqpost l"></i><i class="kqpost r"></i><div class="kqin"><p class="kqintro">Ediciones originales, página por página. Hojéalas como revista, desliza para leerlas en grande o pásalas a texto.</p>';
+    if(!HD){ h+='<div class="kfeat"><span class="kf sk"></span><span class="kf sk"></span></div></div></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ var f=magView.querySelector('.kfeat'); if(f) f.innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir el kiosco ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
     var R=(CLUB.st.read||[]).length, sv=+fbMem('rev01')||0, fc=kItems('fc');
     h+='<div class="kfeat"><button class="kf rev" data-pub="rev" style="--tint:45,212,167"><span class="kfs"><span class="kfc rvthumb"><span class="rvp">'+rvPage(0)+'</span><i class="kgl"></i></span></span><span class="kfx"><em>De la casa · en español</em><b>Revista CruzTRD</b><span class="kfd">Edición 01 · Octubre 2026 · 16 páginas</span>'+
       '<span class="kfm"><i style="width:'+Math.round(R/MAG.length*100)+'%"></i></span><span class="kfn">'+(R?R+' de '+MAG.length+' artículos leídos · +'+R*25+' pts':'Cinco artículos · +25 pts al Club por cada uno')+'</span><span class="kgo">'+(sv>1?'Seguir en la página '+(sv+1):'Leer ahora')+' <i>→</i></span></span></button>';
     if(fc.length){ var f0=fc[0], fsv=+fbMem('fc'+f0.n)||0; h+='<button class="kf fc" data-hem="fc" data-hi="'+f0.__i+'"><span class="kfs"><span class="kfc land">'+(FCCOV[f0.n]?'<img alt="" src="'+FCCOV[f0.n]+'">':'<i class="hsk sk" data-fccov="'+f0.n+'"></i>')+'<i class="kgl"></i><em class="kb">Nuevo</em></span></span><span class="kfx"><em>Tecnología · en inglés</em><b>Full Circle Magazine <span>#'+f0.n+'</span></b><span class="kfd">Última edición · la revista mensual de Linux y software libre</span>'+
       '<span class="kfn">Tiene modo Texto: se lee cómodo en el celular</span><span class="kgo">'+(fsv>1?'Seguir en la página '+(fsv+1):'Leer ahora')+' <i>→</i></span></span></button>'; }
     h+='</div>';
-    h+=kRow('Full Circle','Ediciones anteriores · CC BY-SA 3.0',fc.slice(1).map(function(it){ return kCard('fc',it,{pub:'Full Circle #'+it.n,sub:'Edición anterior'}); }));
+    h+=kRow('Full Circle','Ediciones anteriores · CC BY-SA 3.0',fc.slice(1).map(function(it){ return kCard('fc',it,{pub:'Full Circle #'+it.n,sub:'Edición anterior'}); }),true);
     h+=kRow('Popular Mechanics','Números mensuales completos · dominio público',kItems('pm').slice(0,14).map(function(it){ return kCard('pm',it); }));
     h+=kRow('Scientific American','Los primeros números del periódico · 1845–1847 · dominio público',kItems('sciam').slice(0,14).map(function(it){ return kCard('sciam',it,{sub:it.label}); }));
     var es=[]; ['byn','ilus','ilart'].forEach(function(k){ kItems(k).slice(0,6).forEach(function(it){ es.push(kCard(k,it)); }); });
     h+=kRow('Hemeroteca en español','Revistas ilustradas de Madrid y Barcelona · tomos completos · dominio público',es);
     h+=kRow('Popular Science Monthly','Volúmenes completos · dominio público',kItems('psm').slice(0,12).map(function(it){ return kCard('psm',it); }));
+    h+='</div></div><div class="kqcounter"><div class="kqtop"></div><div class="kqfront"><b>Lee gratis mientras esperas</b><span class="kmx" id="kmx"></span></div></div>';
     h+='<div class="knote">Full Circle se publica bajo licencia CC BY-SA 3.0. La hemeroteca reúne escaneos de dominio público de Wikimedia Commons; la primera vez que se abre una página puede tardar unos segundos en prepararse. Las publicaciones comerciales actuales no permiten mostrar su edición completa sin un acuerdo.</div></div>';
     magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
     var np=1+Object.keys(HD).filter(function(k){ return kItems(k).length; }).length, ni=magView.querySelectorAll('.kc,.kf').length;
