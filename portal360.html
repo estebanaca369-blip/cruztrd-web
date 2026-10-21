@@ -854,6 +854,38 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .frHint{font-size:12px;text-align:center;color:rgba(243,241,236,.5)}
 @media (max-width:480px){ .frTop{grid-template-columns:1fr 1fr;} .frOrder{grid-column:1/-1} .frMv,.frSc{padding:8px} }
 @media (max-width:480px){ .pySws{flex-wrap:nowrap;overflow-x:auto;margin-right:-16px;padding-right:16px;scrollbar-width:none} .pySws::-webkit-scrollbar{display:none} .pySw{flex:none} }
+/* ===== Capa 06 · Chakra ===== */
+.chk{position:fixed;inset:0;z-index:61;display:none;background:#0c0e13;color:#F3F1EC;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden}
+.chk.open{display:block;animation:plyIn .5s ease both}
+.chStage{position:absolute;inset:0;touch-action:pan-y}.chStage canvas{width:100%;height:100%;display:block;cursor:grab}
+.chShade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(7,9,12,.82) 0%,rgba(7,9,12,.45) 32%,rgba(7,9,12,0) 58%),linear-gradient(0deg,rgba(7,9,12,.55) 0%,rgba(7,9,12,0) 24%)}
+.chTop{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:14px;padding:max(18px,env(safe-area-inset-top)) clamp(16px,4vw,56px) 0}
+.chTop .pyBrand span{font-weight:500;color:rgba(243,241,236,.6)}
+.chCard{position:absolute;left:clamp(16px,4vw,56px);top:50%;transform:translateY(-46%);width:min(400px,calc(100% - 32px));padding:22px 22px 18px;border-radius:20px;background:rgba(12,14,20,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(243,241,236,.1);box-shadow:0 30px 80px -30px rgba(0,0,0,.7)}
+.chCard h2{font:700 clamp(36px,4vw,52px)/1 Fraunces,Georgia,serif;letter-spacing:-.02em;margin:10px 0 14px;background:linear-gradient(180deg,#F6FFE9 30%,#B9DC8C 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chBar{height:8px;border-radius:8px;background:rgba(243,241,236,.1);overflow:hidden}.chBar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#7aa84a,#c9e88f);transition:width .8s ease}
+.chNx{font-size:13px;color:rgba(243,241,236,.7);margin:8px 0 14px}.chNx b{color:#d8f0b4}
+.chKpi{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px}.chKpi div{padding:10px;border-radius:12px;background:rgba(243,241,236,.05);display:flex;flex-direction:column;gap:2px}
+.chKpi b{font:700 18px Inter,system-ui,sans-serif;font-variant-numeric:tabular-nums}.chKpi span{font-size:10.5px;line-height:1.3;color:rgba(243,241,236,.55)}
+.chActs{display:flex;flex-direction:column;gap:8px}.chActs .pyGo{justify-content:center;padding:14px 20px;background:linear-gradient(180deg,#d6f0a8,#8fc25a);color:#132008;box-shadow:0 10px 30px -10px rgba(140,200,90,.6)}
+.chActs .pyGo:disabled{background:rgba(243,241,236,.08);color:rgba(243,241,236,.55);box-shadow:none;transform:none;cursor:default}
+.chActs .pyGhost{padding:11px 16px;font-size:13.5px}
+.chStx{font-size:12.5px;color:rgba(243,241,236,.6);margin:12px 0 10px}
+.chHow{list-style:none;margin:0;padding:12px 0 0;border-top:1px solid rgba(243,241,236,.08);display:grid;grid-template-columns:1fr 1fr;gap:8px 12px}
+.chHow li{font-size:12px;line-height:1.4;color:rgba(243,241,236,.62)}.chHow b{display:block;color:#F3F1EC;font-size:12.5px}
+.chFruit{position:absolute;right:clamp(16px,4vw,56px);bottom:max(70px,env(safe-area-inset-bottom));width:min(340px,calc(100% - 32px));padding:20px;border-radius:18px;background:rgba(12,14,20,.88);border:1px solid rgba(255,180,96,.35);display:none;animation:pyRes .35s ease both}
+.chFruit.on{display:block}.chFruit h3{font:700 24px/1.1 Fraunces,Georgia,serif;margin:8px 0 6px}.chFruit p{font-size:13px;line-height:1.5;color:rgba(243,241,236,.72);margin:0 0 14px}.chFruit .pyGo{width:100%;justify-content:center;padding:13px}
+.chFruit .pyGo:disabled{opacity:.45;cursor:default;transform:none}
+.chFx{position:absolute;right:12px;top:12px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(243,241,236,.2);background:none;color:#F3F1EC;cursor:pointer}
+.chFoot{position:absolute;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));text-align:center;font-size:11.5px;color:rgba(243,241,236,.55);margin:0;padding:0 16px}
+.pyChk{margin-top:12px;width:100%;font:600 13px Inter,system-ui,sans-serif;color:#d8f0b4;background:rgba(140,200,90,.1);border:1px solid rgba(140,200,90,.35);border-radius:999px;padding:10px 14px;cursor:pointer}
+.chopen .navhub,.chopen .clubpill{display:none!important}
+@media (max-width:820px){
+  .chShade{background:linear-gradient(0deg,rgba(7,9,12,.92) 0%,rgba(7,9,12,.7) 45%,rgba(7,9,12,0) 70%)}
+  .chCard{top:auto;bottom:max(40px,env(safe-area-inset-bottom));transform:none;max-height:56vh;overflow-y:auto}
+  .chCard h2{font-size:34px;margin:6px 0 10px}.chHow{display:none}.chTop .pyBrand span{display:none}
+  .chFruit{bottom:auto;top:76px;right:16px}
+}
 
 .magopen .navhub,.magopen .gyrobtn,.magopen .topr,.magopen #roomtag,.magopen .badge,.magopen .clubtoast,.magopen .hs,.magopen .edgeh,.magopen .clubpill{opacity:0!important;pointer-events:none!important}
 .magback{position:fixed;inset:0;z-index:9;background:rgba(3,6,8,.62);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .4s}
@@ -1237,7 +1269,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 <div class="magback" id="magBack"></div>
 <section class="mag" id="mag" aria-label="Revista CruzTRD"><button class="x" id="magX" aria-label="Cerrar">✕</button><div class="magview" id="magView"></div></section>
-<section class="ply" id="ply" aria-label="CruzTRD Play · Vuelo Andino"><div class="plyStage" id="plyStage"><canvas id="plyCv"></canvas></div><div class="plyShade"></div><div class="plyRoom" id="plyRoom"></div><div class="plyHud"><div class="hS"><b id="hS">0</b><span>puntos de vuelo</span></div><div class="hM" id="hM">×1</div><div class="hD" id="hD">0 m</div><button class="hX" data-py="quit" aria-label="Terminar vuelo">✕</button><div id="hPop"></div><div class="hTip">Arrastra o mueve el ratón para volar · cruza los arcos</div></div><div class="plyFeria" id="plyFeria"><button class="frX" data-py="quit" aria-label="Salir de la feria">✕</button><div id="frHost"></div></div><div class="plyOver" id="plyOver"></div><div class="plyModal" id="plyModal"></div></section>
+<section class="ply" id="ply" aria-label="CruzTRD Play · Vuelo Andino"><div class="plyStage" id="plyStage"><canvas id="plyCv"></canvas></div><div class="plyShade"></div><div class="plyRoom" id="plyRoom"></div><div class="plyHud"><div class="hS"><b id="hS">0</b><span>puntos de vuelo</span></div><div class="hM" id="hM">×1</div><div class="hD" id="hD">0 m</div><button class="hX" data-py="quit" aria-label="Terminar vuelo">✕</button><div id="hPop"></div><div class="hTip">Arrastra o mueve el ratón para volar · cruza los arcos</div></div><div class="plyFeria" id="plyFeria"><button class="frX" data-py="quit" aria-label="Salir de la feria">✕</button><div id="frHost"></div></div><div class="plyOver" id="plyOver"></div><div class="plyModal" id="plyModal"></div></section><section class="chk" id="chakra" aria-label="Chakra · huerto de fidelidad"><div class="chStage"><canvas id="chCv"></canvas></div><div class="chShade"></div><header class="chTop"><button class="pyBack" data-ch="close">← Volver a la capa 06</button><div class="pyBrand">Chakra <span>· tu huerto de fidelidad</span></div><div class="pyWal chPts"><span>Puntos</span><b>0</b></div></header><aside class="chCard"></aside><div class="chFruit"></div><p class="chFoot">Para marcas: la planta es la billetera hecha visible. Los mismos puntos y la misma escalera de CruzTRD Play; nunca se encoge al canjear.</p></section>
 <div class="dirback" id="dirBack"></div>
 <div class="dirmodal" id="dirPanel">
   <button class="x" id="dirX" aria-label="Cerrar">✕</button>
@@ -2239,6 +2271,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     {name:'Capa 06 · Fidelización', pano:'media/sala7f.jpg', flat:{lonA:-45.3617,lonB:45.3948,latT:18.4474,latB:-18.6971}, es:3, entryYaw:0, fx:[], screens:[{"ui":"cardtv","act":[[1955.604,962.702],[2140.559,962.791],[2140.497,1069.398],[1955.684,1069.473]],"rad":[0,0,0,0],"res":760,"iv":60,"glass":0.035,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":0,"act":[[2209.426,946.863],[2248.031,951.339],[2248.036,1090.555],[2209.479,1094.612]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":1,"act":[[2269.035,953.847],[2302.932,958.092],[2302.852,1084.402],[2269.029,1088.22]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":2,"act":[[2321.562,960.629],[2352.232,964.813],[2352.217,1078.432],[2321.461,1082.062]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":3,"act":[[2368.639,967.061],[2390.314,970.087],[2390.323,1073.721],[2368.588,1076.452]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"invite","act":[[1854.389,1011.904],[1886.586,1011.55],[1883.924,1075.659],[1851.706,1074.331]],"rad":[0,0,0,0],"res":640,"iv":66,"glass":0.04,"fxui":1},{"ui":"reward","act":[[2484.325,963.984],[2535.743,960.834],[2535.629,1056.519],[2484.325,1055.202]],"rad":[0,0,0,0],"res":900,"iv":66,"glass":0.04,"fxui":1},{"ui":"tabglow","act":[[2492.376,1073.968],[2532.63,1075.102],[2528.882,1078.178],[2482.923,1076.721]],"rad":[0.6,0.6,0.6,0.6],"res":90,"iv":80,"glass":0.0,"fxui":1}], spots:[
       {type:'act', act:'card', icon:'★', label:'Mi tarjeta Club CruzTRD', lon:0.009,lat:-5.231},
       {type:'act', act:'share', icon:'↗', label:'Invita y gana +100 pts', lon:-15.761,lat:-5.728},
+      {type:'act', act:'chakra', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z"/><path d="M7 21h10"/></svg>', label:'Chakra · tu huerto de fidelidad', lon:21.5,lat:-8.2},
       {type:'act', act:'card', icon:'★', label:'Reclamar mi recompensa', lon:40.603,lat:-3.807},
       {type:'char', lon:-5.534,lat:-9.456, hk:'fidel', eye:'Capa 06', title:'Fidelización', who:'ESPECIALISTA · FIDELIZACIÓN',
        text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.',
@@ -2309,7 +2342,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
       else if(s.type==='act'){ el.className='hs act'+(s.act==='mag'?' mag':'');
         el.innerHTML='<div class="mk"><span class="ic">'+s.icon+'</span></div><div class="lbl">'+s.label+'</div>';
-        el.addEventListener('click',function(ev){ev.stopPropagation(); if(s.act==='share')clubShare(); else if(s.act==='card')clubLounge(); else if(s.act==='mag')openMag(); else if(s.act==='play')openPlay();}); }
+        el.addEventListener('click',function(ev){ev.stopPropagation(); if(s.act==='share')clubShare(); else if(s.act==='card')clubLounge(); else if(s.act==='mag')openMag(); else if(s.act==='play')openPlay(); else if(s.act==='chakra')openChakra();}); }
       else if(s.type==='dir'){ el.className='hs dir';
         el.innerHTML='<div class="mk"><span class="ic">⊞</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); openDir();}); }
@@ -3518,7 +3551,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
           TIERS.map(function(t,i){ return '<div class="pyTier"><div class="pyTierH"><span>Nivel '+(i+1)+' · '+t.n+'</span>'+(t.buy?'<em>requiere 1 compra en 60 días</em>':'')+'</div><div class="pyItems">'+t.items.map(function(c){ var used=c.buy&&redSeason(c.id), can=!used&&st.pts>=c.p, pct=Math.min(1,st.pts/c.p);
             return '<div class="pyIt'+(c.star?' star':'')+'"><div class="pyItT"><b>'+c.n+'</b><span>'+c.d+'</span><em>vía '+c.prov+'</em></div><div class="pyItR"><b>'+fmt(c.p)+'</b><button data-red="'+c.id+'"'+(can?'':' disabled')+'>'+(used?'Canjeado':(can?'Canjear':'Faltan '+fmt(c.p-st.pts)))+'</button></div><i class="pyBar" style="--p:'+pct+'"></i></div>'; }).join('')+'</div></div>'; }).join('')+
           (st.red.length?'<div class="pyMine"><b>Mis canjes</b>'+st.red.slice(-3).reverse().map(function(x){ return '<div><span>'+x.n+'</span><code>'+x.c+'</code></div>'; }).join('')+'</div>':'')+
-          '<button class="pyDemo" data-py="demo">+2.000 pts de demostración</button></div>'; }
+          '<button class="pyChk" data-py="chakra">Ver tu chakra en la capa 06 · Fidelización →</button><button class="pyDemo" data-py="demo">+2.000 pts de demostración</button></div>'; }
       var usd=st.issued*0.002, gid={vuelo:'vuelo-andino',bici:'descenso-andino',feria:'feria'}[cur];
       return '<div class="pyMar"><div class="pyRkH"><b>Así llega a tu sitio</b><span>una línea</span></div><pre><code>&lt;script async\n  src="https://sdk.cruztrd.com/v1.js"&gt;&lt;/script&gt;\n&lt;cruztrd-game game="'+gid+'"\n  campaign="tu-marca" locale="es-EC"&gt;\n&lt;/cruztrd-game&gt;</code></pre>'+
         '<ul><li><b>Tres juegos, una billetera.</b> Vuelo y Descenso en 3D, Feria como puzzle diario; racha y puntos compartidos.</li><li><b>Tu marca dentro del juego.</b> Arcos, banderas y premios con tu marca.</li><li><b>Premios que reemplazan un gasto.</b> Escalera de 5 niveles pensada para Ecuador: cupón, recarga, gustito, despensa y uno aspiracional.</li><li><b>La compra sostiene el programa.</b> Los premios de US$10 o más piden una compra verificada en 60 días; las compras suman 10 pts por US$1.</li><li><b>Costo con tope.</b> El juego da hasta 100 pts al día más bonos de racha; máximo US$15 al mes por persona.</li></ul>'+
@@ -3573,20 +3606,121 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       if(b.hasAttribute('data-red')){ redeem(b.getAttribute('data-red')); return; }
       if(a==='close') closePlay(); else if(a==='go') go(); else if(a==='snd'){ VAUD.ok(); VAUD.mute(!VAUD.muted); b.classList.toggle('off',VAUD.muted); if(!VAUD.muted) VAUD.pad(view!=='game'); }
       else if(a==='prem'){ tab='prem'; room(); } else if(a==='demo'){ st.pts+=2000; save(); var w=$q('#pyPts'); if(w) w.textContent=fmt(st.pts); paintTab(); }
+      else if(a==='chakra'){ closePlay(); try{ if(typeof goRoom==='function') goRoom(6); }catch(er){} setTimeout(openChakra,700); }
       else if(a==='mclose'){ $q('#plyModal').classList.remove('on'); } else if(a==='quit'){ room(); } }
     function key(e){ if(!root||!root.classList.contains('open')) return; if(e.key==='Escape'){ e.preventDefault(); e.stopImmediatePropagation(); var M=$q('#plyModal'); if(M.classList.contains('on')){ if(!M.querySelector('[data-py="mclose"]').disabled) M.classList.remove('on'); return; } if(view==='game'||view==='over'||view==='feria') room(); else closePlay(); }
       else if((e.key==='Enter'||e.key===' ')&&view==='over'&&!e.target.closest('button')){ e.preventDefault(); go(); } }
-    function open(){ root=$i('ply'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','plyopen');
+    function open(tb){ if(tb) tab=tb; root=$i('ply'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','plyopen');
       if(!root._b){ root._b=1; root.addEventListener('click',click); addEventListener('keydown',key,true); }
       hud={s:$q('#hS'),m:$q('#hM'),d:$q('#hD')};
       try{ if(!E) E=VUELO.create($q('#plyCv'),{inputEl:$q('#plyStage'),onHud:onHud,onEvent:onEvent,onOver:onOver}); }catch(err){ E=null; }
       room();
       if(!st.welcome){ st.welcome=1; st.pts+=60; st.issued+=60; save(); var w=$q('#pyPts'); if(w) w.textContent=fmt(st.pts); timers.push(setTimeout(function(){ toast('Bono de bienvenida · +60 pts','Ya vas en el 20% de tu primer premio'); },900)); } }
     function close(){ timers.forEach(clearTimeout); timers=[]; VAUD.pad(false); if(F){ F.destroy(); F=null; } if(E){ E.destroy(); E=null; } if(root){ root.className='ply'; $q('#plyModal').classList.remove('on'); } document.body.classList.remove('magopen','plyopen'); }
-    return {open:open,close:close};
+    function addPts(n,why){ st.pts+=n; st.issued+=n; if(why==='buy'){ st.buys=(st.buys||0)+1; st.lastBuy=Date.now(); } save(); }
+    function water(){ var k=ymd(); if(st.days.indexOf(k)<0){ st.days.push(k); st.days=st.days.slice(-60); } st.water=k; save(); }
+    return {open:open,close:close,st:function(){ return st; },streak:streak,add:addPts,water:water};
   })();
   function openPlay(){ PLY.open(); }
   function closePlay(){ PLY.close(); }
+  /* ============ Capa 06 · Chakra: la billetera de fidelidad hecha huerto ============ */
+  var CHAKRA=(function(){
+    var T=THREE, LV=[{p:0,n:'Semilla'},{p:300,n:'Brote'},{p:1000,n:'Plántula'},{p:2400,n:'Arbusto'},{p:4800,n:'Árbol joven'},{p:7000,n:'Árbol en cosecha'}];
+    var FR=[{p:300,n:'Cupón 10% o envío gratis',t:'Nivel 1 · Primer triunfo'},{p:1000,n:'Recarga US$2',t:'Nivel 2 · Utilidad'},{p:2400,n:'Datos o combo de US$5',t:'Nivel 3 · Gustito del mes'},{p:4800,n:'Bono Supermaxi / Akí US$10',t:'Nivel 4 · Despensa y movilidad'},{p:7000,n:'US$15 a elección',t:'Nivel 5 · Aspiracional'}];
+    function rng(seed){ var s=(seed>>>0)||1; return function(){ s^=s<<13; s>>>=0; s^=s>>>17; s^=s<<5; s>>>=0; return s/4294967296; }; }
+    function gOf(life){ return Math.min(1,Math.pow(Math.max(0,life)/7000,0.62)); }
+    function ymd(d){ d=d||new Date(); return d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(); }
+    function fmt(n){ return Math.round(n).toLocaleString('es-EC'); }
+    var root=null, R=null, raf=0, alive=false, ro=null;
+    function build(){ var host=root.querySelector('.chStage'), cv=root.querySelector('#chCv'), W=1, H=1;
+      R=new T.WebGLRenderer({canvas:cv,antialias:true}); R.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75)); R.shadowMap.enabled=true; R.shadowMap.type=T.PCFSoftShadowMap;
+      var FOG=new T.Color(0.95,0.74,0.58); R.setClearColor(FOG); var sc=new T.Scene(); sc.fog=new T.Fog(FOG,28,95);
+      var cam=new T.PerspectiveCamera(42,1,0.1,400);
+      var sky=new T.Mesh(new T.SphereGeometry(300,24,12),new T.ShaderMaterial({side:T.BackSide,depthWrite:false,fog:false,uniforms:{sun:{value:new T.Vector3(-0.6,0.18,-0.78).normalize()}},
+        vertexShader:'varying vec3 vD; void main(){ vD=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }',
+        fragmentShader:'uniform vec3 sun; varying vec3 vD; void main(){ float h=vD.y; vec3 hor=vec3(0.95,0.74,0.58); vec3 mid=vec3(0.62,0.6,0.78); vec3 top=vec3(0.28,0.36,0.62); vec3 c=mix(hor,mid,smoothstep(0.0,0.25,h)); c=mix(c,top,smoothstep(0.2,0.75,h)); float s=max(dot(normalize(vD),sun),0.0); c+=vec3(1.0,0.7,0.4)*pow(s,8.0)*0.35; c+=vec3(1.0,0.9,0.7)*pow(s,300.0); gl_FragColor=vec4(c,1.0); }'}));
+      sc.add(sky);
+      sc.add(new T.HemisphereLight(0xcfd8ff,0x6b4a3a,0.75)); var dl=new T.DirectionalLight(0xffd2a0,1.15); dl.position.set(-9,12,6); dl.castShadow=true; dl.shadow.mapSize.set(1024,1024); var sca=dl.shadow.camera; sca.left=-9; sca.right=9; sca.top=9; sca.bottom=-9; sca.near=1; sca.far=40; dl.shadow.bias=-0.0008; sc.add(dl);
+      function vc(geo,fn){ var g=geo.toNonIndexed(); g.computeVertexNormals(); var p=g.attributes.position, n=g.attributes.normal, col=new Float32Array(p.count*3); for(var i=0;i<p.count;i+=3){ var y=(p.getY(i)+p.getY(i+1)+p.getY(i+2))/3, c=fn(y,n.getY(i),Math.abs(Math.sin(i*12.9898)*43758.5453)%1,p.getX(i),p.getZ(i)); for(var k=0;k<3;k++){ col[(i+k)*3]=c[0]; col[(i+k)*3+1]=c[1]; col[(i+k)*3+2]=c[2]; } } g.setAttribute('color',new T.BufferAttribute(col,3)); return g; }
+      var VM=new T.MeshLambertMaterial({vertexColors:true});
+      // terreno: colinas de páramo, la chakra al centro
+      var gp=new T.PlaneGeometry(140,140,46,46); gp.rotateX(-Math.PI/2); var pp=gp.attributes.position, r0=rng(5);
+      for(var i=0;i<pp.count;i++){ var x=pp.getX(i), z=pp.getZ(i), d=Math.sqrt(x*x+z*z), hh=d<20?r0()*0.12:Math.pow((d-20)/18,1.5)*(1.0+Math.sin(x*0.11)*0.6+Math.cos(z*0.13)*0.5)+r0()*0.3; pp.setY(i,hh-0.02); }
+      var ground=new T.Mesh(vc(gp,function(y,ny,r){ var q=0.85+r*0.25; return y<0.05?[0.42*q,0.52*q,0.25*q]:(y>9?[0.62*q,0.5*q,0.42*q]:[0.36*q,0.47*q,0.22*q]); }),VM); ground.receiveShadow=true; sc.add(ground);
+      var plot=new T.Mesh(vc(new T.CylinderGeometry(3.3,3.5,0.3,28,1),function(y,ny,r){ var q=0.85+r*0.25; return ny>0.5?[0.42*q,0.29*q,0.2*q]:[0.33*q,0.23*q,0.16*q]; }),VM); plot.position.y=0.12; plot.receiveShadow=true; sc.add(plot);
+      for(i=0;i<5;i++){ var fur=new T.Mesh(new T.TorusGeometry(0.9+i*0.5,0.05,4,40),new T.MeshLambertMaterial({color:0x5a3d29})); fur.rotation.x=Math.PI/2; fur.position.y=0.28; fur.receiveShadow=true; sc.add(fur); }
+      var rockG=vc(new T.DodecahedronGeometry(1,0),function(y,ny,r){ var q=0.8+r*0.3; return [0.58*q,0.54*q,0.5*q]; });
+      for(i=0;i<34;i++){ var a=i/34*Math.PI*2, st=new T.Mesh(rockG,VM), s=0.22+r0()*0.14; st.scale.set(s,s*0.8,s); st.position.set(Math.cos(a)*3.6,0.15,Math.sin(a)*3.6); st.rotation.set(r0()*3,r0()*3,0); st.castShadow=true; sc.add(st); }
+      [[-60,-120,40,46,0.3],[25,-130,30,34,0.36],[85,-100,22,22,0.45],[-120,-80,26,24,0.4]].forEach(function(v){ var m=new T.Mesh(vc(new T.ConeGeometry(v[2],v[3],10,3),function(y,ny,r){ var t=(y+v[3]/2)/v[3], k=t>1-v[4]; var c=k?[1,0.93,0.9]:[0.5,0.42,0.5], hz=k?0.25:0.5; return [c[0]*(1-hz)+0.95*hz,c[1]*(1-hz)+0.74*hz,c[2]*(1-hz)+0.58*hz]; }),new T.MeshBasicMaterial({vertexColors:true,fog:false})); m.position.set(v[0],v[3]/2-3,v[1]); sc.add(m); });
+      // surcos de visitas: un brote de maíz por día que volviste
+      var sprG=vc(new T.ConeGeometry(0.09,0.5,5,1).translate(0,0.25,0),function(){ return [0.45,0.62,0.25]; }), leafG=vc(new T.ConeGeometry(0.05,0.42,3,1).translate(0,0.21,0),function(){ return [0.5,0.7,0.3]; });
+      var sprouts=[]; for(i=0;i<30;i++){ var ring=i<15?4.3:5.0, a2=(i%15)/15*Math.PI*2+(i<15?0:0.2), g2=new T.Group(); g2.add(new T.Mesh(sprG,VM)); var l1=new T.Mesh(leafG,VM); l1.rotation.z=0.7; l1.position.y=0.15; g2.add(l1); var l2=new T.Mesh(leafG,VM); l2.rotation.z=-0.7; l2.position.y=0.22; g2.add(l2); g2.position.set(Math.cos(a2)*ring,0.02,Math.sin(a2)*ring); g2.rotation.y=a2; g2.scale.setScalar(0.001); g2.children.forEach(function(m){ m.castShadow=true; }); sc.add(g2); sprouts.push(g2); }
+      // árbol de tomate de árbol: ramas con nacimiento progresivo
+      var tr=rng(20261021), barkM=new T.MeshLambertMaterial({color:0x6b4a33}), leafM=new T.MeshLambertMaterial({color:0x5f8f3a}), leafM2=new T.MeshLambertMaterial({color:0x7aa84a}), UC=new T.CylinderGeometry(1,1,1,6).translate(0,0.5,0), LG=new T.IcosahedronGeometry(1,0);
+      var B=[], LEAVES=[], tips=[], tree=new T.Group(); sc.add(tree); tree.position.y=0.28; tree.scale.setScalar(1.3);
+      function branch(par,len,rad,depth,birth,ang,rot){ var g=new T.Group(); g.rotation.set(ang,rot,0,'YXZ'); par.add(g); var m=new T.Mesh(UC,barkM); m.castShadow=true; g.add(m); var b={g:g,m:m,len:len,rad:rad,birth:birth,depth:depth,kids:[]}; B.push(b);
+        if(depth<4){ var n=depth===0?3:(tr()<0.6?2:3); for(var k=0;k<n;k++){ var cb=branch(g,len*(0.74+tr()*0.12),rad*0.62,depth+1,birth+0.15+tr()*0.05,0.42+tr()*0.38,k/n*Math.PI*2+tr()*0.8+depth); b.kids.push(cb); } }
+        if(true){ var lf=new T.Mesh(LG,tr()<0.5?leafM:leafM2); lf.castShadow=true; g.add(lf); var L={m:lf,b:b,birth:birth+(depth<2?0.03:0.08),s:depth<2?0.22+tr()*0.08:(0.32+tr()*0.22)*(depth>=4?0.85:1.05)}; LEAVES.push(L); b.leaf=L; }
+        if(depth>=1) tips.push(b); return b; }
+      var trunk=branch(tree,1.35,0.17,0,0,0,0);
+      var thr=FR.map(function(f){ return gOf(f.p); }), used={}, fruitG=new T.SphereGeometry(0.21,14,10), fruits=[];
+      var GLOWT=(function(){ var c=document.createElement('canvas'); c.width=c.height=64; var g=c.getContext('2d'), gr=g.createRadialGradient(32,32,0,32,32,32); gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(0.3,'rgba(255,255,255,.5)'); gr.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=gr; g.fillRect(0,0,64,64); return new T.CanvasTexture(c); })();
+      FR.forEach(function(f,k){ var cand=tips.filter(function(b){ return !used[B.indexOf(b)]&&b.birth+0.1<=thr[k]+0.02; }).sort(function(a,b2){ return b2.depth-a.depth||b2.birth-a.birth; }), b=cand[0]||tips.filter(function(q){ return !used[B.indexOf(q)]; })[0]||trunk; used[B.indexOf(b)]=1;
+        var fm=new T.Mesh(fruitG,new T.MeshLambertMaterial({color:0x7aa84a})); fm.scale.set(1,1.3,1); fm.castShadow=true; var gl=new T.Sprite(new T.SpriteMaterial({map:GLOWT,color:0xffb060,transparent:true,blending:T.AdditiveBlending,depthWrite:false,opacity:0})); gl.scale.set(1.1,1.1,1); var hold=new T.Group(); hold.add(fm); hold.add(gl); b.g.add(hold); fruits.push({k:k,b:b,m:fm,gl:gl,h:hold,f:f}); fm.userData.fk=k; });
+      // agua al regar
+      var drops=[], dropM=new T.MeshBasicMaterial({color:0xbfe6ff,transparent:true,opacity:0.85}), dropG=new T.SphereGeometry(0.05,6,4);
+      var S={g:0,gt:0,orbit:0.6,drag:null,ripe:[],wilt:0,t:0};
+      function size(){ var r=host.getBoundingClientRect(); W=Math.max(1,r.width); H=Math.max(1,r.height); R.setSize(W,H,false); cam.aspect=W/H; if(S&&S.vo){ cam.clearViewOffset(); S.vo=0; } cam.updateProjectionMatrix(); }
+      ro=window.ResizeObserver?new ResizeObserver(size):null; if(ro) ro.observe(host); size();
+      function clamp(x){ return Math.max(0,Math.min(1,x)); }
+      function apply(){ var g=S.g;
+        B.forEach(function(b){ var s=clamp((g-b.birth)/(b.depth?0.22:0.45)), e=s*s*(3-2*s); b.m.scale.set(b.rad*Math.max(0.15,e),b.len*Math.max(0.001,e),b.rad*Math.max(0.15,e)); b.m.visible=e>0.002; b.kids.forEach(function(k){ k.g.position.set(0,b.len*e*0.96,0); }); if(b.leaf){ b.leaf.m.position.set(0,b.len*e,0); } });
+        LEAVES.forEach(function(L){ var s=clamp((g-L.birth)/0.2), e=s*s*(3-2*s); var wl=1-S.wilt*0.25; L.m.scale.set(L.s*e,L.s*e*0.7*wl,L.s*e); L.m.visible=e>0.01; });
+        fruits.forEach(function(F){ var s=clamp((g-thr[F.k]+0.02)/0.05), ripe=S.ripe[F.k]; F.h.position.set(0,F.b.len*clamp((g-F.b.birth)/(F.b.depth?0.22:0.45))*0.72,0.0); F.h.translateX(F.b.rad*1.6+0.2); F.h.translateY(-0.12); F.m.scale.set(s,1.3*s,s); F.h.visible=s>0.02; F.m.material.color.setHex(ripe?0xe8452c:0x8fb54a); F.gl.material.opacity=ripe?0.55+Math.sin(S.t*3+F.k)*0.25:0; }); }
+      function setState(life,bal,days,watered){ S.gt=gOf(life); S.ripe=FR.map(function(f){ return bal>=f.p; }); S.wilt=watered?0:1; var n=Math.min(30,days); sprouts.forEach(function(sp,i){ sp.userData.on=i<n; }); }
+      function water(){ for(var i=0;i<60;i++){ var d=new T.Mesh(dropG,dropM); d.position.set((Math.random()*2-1)*1.6,4.5+Math.random()*1.5,(Math.random()*2-1)*1.6); d.userData.v=-3-Math.random()*3; sc.add(d); drops.push(d); } }
+      var ray=new T.Raycaster(), mv=new T.Vector2();
+      function pick(e){ var r=cv.getBoundingClientRect(); mv.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1); ray.setFromCamera(mv,cam); var hit=ray.intersectObjects(fruits.filter(function(F){ return F.h.visible; }).map(function(F){ return F.m; }),false)[0]; return hit?hit.object.userData.fk:null; }
+      cv.addEventListener('pointerdown',function(e){ S.drag={x:e.clientX,o:S.orbit,t:performance.now()}; });
+      addEventListener('pointermove',S.pm=function(e){ if(!S.drag) return; S.orbit=S.drag.o-(e.clientX-S.drag.x)*0.006; S.idle=0; });
+      addEventListener('pointerup',S.pu=function(e){ if(!S.drag) return; var tap=Math.abs(e.clientX-S.drag.x)<6&&performance.now()-S.drag.t<350; S.drag=null; if(tap){ var k=pick(e); if(k!=null&&API.onFruit) API.onFruit(k); } });
+      var last=performance.now();
+      function frame(now){ if(!alive) return; raf=requestAnimationFrame(frame); var dt=Math.min(0.05,(now-last)/1000); last=now; S.t+=dt;
+        S.g+=(S.gt-S.g)*Math.min(1,dt*1.6); if(!S.drag){ S.idle=(S.idle||0)+dt; if(S.idle>2) S.orbit+=dt*0.08; }
+        var cr=(15.5-S.g*1.5)*(W>820?1:1.3), ty=0.9+S.g*2.0; cam.position.set(Math.sin(S.orbit)*cr,5.2+S.g*2.2,Math.cos(S.orbit)*cr); cam.lookAt(0,ty,0); if(W>820){ if(!S.vo){ cam.setViewOffset(W,H,-W*0.17,0,W,H); S.vo=1; } } else if(S.vo!==2){ cam.setViewOffset(W,H,0,H*0.2,W,H); S.vo=2; }
+        sprouts.forEach(function(sp){ var tg=sp.userData.on?1:0.001, s=sp.scale.x+(tg-sp.scale.x)*Math.min(1,dt*3); sp.scale.setScalar(s); });
+        tree.rotation.z=Math.sin(S.t*0.8)*0.012; S.wilt+=( (S.wiltT==null?S.wilt:S.wiltT) -S.wilt)*dt;
+        for(var i=drops.length-1;i>=0;i--){ var d=drops[i]; d.userData.v-=9*dt; d.position.y+=d.userData.v*dt; if(d.position.y<0.3){ sc.remove(d); drops.splice(i,1); } }
+        apply(); R.render(sc,cam); }
+      alive=true; raf=requestAnimationFrame(frame);
+      var API={set:setState,water:water,onFruit:null,dispose:function(){ alive=false; cancelAnimationFrame(raf); if(ro) ro.disconnect(); removeEventListener('pointermove',S.pm); removeEventListener('pointerup',S.pu); sc.traverse(function(o){ if(o.geometry) o.geometry.dispose(); if(o.material){ if(o.material.map) o.material.map.dispose(); o.material.dispose(); } }); R.dispose(); try{ R.forceContextLoss(); }catch(er){} },S:S};
+      return API; }
+    var V=null;
+    function level(life){ var k=0; for(var i=0;i<LV.length;i++) if(life>=LV[i].p) k=i; return k; }
+    function paint(){ var st=PLY.st(), life=st.issued||0, bal=st.pts||0, k=level(life), nx=LV[k+1], today=ymd(), watered=st.days.indexOf(today)>-1, sk=PLY.streak(), ripe=FR.filter(function(f){ return bal>=f.p; }).length;
+      if(V){ V.set(life,bal,st.days.length,watered); V.S.wiltT=watered?0:1; }
+      root.querySelector('.chPts b').textContent=fmt(bal);
+      var pct=nx?Math.min(1,(life-LV[k].p)/(nx.p-LV[k].p)):1;
+      root.querySelector('.chCard').innerHTML='<span class="pyEye"><i></i>Tu chakra · etapa '+(k+1)+' de 6</span><h2>'+LV[k].n+'</h2>'+
+        '<div class="chBar"><i style="width:'+(pct*100)+'%"></i></div><p class="chNx">'+(nx?('Faltan <b>'+fmt(nx.p-life)+' pts ganados</b> para que crezca a '+nx.n.toLowerCase()):'Tu árbol está en plena cosecha')+'</p>'+
+        '<div class="chKpi"><div><b>'+fmt(life)+'</b><span>pts ganados en total</span></div><div><b>'+fmt(bal)+'</b><span>pts para cosechar</span></div><div><b>'+ripe+' / 5</b><span>frutos maduros</span></div></div>'+
+        '<div class="chActs"><button class="pyGo" data-ch="water"'+(watered?' disabled':'')+'><span>'+(watered?'Ya regaste hoy':'Regar hoy')+'</span></button><button class="pyGhost" data-ch="buy">Simular compra US$30 · +300 pts</button><button class="pyGhost" data-ch="play">Ganar puntos jugando →</button></div>'+
+        '<p class="chStx">'+(sk?('Racha de '+sk+' '+(sk===1?'día':'días')+' · '):'')+Math.min(30,st.days.length)+' surcos sembrados'+(watered?'':' · tu planta te espera')+'</p>'+
+        '<ul class="chHow"><li><b>Jugar</b> hasta 100 pts al día</li><li><b>Comprar</b> 10 pts por cada US$1</li><li><b>Volver cada día</b> siembra un surco y sostiene la racha</li><li><b>Cosechar</b> un fruto maduro es canjear un premio</li></ul>'; }
+    function fruitCard(k){ var f=FR[k], st=PLY.st(), ok=st.pts>=f.p, c=root.querySelector('.chFruit');
+      c.innerHTML='<button class="chFx" data-ch="fx" aria-label="Cerrar">✕</button><span class="pyEye"><i></i>'+f.t+'</span><h3>'+f.n+'</h3><p>'+(ok?'Este fruto está maduro: tienes los '+fmt(f.p)+' pts para cosecharlo.':'Aún está verde: te faltan '+fmt(f.p-st.pts)+' pts.')+'</p><button class="pyGo" data-ch="harvest"'+(ok?'':' disabled')+'><span>Cosechar en CruzTRD Play</span></button>'; c.classList.add('on'); }
+    function click(e){ var b=e.target.closest('[data-ch]'); if(!b) return; var a=b.getAttribute('data-ch');
+      if(a==='close') close(); else if(a==='water'){ PLY.water(); VAUD.ok(); VAUD.ring(2); if(V) V.water(); setTimeout(paint,600); }
+      else if(a==='buy'){ PLY.add(300,'buy'); VAUD.ok(); VAUD.orb(6); paint(); }
+      else if(a==='play'||a==='harvest'){ close(); PLY.open(a==='harvest'?'prem':null); }
+      else if(a==='fx') root.querySelector('.chFruit').classList.remove('on'); }
+    function open(){ root=$i('chakra'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','plyopen','chopen'); root.classList.add('open');
+      if(!root._b){ root._b=1; root.addEventListener('click',click); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
+      try{ V=build(); V.onFruit=fruitCard; }catch(err){ V=null; } paint(); }
+    function close(){ if(V){ V.dispose(); V=null; } if(root){ root.classList.remove('open'); root.querySelector('.chFruit').classList.remove('on'); } document.body.classList.remove('magopen','plyopen','chopen'); }
+    return {open:open,close:close};
+  })();
+  function openChakra(){ CHAKRA.open(); }
   function openMag(){ closeDir(); panel.classList.remove('open'); kShelf(); magBack.classList.add('open'); magEl.classList.add('open'); document.body.classList.add('magopen'); }
   function closeMag(){ fbClose(); magEl.classList.remove('open'); magBack.classList.remove('open'); document.body.classList.remove('magopen'); }
   magView.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-art],[data-idx],[data-room],[data-shelf],[data-pub],[data-retry]'); if(!t)return;
