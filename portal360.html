@@ -3211,14 +3211,16 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function week(d){ d=d?new Date(d):new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+3-(d.getDay()+6)%7); var w1=new Date(d.getFullYear(),0,4); return 1+Math.round(((d-w1)/864e5-3+(w1.getDay()+6)%7)/7); }
     function dayNo(){ var d=new Date(), s=new Date(d.getFullYear(),0,0); return Math.floor((d-s)/864e5); }
     function streak(){ var n=0, d=new Date(); if(st.days.indexOf(ymd(d))<0) d.setDate(d.getDate()-1); while(st.days.indexOf(ymd(d))>-1){ n++; d.setDate(d.getDate()-1); } return n; }
+    var MS={3:50,7:150,14:250,30:400};
+    function nextMs(n){ var k=[3,7,14,30].filter(function(x){ return x>n; })[0]; return k?{d:k,p:MS[k]}:null; }
     function seed(){ var t=ymd(); return ((t*2654435761)>>>0)^0x5bd1e995; }
     var CAT=[
-      {id:'cup',n:'Cupón 15% en la tienda',d:'Se emite en el Shopify, VTEX o WooCommerce de la marca',p:400,prov:'API de la tienda',usd:0},
+      {id:'cup',n:'Cupón 15% en la tienda',d:'Se emite en el Shopify, VTEX o WooCommerce de la marca',p:300,prov:'API de la tienda',usd:0},
+      {id:'rec2',n:'Recarga celular US$2',d:'Claro · Movistar · CNT · Tuenti, al número verificado',p:1000,prov:'Reloadly / DT One',usd:2},
       {id:'rec',n:'Recarga celular US$3',d:'Claro · Movistar · CNT · Tuenti',p:1500,prov:'Reloadly / DT One',usd:3},
       {id:'pya',n:'PedidosYa US$10',d:'Tarjeta digital para Ecuador',p:4800,prov:'Ding',usd:10},
       {id:'ub',n:'Uber Ecuador US$10',d:'Solo viajes, válida en Ecuador',p:4800,prov:'GIFQ',usd:10},
-      {id:'nf',n:'Netflix US$15',d:'Tarjeta en USD; la cuenta debe pagar en USD',p:7000,prov:'Reloadly',usd:15,warn:'Validar en Ecuador'},
-      {id:'sp',n:'Spotify Premium',d:'Spotify dejó de vender tarjetas regalo el 31 de marzo de 2026',p:0,lock:'Solo con convenio directo con Spotify'}
+      {id:'nf',n:'Netflix US$15',d:'Tarjeta en USD; la cuenta debe pagar en USD',p:7000,prov:'Reloadly',usd:15,warn:'Validar en Ecuador'}
     ];
     var NAMES=['Valeria R.','Mateo C.','Daniela P.','Sebastián L.','Camila V.','Joaquín A.','Paula M.','Andrés T.','Gabriela N.','Nicolás E.','Isabela F.','Martín Q.'];
     var E=null, view=null, tab='rank', root=null, timers=[], hud={}, lastHud={};
@@ -3237,7 +3239,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         '<div class="pyMain"><div class="pyHero"><span class="pyEye"><i></i>Ruta del día nº '+dayNo()+' · '+fecha+'</span><h1>Vuelo<br>Andino</h1>'+
         '<p>Planea como un cóndor entre volcanes. Cruza los arcos para multiplicar, roza las rocas para sumar más y vuelve cada día: la ruta cambia a medianoche y es la misma para todos.</p>'+
         '<div class="pyCta"><button class="pyGo" data-py="go"><span>'+(played?'Volar otra vez':'Volar la ruta de hoy')+'</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button><span class="pyHint">Ratón, flechas o arrastra con el dedo</span></div>'+
-        '<div class="pyStreak"><div class="pyDays">'+cells+'</div><div class="pyStx"><b>'+(sk?('Racha de '+sk+' '+(sk===1?'día':'días')):'Empieza tu racha hoy')+'</b><span>'+(played?('Mañana tu primer vuelo suma +'+(50+10*Math.min(7,sk+1))+' pts'):('Tu primer vuelo de hoy suma +'+(50+10*Math.min(7,sk+1))+' pts'))+'</span></div></div>'+
+        '<div class="pyStreak"><div class="pyDays">'+cells+'</div><div class="pyStx"><b>'+(sk?('Racha de '+sk+' '+(sk===1?'día':'días')):'Empieza tu racha hoy')+'</b><span>'+(function(){ var nm=nextMs(played?sk:sk); return nm?('Día '+nm.d+' de racha: +'+nm.p+' pts de bono'):'Racha máxima: sigue así'; })()+'</span></div></div>'+
         '<div class="pyStats"><div><b>'+fmt(st.day[ymd()]||0)+'</b><span>Récord de hoy</span></div><div><b>'+fmt(st.best)+'</b><span>Tu mejor vuelo</span></div><div><b>'+fmt(st.runs)+'</b><span>Vuelos</span></div></div></div>'+
         '<aside class="pyPanel"><nav class="pyTabs" role="tablist"><button data-tab="rank">Ranking</button><button data-tab="prem">Premios</button><button data-tab="mar">Para marcas</button></nav><div class="pyTab" id="pyTab"></div></aside></div>'+
         '<footer class="pyFoot">Demo de CruzTRD Play · el ranking usa jugadores de demostración y los códigos mostrados no son canjeables</footer>'; }
@@ -3250,7 +3252,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
           '<button class="pyDemo" data-py="demo">+2.000 pts de demostración</button></div>'; }
       var usd=st.issued*0.002;
       return '<div class="pyMar"><div class="pyRkH"><b>Así llega a tu sitio</b><span>una línea</span></div><pre><code>&lt;script async\n  src="https://sdk.cruztrd.com/v1.js"&gt;&lt;/script&gt;\n&lt;cruztrd-game game="vuelo-andino"\n  campaign="tu-marca" locale="es-EC"&gt;\n&lt;/cruztrd-game&gt;</code></pre>'+
-        '<ul><li><b>Tu marca dentro del juego.</b> Los arcos llevan tu logo; colores y premios son tuyos.</li><li><b>Hábito diario.</b> Ruta del día, racha y temporada semanal.</li><li><b>Premios que sí se entregan en Ecuador.</b> Cupones de tu tienda, recargas y tarjetas digitales por API.</li><li><b>El servidor decide.</b> Cada puntaje se valida antes de pagar; el navegador nunca otorga premios.</li><li><b>Costo con tope.</b> Máximo 420 pts por jugador al día ≈ US$0,84.</li></ul>'+
+        '<ul><li><b>Tu marca dentro del juego.</b> Los arcos llevan tu logo; colores y premios son tuyos.</li><li><b>Hábito diario.</b> Ruta del día, racha y temporada semanal.</li><li><b>Premios que sí se entregan en Ecuador.</b> Cupones de tu tienda, recargas y tarjetas digitales por API.</li><li><b>El servidor decide.</b> Cada puntaje se valida antes de pagar; el navegador nunca otorga premios.</li><li><b>Costo con tope.</b> El juego da hasta 100 pts al día (≈ US$0,20) más bonos de racha; tope de US$15 al mes por persona. Las compras suman 10 pts por US$1.</li></ul>'+
         '<div class="pyLive"><b>En vivo, esta demo</b><div><span>Vuelos</span><em>'+fmt(st.runs)+'</em></div><div><span>Puntos emitidos</span><em>'+fmt(st.issued)+'</em></div><div><span>Costo estimado</span><em>US$'+usd.toFixed(2).replace('.',',')+'</em></div><div><span>Canjes</span><em>'+st.red.length+'</em></div></div></div>'; }
     function paintTab(){ var t=$q('#pyTab'); if(!t) return; t.innerHTML=tabHtml(); [].slice.call(root.querySelectorAll('.pyTabs button')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-tab')===tab); b.setAttribute('aria-selected',b.getAttribute('data-tab')===tab); }); }
     function paintRoom(){ $q('#plyRoom').innerHTML=shell(); paintTab(); }
@@ -3263,15 +3265,15 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       var dd=Math.floor(d/10)*10; if(dd!==lastHud.d){ hud.d.textContent=fmt(dd)+' m'; lastHud.d=dd; } }
     function pop(txt,cls){ var p=document.createElement('div'); p.className='hP '+(cls||''); p.textContent=txt; $q('#hPop').appendChild(p); setTimeout(function(){ p.remove(); },1100); }
     function onEvent(t,d){ if(t==='ring') pop('Arco ×'+d.mult+'  +'+d.pts,'ring'); else if(t==='near') pop('¡Rozaste!  +'+d.pts,'near'); else if(t==='scrape') pop('Multiplicador perdido','bad'); else if(t==='orb'&&d.pts>=30) pop('+'+d.pts,'orb'); }
-    function onOver(res){ var k=ymd(), first=st.days.indexOf(k)<0, sk0=streak(), base=Math.floor(res.score/25), capLeft=Math.max(0,300-(st.earn[k]||0)), got=Math.min(base,capLeft);
-      var bonus=first?50:0, sb=first?10*Math.min(7,sk0+1):0, total=got+bonus+sb, prevBest=st.best, prevDay=st.day[k]||0, y=new Date().getFullYear(), wk=y+'-'+week();
+    function onOver(res){ var k=ymd(), first=st.days.indexOf(k)<0, sk0=streak(), base=Math.floor(res.score/40), capLeft=Math.max(0,100-(st.earn[k]||0)), got=Math.min(base,capLeft);
+      var bonus=first?15:0, sb=first?(MS[sk0+1]||0):0, total=got+bonus+sb, prevBest=st.best, prevDay=st.day[k]||0, y=new Date().getFullYear(), wk=y+'-'+week();
       if(first) st.days.push(k); st.days=st.days.slice(-60); st.earn[k]=(st.earn[k]||0)+got; st.pts+=total; st.issued+=total; st.runs++; st.best=Math.max(st.best,res.score); st.day[k]=Math.max(prevDay,res.score); st.wk[wk]=Math.max(st.wk[wk]||0,res.score); save();
       try{ if(CLUB&&CLUB.play) CLUB.play(); }catch(e){}
       var b=board(), pos=0; b.forEach(function(x,i){ if(x.me) pos=i+1; }); var rec=res.score>prevBest&&prevBest>0;
       setView('over'); if(rec||pos&&pos<=3) VAUD.win();
       $q('#plyOver').innerHTML='<div class="pyRes"><span class="pyEye"><i></i>Ruta del día nº '+dayNo()+'</span><h2>'+(rec?'¡Nuevo récord!':'Fin del vuelo')+'</h2><div class="pyBig">'+fmt(res.score)+'</div>'+
         '<div class="pyRow"><div><b>'+fmt(res.dist)+' m</b><span>distancia</span></div><div><b>'+res.orbs+'</b><span>orbes</span></div><div><b>'+res.rings+'</b><span>arcos</span></div><div><b>'+res.near+'</b><span>rozones</span></div><div><b>×'+res.maxMult+'</b><span>mejor mult.</span></div></div>'+
-        '<div class="pyEarn"><div><span>Puntos del vuelo</span><b>+'+fmt(got)+'</b></div>'+(first?'<div><span>Primer vuelo del día</span><b>+50</b></div><div><span>Racha día '+(sk0+1)+'</span><b>+'+sb+'</b></div>':'')+(got<base?'<div class="cap"><span>Tope diario de 300 pts alcanzado</span><b>—</b></div>':'')+'<div class="tot"><span>A tu billetera</span><b>+'+fmt(total)+' pts</b></div></div>'+
+        '<div class="pyEarn"><div><span>Puntos del vuelo</span><b>+'+fmt(got)+'</b></div>'+(first?'<div><span>Primer vuelo del día</span><b>+15</b></div>'+(sb?'<div><span>Bono por '+(sk0+1)+' días de racha</span><b>+'+sb+'</b></div>':'<div class="cap"><span>Racha día '+(sk0+1)+(nextMs(sk0+1)?' · bono al día '+nextMs(sk0+1).d:'')+'</span><b>—</b></div>'):'')+(got<base?'<div class="cap"><span>Tope diario de 100 pts de juego alcanzado</span><b>—</b></div>':'')+'<div class="tot"><span>A tu billetera</span><b>+'+fmt(total)+' pts</b></div></div>'+
         '<p class="pyPos">'+(pos?('Puesto '+pos+' de '+b.length+' en la temporada '+week()):'')+'</p>'+
         '<div class="pyBtns"><button class="pyGo" data-py="go"><span>Volar otra vez</span></button><button class="pyGhost" data-py="prem">Ver premios · '+fmt(st.pts)+' pts</button></div></div>'; }
 
