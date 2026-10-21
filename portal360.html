@@ -2893,11 +2893,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   // ===== Sala Arcade · juegos originales del estudio =====
   var PX="'Press Start 2P',monospace";
-  function arTxt(c,t,x,y,sz,col,al,glow){ c.save(); c.font=sz+'px '+PX; c.textAlign=al||'center'; c.textBaseline='middle'; if(glow){ c.shadowColor=col; c.shadowBlur=glow; } c.fillStyle=col; c.fillText(t,x,y); c.restore(); }
+  function arTxt(c,t,x,y,sz,col,al,glow){ c.save(); c.font=sz+'px '+PX; c.textAlign=al||'center'; c.textBaseline='middle'; if(glow&&!ARLITE){ c.shadowColor=col; c.shadowBlur=glow; } c.fillStyle=col; c.fillText(t,x,y); c.restore(); }
   function arParts(){ return {a:[], add:function(x,y,n,col,sp,life){ for(var i=0;i<n;i++){ var an=Math.random()*6.283, s=(sp||120)*(.25+Math.random()*.9), l=(life||.6)*(.6+Math.random()*.6); this.a.push({x:x,y:y,vx:Math.cos(an)*s,vy:Math.sin(an)*s,l:l,m:l,c:col,r:1.5+Math.random()*2.5}); } if(this.a.length>500) this.a.splice(0,this.a.length-500); },
     step:function(dt,g){ var a=this.a; for(var i=a.length-1;i>=0;i--){ var p=a[i]; p.l-=dt; if(p.l<=0){ a.splice(i,1); continue; } p.vy+=(g||0)*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=.985; p.vy*=.985; } },
     draw:function(c){ c.save(); c.globalCompositeOperation='lighter'; for(var i=0;i<this.a.length;i++){ var p=this.a[i]; c.globalAlpha=Math.max(0,p.l/p.m); c.fillStyle=p.c; c.fillRect(p.x-p.r/2,p.y-p.r/2,p.r,p.r); } c.restore(); } }; }
-  function arGlow(c,col,b){ c.shadowColor=col; c.shadowBlur=b; }
+  var ARLITE=false;
+  function arGlow(c,col,b){ if(ARLITE) return; c.shadowColor=col; c.shadowBlur=b; }
   function arScreen(c,W,H,g){ if(g.st==='play') return; c.save(); c.fillStyle='rgba(5,4,12,.66)'; c.fillRect(0,0,W,H); var bl=(performance.now()/450|0)%2;
     if(g.st==='ready'){ arTxt(c,g.title,W/2,H*.3,26,g.col,'center',20); arTxt(c,g.sub,W/2,H*.38,8,'#cfd8e8'); arTxt(c,g.goal,W/2,H*.5,7,'#ffd27a'); if(bl) arTxt(c,g.hint,W/2,H*.62,9,'#ffffff','center',8); arTxt(c,'RÉCORD '+g.best,W/2,H*.74,8,'#8a93a6'); }
     else { arTxt(c,'FIN DEL JUEGO',W/2,H*.3,16,'#ff4fd8','center',16); arTxt(c,'PUNTOS '+g.score,W/2,H*.42,12,'#ffffff'); arTxt(c,(g.score>0&&g.score>=g.best?'¡NUEVO RÉCORD!':'RÉCORD '+g.best),W/2,H*.5,8,'#ffd27a'); if(bl) arTxt(c,'TOCA PARA JUGAR OTRA VEZ',W/2,H*.64,7,'#ffffff'); }
@@ -3076,7 +3077,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       function frus(){ var h=vz; cam.left=-h*asp; cam.right=h*asp; cam.top=h; cam.bottom=-h; cam.updateProjectionMatrix(); }
       return { step:function(dt){ t+=dt; if(flt>0){ flt-=dt; if(flt<=0){ fl=''; hudSet(); } }
           if(mov&&st==='play'){ var p=top(), sp=Math.min(6,2.4+score*.09), k=axis==='x'?'x':'z', pos=mov.m.position[k]+mov.v*sp*dt; if(pos>3.8){ pos=3.8; mov.v=-1; } if(pos<-3.8){ pos=-3.8; mov.v=1; } mov.m.position[k]=pos;
-            if(att){ var pc=axis==='x'?p.x:p.z; if(Math.abs(pos-(pc+aiAt))<.05) drop(); } }
+            if(att){ var pc=axis==='x'?p.x:p.z, df=pos-(pc+aiAt); if(mov.pd!=null&&(df===0||(df>0)!==(mov.pd>0))){ mov.m.position[k]=pc+aiAt; drop(); } else if(mov) mov.pd=df; } }
           debris.forEach(function(d){ d.vy-=14*dt; d.m.position.y+=d.vy*dt; d.m.rotation[d.ax==='x'?'z':'x']+=d.vr*dt; }); debris=debris.filter(function(d){ if(d.m.position.y<camY-14){ S.remove(d.m); d.m.material.dispose(); return false; } return true; });
           rings.forEach(function(r){ r.t+=dt; var s=1+r.t*1.6; r.m.scale.set(r.w*1.05*s,r.d*1.05*s,1); r.m.material.opacity=Math.max(0,.9-r.t*1.4); }); rings=rings.filter(function(r){ if(r.t>.7){ S.remove(r.m); r.m.material.dispose(); return false; } return true; });
           var ty=top()?top().y:0, tv=st==='over'?Math.max(V,(ty+3)*.62):V; camY+=(ty-camY)*Math.min(1,dt*3); vz+=(tv-vz)*Math.min(1,dt*2);
@@ -3105,7 +3106,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       if(def.gl){ g.resize(r.width,r.height,mode==='play'?dpr:1); return; } var w=Math.round(r.width*dpr), h=Math.round(r.height*dpr); if(cv.width!==w||cv.height!==h){ cv.width=w; cv.height=h; } api.s=w/W; }
     size();
     function fr(now){ if(!alive) return; raf=requestAnimationFrame(fr); var dt=Math.min(.05,(now-last)/1000); last=now; if(mode==='attract'){ acc+=dt; if(acc<1/30) return; dt=Math.min(.05,acc); acc=0; }
-      try{ g.step(dt); if(c2) c2.setTransform(api.s,0,0,api.s,0,0); g.draw(); }catch(e){ if(window.console) console.error(e); } }
+      try{ g.step(dt); if(c2) c2.setTransform(api.s,0,0,api.s,0,0); ARLITE=mode==='attract'; g.draw(); ARLITE=false; }catch(e){ ARLITE=false; if(window.console) console.error(e); } }
     raf=requestAnimationFrame(fr);
     return {g:g,def:def,cv:cv,size:size,stop:function(){ alive=false; cancelAnimationFrame(raf); try{ if(g.destroy) g.destroy(); }catch(e){} }}; }
   function arOver(def,sc){ var nb=sc>(AR.hs[def.id]||0); if(nb){ AR.hs[def.id]=sc; arSave(); } var b=$i('arBest'); if(b) b.textContent='RÉCORD '+(AR.hs[def.id]||0);
@@ -3213,7 +3214,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   var t0=performance.now(), FOV0=40, FOV1=72, ENTER=1800, proj=new THREE.Vector3(), fwd=new THREE.Vector3(), lastDash=0;
   function loop(){
-    requestAnimationFrame(loop);
+    requestAnimationFrame(loop); if(document.body.classList.contains('arcopen')) return;
     var now=performance.now(), e=now-t0;
     if(e<ENTER){var k=e/ENTER;k=1-Math.pow(1-k,3);camera.fov=ROOMS[cur].flat?capFov(99)*(0.84+0.16*k):capFov(FOV0+(FOV1-FOV0)*k);camera.updateProjectionMatrix();}
     var drift=noDrift?0:Math.sin(now/4200)*0.05;
