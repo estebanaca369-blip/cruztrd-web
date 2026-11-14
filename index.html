@@ -121,6 +121,22 @@ h2{font-family:'Poppins';font-weight:700;font-size:clamp(32px,3.7vw,50px);line-h
 .contacto h2{font-family:'Poppins';font-weight:700;font-size:clamp(30px,4.2vw,58px);letter-spacing:-1.2px}
 .contacto h2 .g{color:var(--accent)}
 .contacto p{margin-top:16px;font-size:18px;color:#D2DBDF}
+/* Productos y contacto (14/11/2026) */
+.bloque{position:relative;z-index:10;background:var(--bg);padding:72px 24px;border-top:1px solid rgba(255,255,255,.08)}
+.bloque .in{max-width:1000px;margin:0 auto}
+.bloque .eyebrow{color:var(--accent);font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.bloque h2{color:var(--ink);font-size:clamp(28px,3.6vw,40px);line-height:1.1;margin:0 0 14px;letter-spacing:-.02em}
+.bloque p.lead{color:var(--muted);font-size:17px;max-width:640px;margin:0 0 30px;line-height:1.55}
+.prod{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:24px}
+.prod img{width:72px;height:72px;border-radius:17px}
+.prod h3{color:var(--ink);margin:0 0 4px;font-size:22px}
+.prod p{color:var(--muted);margin:0;font-size:15px;line-height:1.5}
+.prod a.ir{color:#050608;background:var(--accent);text-decoration:none;font-weight:700;padding:12px 18px;border-radius:12px;white-space:nowrap}
+.contacto{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.contacto div{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px}
+.contacto small{display:block;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.contacto a,.contacto span{color:var(--ink);font-size:16px;text-decoration:none;line-height:1.45}
+@media (max-width:760px){.prod{grid-template-columns:1fr;text-align:left}.contacto{grid-template-columns:1fr}}
 footer{border-top:1px solid rgba(255,255,255,.08);padding:34px;text-align:center;color:var(--muted);font-size:13px;position:relative;z-index:10;background:var(--bg)}
 footer .brand{justify-content:center;font-size:18px;margin-bottom:8px}
 .foot-legal{margin-top:16px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
@@ -980,10 +996,39 @@ body.pk-open .deskwin{animation-play-state:paused}
     </div>
   </div>
 </div></section>
+<section class="bloque" id="productos">
+  <div class="in">
+    <div class="eyebrow">Nuestros productos</div>
+    <h2>Apps D2C que construimos y operamos</h2>
+    <p class="lead">Además de construir para nuestros clientes, lanzamos productos propios en Ecuador.</p>
+    <div class="prod">
+      <img src="/media/declarame-icono.svg" alt="Ícono de Declárame">
+      <div>
+        <h3>Declárame</h3>
+        <p>App para personas naturales en Ecuador: te dice si estás al día con el SRI y prepara el borrador de tu IVA del mes. Tú revisas, presentas y pagas. iPhone y Android, muy pronto.</p>
+      </div>
+      <a class="ir" href="https://declarame.com">declarame.com →</a>
+    </div>
+  </div>
+</section>
+
+<section class="bloque" id="contacto">
+  <div class="in">
+    <div class="eyebrow">Contacto</div>
+    <h2>Hablemos</h2>
+    <p class="lead">CRUZTRD CT S.A.S. · RUC 1793237622001</p>
+    <div class="contacto">
+      <div><small>Correo</small><a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a></div>
+      <div><small>Teléfono / WhatsApp</small><a href="tel:+593988011913">+593 98 801 1913</a></div>
+      <div><small>Dirección</small><span>Calle OE1C S5-213, Santa María, Tumbaco<br>Quito 170184, Ecuador</span></div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="brand"><span class="c">Cruz</span><span class="t">TRD</span></div>
   <div>AI Studio · Convertimos ideas en apps listas para las personas · Quito, Ecuador</div>
-  <div style="margin-top:6px;opacity:.7">CRUZTRD CT S.A.S. · RUC 1793237622001 · cruztrd.com</div>
+  <div style="margin-top:6px;opacity:.7">CRUZTRD CT S.A.S. · RUC 1793237622001 · Calle OE1C S5-213, Santa María, Tumbaco, Quito · <a href="mailto:esteban@cruztrd.com" style="color:inherit">esteban@cruztrd.com</a> · +593 98 801 1913</div>
   <div class="foot-legal">
     <a href="/terminos.html">Términos y Condiciones</a>
     <span class="foot-sep">·</span>
