@@ -10,7 +10,7 @@
     if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
     else root.removeAttribute('data-theme');
   }
-  apply(stored());
+  apply(stored() || 'dark'); // oscuro por defecto, como la home y el Estudio 360°
   function currentIsDark() {
     var t = root.getAttribute('data-theme');
     if (t) return t === 'dark';
