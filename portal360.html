@@ -10,7 +10,7 @@
 <meta property="og:image" content="https://cruztrd.com/media/og.jpg">
 <link rel="canonical" href="https://cruztrd.com/portal360.html">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Caveat:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter+Tight:wght@600&family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Caveat:wght@500;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--accent:#19C37D;--accent2:#2DD4A7;--ink:#EDF3F1;--muted:#93a3a9;--mono:'Share Tech Mono',monospace;--disp:'Poppins',system-ui,sans-serif;--bg:#04070a}
 html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sans-serif;overflow:hidden}
@@ -1260,6 +1260,17 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 /* botón de giroscopio (solo móvil) */
 .gyrobtn{position:fixed;bottom:22px;left:22px;z-index:6;display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:12px;color:#eafff6;background:rgba(6,12,12,.42);border:1px solid rgba(45,212,167,.3);border-radius:999px;padding:10px 15px;backdrop-filter:blur(12px);cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.4);text-shadow:0 1px 5px #000;transition:background .2s,border-color .2s}
+.bienv{position:fixed;inset:0;z-index:9;display:flex;align-items:flex-end;justify-content:flex-start;padding:clamp(20px,5vw,72px);background:linear-gradient(180deg,rgba(7,9,12,.25),rgba(7,9,12,.72));backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:opacity .5s ease}
+.bienv[hidden]{display:none}
+.bienv.fuera{opacity:0;pointer-events:none}
+.bienv-c{max-width:560px;color:#fff;font-family:'Inter',system-ui,sans-serif}
+.bienv-m{font-weight:600;font-size:20px;letter-spacing:-.03em;margin-bottom:18px}.bienv-m b{color:#2DD4A7;font-weight:600}
+.bienv h1{margin:0;font:600 clamp(44px,8vw,96px)/.95 'Inter Tight','Inter',system-ui,sans-serif;letter-spacing:-.035em}
+.bienv p{margin:18px 0 26px;font-size:clamp(16px,1.4vw,19px);line-height:1.5;color:rgba(255,255,255,.86);max-width:44ch}
+.bienv button{min-height:54px;padding:0 30px;border:0;border-radius:999px;background:#2DD4A7;color:#04130E;font:500 17px 'Inter',system-ui,sans-serif;cursor:pointer}
+.bienv button:hover{background:#5fe3c0}
+.bienv a{margin-left:20px;color:rgba(255,255,255,.8);font-size:15px;text-underline-offset:5px}
+@media(max-width:520px){.bienv a{display:block;margin:18px 0 0}}
 .gyrobtn[hidden]{display:none!important}
 .hs,.badge,#roomtag,.topr,.clubpill,.navhub{-webkit-user-select:none;user-select:none}
 .hs:focus-visible,.badge:focus-visible,.clubpill:focus-visible,.navhub:focus-visible{outline:2px solid #2DD4A7;outline-offset:4px;border-radius:12px}
@@ -1347,6 +1358,15 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <button class="navhub" id="navHub"><span class="nhic">&#8862;</span>Directorio</button>
 <button class="gyrobtn" id="gyroBtn" hidden><span class="gic">&#9673;</span><span class="glbl">Mirar con el móvil</span></button>
 
+<div class="bienv" id="bienv" hidden>
+  <div class="bienv-c" role="dialog" aria-modal="true" aria-labelledby="bienvT">
+    <div class="bienv-m">Cruz<b>TRD</b></div>
+    <h1 id="bienvT">Estudio 360°</h1>
+    <p>Siete pisos, uno por cada capa de tu app. Arrastra para mirar alrededor, toca al especialista de cada piso y sube por el ascensor.</p>
+    <button type="button" id="bienvGo">Entrar al estudio</button>
+    <a href="/">Volver al inicio</a>
+  </div>
+</div>
 <div class="load" id="loader">
   <div class="loadwrap">
     <div class="loadmark">Cruz<b>TRD</b></div>
@@ -3818,7 +3838,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   })();
   function openChakra(){ CHAKRA.open(); }
   /* ============ Diseña tu app con el equipo: diagnóstico con IA + voz de los especialistas ============ */
-  var TEAM={intro:{nm:'Tu anfitrión',short:'el anfitrión',role:'Anfitrión del estudio'},infra:{nm:'Mateo',role:'Infraestructura'},seg:{nm:'Camilo',role:'Seguridad'},pagos:{nm:'Diana',role:'Pagos'},susc:{nm:'Bruno',role:'Suscripciones'},mkt:{nm:'Nico',role:'Marketing'},fidel:{nm:'Renata',role:'Fidelización'},dash:{nm:'Andrés',role:'Dashboards & KPIs'}};
+  var TEAM={intro:{nm:'Tu anfitrión',short:'el anfitrión',role:'Anfitrión del estudio'},infra:{nm:'Mateo',role:'Infraestructura'},seg:{nm:'Diana',role:'Seguridad'},pagos:{nm:'Camilo',role:'Pagos'},susc:{nm:'Bruna',role:'Suscripciones'},mkt:{nm:'Nico',role:'Marketing'},fidel:{nm:'Renata',role:'Fidelización'},dash:{nm:'Andrés',role:'Dashboards & KPIs'}};
   var TORDER=['infra','seg','pagos','susc','mkt','fidel','dash'];
   function tRoom(hk){ for(var i=0;i<ROOMS.length;i++){ var sp=ROOMS[i].spots||[]; for(var j=0;j<sp.length;j++) if(sp[j].type==='char'&&sp[j].hk===hk) return i; } return 0; }
   function tAv(hk){ return 'media/av-'+hk+'.webp'; }
@@ -3976,7 +3996,14 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   document.getElementById('navHub').onclick=openDir;
 
   // arranque en Recepción
-  setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);});
+  setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);
+    // bienvenida (una vez por visita) o entrada directa a un piso desde el inicio (?capa=N)
+    var capa=0; try{ capa=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){}
+    var bv=document.getElementById('bienv'), visto=false; try{ visto=sessionStorage.getItem('cz_bienv')==='1'; }catch(e){}
+    if(capa>=1&&capa<=7){ setTimeout(function(){ try{ goRoom(capa); }catch(e){} },1100); }
+    else if(bv&&!visto){ bv.hidden=false; var cerrar=function(){ bv.classList.add('fuera'); try{ sessionStorage.setItem('cz_bienv','1'); }catch(e){} setTimeout(function(){ bv.hidden=true; },520); };
+      document.getElementById('bienvGo').onclick=cerrar; setTimeout(function(){ try{ document.getElementById('bienvGo').focus(); }catch(e){} },950); }
+  });
   buildHotspots(ROOMS[0]); buildWall(ROOMS[0]); roomtag.textContent=ROOMS[0].name; CLUB.ui(); if((CLUB.st.v||1)>1) setTimeout(function(){CLUB.toast('Bienvenido de vuelta','+200 pts por regresar · visita nº '+CLUB.st.v);},1600);
   var noDrift=false;
   window.__T={ROOMS:ROOMS, go:goRoom, curRoom:function(){return cur;},
