@@ -17,7 +17,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 #c{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0;cursor:grab;touch-action:none}
 #c.drag{cursor:grabbing}
 .vig{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 46%,rgba(3,6,9,.5) 88%,rgba(3,6,9,.9) 100%)}
-.badge{position:fixed;top:20px;left:22px;z-index:6;font-family:'Poppins';font-weight:700;font-size:20px;color:var(--ink);text-shadow:0 2px 14px rgba(0,0,0,.8)}
+.badge{text-decoration:none;position:fixed;top:20px;left:22px;z-index:6;font-family:'Poppins';font-weight:700;font-size:20px;color:var(--ink);text-shadow:0 2px 14px rgba(0,0,0,.8)}
 .badge b{color:var(--accent)}
 .topr{position:fixed;top:18px;right:22px;z-index:6;text-align:right;font-family:var(--mono);font-size:11px;letter-spacing:3px;color:#9fe9cf;text-transform:uppercase;opacity:.8;text-shadow:0 2px 14px rgba(0,0,0,.9)}
 
@@ -118,7 +118,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .clubcard .cn{font-size:12px;line-height:1.45;color:#8fa29d;margin:12px 0 0}
 .hs.act .mk{border-color:rgba(255,214,140,.95);box-shadow:0 0 14px rgba(255,200,110,.35)}
 .hs.act .mk .ic{font:700 13px Poppins,system-ui,sans-serif;color:#ffe2a8}
-@media (max-width:820px){.clubpill{top:40px;right:12px}.clubcard{right:12px;left:12px;width:auto;bottom:84px}}
+@media (max-width:820px){#roomtag{top:52px;left:16px;transform:none;font-size:10px;letter-spacing:2px;max-width:52vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.clubtoast{top:126px;max-width:86vw}.clubpill{top:46px;right:12px}.clubcard{right:12px;left:12px;width:auto;bottom:84px}}
 .holo-n{position:fixed;left:0;top:0;z-index:4;pointer-events:none;display:flex;align-items:center;gap:10px;padding:8px 16px 8px 8px;border-radius:999px;background:linear-gradient(180deg,rgba(12,38,34,.72),rgba(6,20,18,.66));border:1px solid rgba(45,212,167,.6);box-shadow:0 0 26px rgba(45,212,167,.22),inset 0 0 14px rgba(45,212,167,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;white-space:nowrap;will-change:transform,opacity}
 .holo-n .hic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(45,212,167,.2);color:#bdfbe6;font:700 15px Poppins,system-ui,sans-serif}
 .holo-n .htx{display:flex;flex-direction:column;line-height:1.2}
@@ -1260,6 +1260,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 /* botón de giroscopio (solo móvil) */
 .gyrobtn{position:fixed;bottom:22px;left:22px;z-index:6;display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:12px;color:#eafff6;background:rgba(6,12,12,.42);border:1px solid rgba(45,212,167,.3);border-radius:999px;padding:10px 15px;backdrop-filter:blur(12px);cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.4);text-shadow:0 1px 5px #000;transition:background .2s,border-color .2s}
+.gyrobtn[hidden]{display:none!important}
+.hs:focus-visible,.badge:focus-visible,.clubpill:focus-visible,.navhub:focus-visible{outline:2px solid #2DD4A7;outline-offset:4px;border-radius:12px}
 .gyrobtn.active{background:rgba(45,212,167,.24);border-color:rgba(45,212,167,.7)}
 .gyrobtn .gic{font-family:var(--mono);color:var(--accent2);font-size:14px}
 @media(max-width:520px){.gyrobtn .glbl{display:none}.gyrobtn{padding:11px;gap:0}}
@@ -1298,7 +1300,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 <body>
 <canvas id="c"></canvas>
 <div class="vig"></div>
-<div class="badge">Cruz<b>TRD</b></div>
+<a class="badge" href="/" aria-label="CruzTRD · volver al inicio" title="Volver al inicio">Cruz<b>TRD</b></a>
 <div class="topr">Estudio 360° · recorrido inmersivo</div>
 
 <div class="hint" id="hint"><span>↔ arrastra para mirar el estudio · toca los puntos · cruza las puertas</span></div>
@@ -1997,7 +1999,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function progress(){ var p=pts(), t=tier(p); if(t===TIERS.length-1) return 1; return (p-TIERS[t][1])/(TIERS[t+1][1]-TIERS[t][1]); }
     var pill=null, toastEl=null, toastT=null;
     function ui(){ if(!pill){ pill=document.createElement('div'); pill.className='clubpill'; pill.title='Club CruzTRD: ganas puntos recorriendo el estudio. Canjéalos en la capa 06 · Fidelización'; document.body.appendChild(pill);
-        pill.onclick=function(){ if(typeof goRoom==='function') goRoom(6); }; }
+        pill.onclick=function(){ if(typeof clubLounge==='function') clubLounge(); }; pill.setAttribute('role','button'); pill.tabIndex=0; pill.title='Club CruzTRD: ganas puntos recorriendo el estudio'; }
       var t=tier(); pill.innerHTML='<span class="cs">★</span><b>'+pts().toLocaleString('es')+' pts</b><i style="color:'+TIERS[t][2]+'">'+TIERS[t][0]+'</i>'; }
     function toast(main,sub){ if(!toastEl){toastEl=document.createElement('div'); toastEl.className='clubtoast'; document.body.appendChild(toastEl);}
       toastEl.innerHTML='<b>'+main+'</b><span>'+sub+'</span>'; toastEl.classList.remove('on'); void toastEl.offsetWidth; toastEl.classList.add('on');
@@ -2296,7 +2298,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       {type:'char', lon:10,lat:-9, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas. Llama al ascensor cuando quieras subir a cualquier piso del estudio.',
        sheet:'media/strip-host.webp', cls:'hosta'},
-      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Librería del Estudio', lon:142,lat:1},
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Revista CruzTRD · Edición 01', lon:142,lat:1},
       {type:'act', act:'play', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11c3.5-2.5 6.5-2.6 10 0 3.5-2.6 6.5-2.5 10 0"/><path d="M5 9.4L3.5 7M8.5 8.6L8 6M19 9.4L20.5 7M15.5 8.6L16 6"/><path d="M12 11v3.5"/></svg>', label:'CruzTRD Play · Juegos', lon:164,lat:-11},
       {type:'act', act:'equipo', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>', label:'Diseña tu app con IA', lon:-84,lat:-9},
       {type:'dir', lon:80,lat:-4, label:'Llamar el ascensor'}
@@ -2418,17 +2420,19 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         edgeH.innerHTML='<span class="eav" style="background-image:url(media/av-'+s.hk+'.webp)"></span><span class="etx"><b>Tu especialista</b><i>está por aquí</i></span><span class="earr">→</span>'; edgeH.__s=s;
         (function(el,s){ var T=window.__hsT; T.push(setTimeout(function(){ if(!el.classList.contains('seen')){ el.classList.add('say'); T.push(setTimeout(function(){el.classList.remove('say');},7000)); } },2600));
           T.push(setInterval(function(){ if(el.classList.contains('seen')||panel.classList.contains('open'))return; el.classList.remove('nudge'); void el.offsetWidth; el.classList.add('nudge','say'); T.push(setTimeout(function(){el.classList.remove('say');},5000)); },22000)); })(el,s); }
+      el.setAttribute('role','button'); el.tabIndex=0; el.setAttribute('aria-label',s.label||(s.hk==='intro'?'Anfitrión':'Especialista en '+(s.title||'')));
+      el.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); el.click(); } });
       document.body.appendChild(el); s.el=el;
     });
   }
 
   var clubCard=null;
   function clubLounge(){
-    if(cur!==6)return; if(!clubCard){ clubCard=document.createElement('div'); clubCard.className='clubcard'; document.body.appendChild(clubCard); }
+    if(clubCard&&clubCard.classList.contains('on')){ clubCard.classList.remove('on'); return; } if(!clubCard){ clubCard=document.createElement('div'); clubCard.className='clubcard'; document.body.appendChild(clubCard); }
     var p=CLUB.pts(), ti=CLUB.tier(), T=CLUB.TIERS[ti], nx=CLUB.TIERS[ti+1], miss=CLUB.missing().filter(function(i){return i!==6;});
     var h='<button class="cx" aria-label="Cerrar">✕</button><div class="ce">Club CruzTRD · tu tarjeta</div>'+
       '<div class="ch"><span class="ct" style="color:'+T[2]+'">Nivel '+T[0]+'</span><b>'+p.toLocaleString('es')+' pts</b></div>';
-    if(ti>=1){ h+='<div class="cr"><span>Recompensa desbloqueada</span><b>'+CLUB.REWARD[T[0]]+'</b><a class="cbtn" href="/index.html#formula" target="_top">Reclamar →</a></div>'; }
+    if(ti>=1){ h+='<div class="cr"><span>Recompensa desbloqueada</span><b>'+CLUB.REWARD[T[0]]+'</b><a class="cbtn" href="'+(T[0]==='Platino'?'https://wa.me/593988011913?text='+encodeURIComponent('Hola CruzTRD, llegué a nivel Platino en el Estudio 360° y quiero mi sesión 1:1.'):'/index.html#formula')+'"'+(T[0]==='Platino'?' target="_blank" rel="noopener"':' target="_top"')+'>Reclamar →</a></div>'; }
     if(nx){ h+='<p class="cp">Te faltan <b>'+(nx[1]-p)+' pts</b> para <b style="color:'+nx[2]+'">'+nx[0]+'</b>'+(CLUB.REWARD[nx[0]]?' · '+CLUB.REWARD[nx[0]]:'')+'.</p>'; }
     if(miss.length){ h+='<div class="cm"><span>Gana +100 en cada capa que te falta:</span><div>'+miss.map(function(i){return '<button data-go="'+i+'">'+ROOMS[i].name.replace(/^Capa (\d+) · /,'$1 · ')+'</button>';}).join('')+'</div></div>'; }
     h+='<p class="cn">Así se siente un programa de lealtad bien hecho: te reconoce, te premia y te da un motivo para volver. Esto construimos para tus clientes.</p>';
@@ -2469,6 +2473,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   }
   var moving=false, elevCabin=document.getElementById('elevCabin');
   function wait(ms){return new Promise(function(r){setTimeout(r,ms);});}
+  // vista de entrada: en vertical se centra en el especialista; en horizontal solo se corrige si quedaría fuera de cuadro
+  function entryYawFor(R){ var e=R.entryYaw||0, c=null; (R.spots||[]).forEach(function(s){ if(!c&&s.type==='char') c=s; }); if(!c) return e;
+    var cy=-c.lon*Math.PI/180, d=cy-e; while(d>Math.PI)d-=2*Math.PI; while(d<-Math.PI)d+=2*Math.PI;
+    var asp=innerWidth/innerHeight, half=Math.atan(Math.tan((camera.fov||60)*Math.PI/360)*asp);
+    if(asp<1) return e+d; if(Math.abs(d)>half*0.62) return e+d-(d>0?1:-1)*half*0.5; return e; }
   function goRoom(idx){
     if(moving)return;
     if(idx===cur){panel.classList.remove('open');return;}
@@ -2512,7 +2521,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     elevCabin.classList.remove('show');            // la cabina se desvanece tras las puertas
     elev.classList.remove('riding');
     await wait(320);
-    tyaw=yaw=ROOMS[to].entryYaw||0; tpitch=pitch=0; // prepara la vista + re-dispara el FOV de entrada
+    tyaw=yaw=entryYawFor(ROOMS[to]); tpitch=pitch=0; // prepara la vista + re-dispara el FOV de entrada
     if(gyro.on)gyro.have=false;                     // recalibra el giroscopio a la nueva sala
     t0=performance.now();
     elev.classList.remove('shut');                  // puertas abren → sala destino
@@ -2545,7 +2554,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var magEl=document.getElementById('mag'), magBack=document.getElementById('magBack'), magView=document.getElementById('magView');
   function magRead(){ return (CLUB.st.read||[]); }
   function magIndex(){
-    var R=magRead(), h='<div class="kbar"><button class="kback" data-shelf="1">← Kiosco</button></div><div class="spread">';
+    var R=magRead(), h='<div class="kbar"><button class="kback" data-shelf="1">← Volver al estudio</button></div><div class="spread">';
     h+='<div class="mcover"><div class="mmast">Revista<span>Cruz<b>TRD</b></span></div><div class="mmeta"><span>Edición 01</span><span>Octubre 2026</span></div>'+
        '<div class="mbigd">D2C</div><div class="mhead">Vender directo ya no es opcional</div>'+
        '<ul class="mlines"><li>Las 7 capas de una app D2C</li><li>Cobrar en Ecuador sin fricción</li><li>El cliente que vuelve</li><li>Cinco números para decidir</li></ul>'+
@@ -2609,7 +2618,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function kPaper(k){
     var P=KP[k];
     function render(src){
-      var h='<article class="kbroad '+P.tone+' '+P.kind+'"><div class="kbar in"><button class="kback" data-shelf="1">← Kiosco</button><span>'+esc(src?src.name:'')+'</span></div>';
+      var h='<article class="kbroad '+P.tone+' '+P.kind+'"><div class="kbar in"><button class="kback" data-shelf="1">← Volver al estudio</button><span>'+esc(src?src.name:'')+'</span></div>';
       h+='<header class="kbm"><div class="kbt">'+P.mast+'</div><div class="kbl"><span>'+kToday()+'</span><span>Edición en línea · '+esc(P.sub)+(P.lang!=='ES'?' · en '+({EN:'inglés',PT:'portugués',FR:'francés'}[P.lang]||P.lang):'')+'</span><span>Actualizado '+kAgo(src&&src.items[0]&&src.items[0].date)+'</span></div></header>';
       if(!src||!src.items.length){ h+='<div class="kerr"><b>No pudimos traer las noticias en este momento.</b><span>Puede ser un corte temporal de la fuente. Intenta de nuevo en unos minutos.</span><button data-retry="'+k+'">Reintentar</button></div></article>'; magView.innerHTML=h; return; }
       var L=src.items[0];
@@ -2856,7 +2865,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     FB.key=fbKeyOf(k,it); FB.saved=+fbMem(FB.key)||0;
     var phone=innerWidth<760; FB.mode=mode||(k==='rev'?'book':(phone?'scroll':'book'));
     magEl.classList.add('reading'); magView.className='magview vfb'; magEl.scrollTop=0; if(KFLY&&KFLY.ar&&k!=='rev') FB.ar=KFLY.ar; if(KFLY&&KFLY.ar>1.05&&k!=='rev') FB.land=true; if(KFLY&&KFLY.tint) magEl.style.setProperty('--tint',KFLY.tint); else if(k==='rev') magEl.style.setProperty('--tint','45,212,167');
-    magView.innerHTML='<div class="fbw" id="fbW"><header class="fbtop"><button class="kback" data-shelf="1">← Kiosco</button><div class="fbti"><b>'+esc(title)+'</b><span>'+esc(sub)+'</span></div>'+
+    magView.innerHTML='<div class="fbw" id="fbW"><header class="fbtop"><button class="kback" data-shelf="1">← Volver al estudio</button><div class="fbti"><b>'+esc(title)+'</b><span>'+esc(sub)+'</span></div>'+
       '<div class="fbmodes" id="fbModes" role="tablist" aria-label="Modo de lectura"><button data-mode="book" role="tab">'+FBIC.book+'<em>Revista</em></button><button data-mode="scroll" role="tab">'+FBIC.scroll+'<em>Continuo</em></button>'+(k==='rev'||k==='fc'?'<button data-mode="text" role="tab">'+FBIC.text+'<em>Texto</em></button>':'')+'</div><span class="fbpg" id="fbPg"></span></header>'+
       '<div class="fbstage" id="fbStage"><div class="fbload" id="fbLoad"><span class="fbspin"></span><span id="fbLoadT">Abriendo la edición…</span><span class="fbbar"><i id="fbLoadB"></i></span></div></div>'+
       '<footer class="fbfoot"><div class="fbtools" id="fbTools"></div><div class="fbcred">'+esc(cred)+'</div></footer></div>';
@@ -3095,7 +3104,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     // Muestras reales (ElevenLabs) en media/audio/: se cargan si figuran en manifest.json; si no, se usa el sintetizador.
     var BUF={}, MAN=null, manP=null, LOOP={}, MUS={cur:null,src:null,g:null};
     function manifest(){ if(manP) return manP; manP=fetch('media/audio/manifest.json',{cache:'no-cache'}).then(function(r){ return r.ok?r.json():{files:[]}; }).then(function(m){ MAN={}; (m.files||[]).forEach(function(f){ MAN[f]=1; }); return MAN; }).catch(function(){ MAN={}; return MAN; }); return manP; }
-    function load(n){ if(BUF[n]) return BUF[n]; BUF[n]=manifest().then(function(m){ if(!m[n]||!A) return null; return fetch('media/audio/'+n+'.mp3').then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); }).then(function(ab){ return new Promise(function(res){ A.decodeAudioData(ab,res,function(){ res(null); }); }); }); }).then(function(b){ BUF[n]={b:b}; return b; },function(){ BUF[n]={b:null}; return null; }); return BUF[n]; }
+    function load(n){ if(BUF[n]) return BUF[n].then?BUF[n]:Promise.resolve(BUF[n].b); BUF[n]=manifest().then(function(m){ if(!m[n]||!A) return null; return fetch('media/audio/'+n+'.mp3').then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); }).then(function(ab){ return new Promise(function(res){ A.decodeAudioData(ab,res,function(){ res(null); }); }); }); }).then(function(b){ BUF[n]={b:b}; return b; },function(){ BUF[n]={b:null}; return null; }); return BUF[n]; }
     function has(n){ return BUF[n]&&BUF[n].b; }
     function smp(n,o){ if(!A||muted||!has(n)) return false; o=o||{}; var s=A.createBufferSource(), g=A.createGain(); s.buffer=BUF[n].b; s.playbackRate.value=o.rate||1; g.gain.value=o.vol==null?0.8:o.vol; s.connect(g); g.connect(sfxG); s.start(); return true; }
     function loopTo(n,gain,rate){ if(!A||!has(n)){ return false; } var L=LOOP[n]; if(!L){ var s=A.createBufferSource(), g=A.createGain(); s.buffer=BUF[n].b; s.loop=true; g.gain.value=0; s.connect(g); g.connect(sfxG); s.start(); L=LOOP[n]={s:s,g:g}; } L.g.gain.setTargetAtTime(gain,A.currentTime,0.25); if(rate) L.s.playbackRate.setTargetAtTime(rate,A.currentTime,0.3); return true; }
@@ -3594,11 +3603,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     };
     function seed(g){ var t=ymd(); return (((t*2654435761)>>>0)^0x5bd1e995^(GAMES[g].salt*40503))>>>0; }
     var TIERS=[
-      {n:'Primer triunfo',p:300,items:[{id:'cup',n:'Cupón 10% o envío gratis',d:'En la tienda de la marca',p:300,prov:'API de la tienda',usd:0.6}]},
-      {n:'Utilidad',p:1000,items:[{id:'rec2',n:'Recarga US$2',d:'Claro · Movistar · CNT · Tuenti, al número verificado',p:1000,prov:'DingConnect / Reloadly',usd:2},{id:'rec3',n:'Recarga US$3 o café',d:'Recarga, o Sweet & Coffee / Juan Valdez',p:1500,prov:'Reloadly · GiftPoint',usd:3}]},
-      {n:'Gustito del mes',p:2400,items:[{id:'dat5',n:'Paquete de datos US$5',d:'≈ 6 GB por 15 días',p:2400,prov:'Ding / Reloadly',usd:5},{id:'kfc5',n:'Combo KFC o Menestras US$5',d:'Código digital',p:2400,prov:'GiftPoint',usd:5}]},
-      {n:'Despensa y movilidad',p:4800,buy:1,items:[{id:'smx',n:'Bono Supermaxi / Akí US$10',d:'El premio que más se usaría',p:4800,prov:'GiftPoint · Plan Empresarial Favorita',usd:10,star:1},{id:'pya',n:'PedidosYa US$10',d:'Tarjeta digital Ecuador',p:4800,prov:'GiftPoint / Ding',usd:10},{id:'ub',n:'Uber Ecuador US$10',d:'Solo viajes',p:4800,prov:'GIFQ',usd:10},{id:'pmx',n:'Primax US$10',d:'Combustible',p:4800,prov:'GiftPoint',usd:10}]},
-      {n:'Aspiracional',p:7000,buy:1,items:[{id:'asp',n:'US$15 a elección',d:'Supermaxi, PedidosYa o Uber · 1 por temporada',p:7000,prov:'GiftPoint · GIFQ',usd:15}]}
+      {n:'Primer triunfo',p:300,items:[{id:'cup',n:'Cupón 10% o envío gratis',d:'En la tienda de la marca',p:300,usd:0.6}]},
+      {n:'Utilidad',p:1000,items:[{id:'rec2',n:'Recarga móvil US$2',d:'Al número verificado del jugador',p:1000,usd:2},{id:'rec3',n:'Recarga US$3 o café',d:'Recarga o un café en una cafetería aliada',p:1500,usd:3}]},
+      {n:'Gustito del mes',p:2400,items:[{id:'dat5',n:'Paquete de datos US$5',d:'Datos móviles por 15 días',p:2400,usd:5},{id:'kfc5',n:'Combo de comida US$5',d:'Código digital en un restaurante aliado',p:2400,usd:5}]},
+      {n:'Despensa y movilidad',p:4800,buy:1,items:[{id:'smx',n:'Bono de supermercado US$10',d:'El premio que más se usaría',p:4800,usd:10,star:1},{id:'pya',n:'Delivery US$10',d:'Tarjeta digital',p:4800,usd:10},{id:'ub',n:'Movilidad US$10',d:'Solo viajes',p:4800,usd:10},{id:'pmx',n:'Combustible US$10',d:'En estaciones aliadas',p:4800,usd:10}]},
+      {n:'Aspiracional',p:7000,buy:1,items:[{id:'asp',n:'US$15 a elección',d:'Supermercado, delivery o movilidad · 1 por temporada',p:7000,usd:15}]}
     ];
     var ALL=[]; TIERS.forEach(function(t,i){ t.items.forEach(function(it){ it.tier=i; it.buy=t.buy; ALL.push(it); }); });
     var NAMES=['Valeria R.','Mateo C.','Daniela P.','Sebastián L.','Camila V.','Joaquín A.','Paula M.','Andrés T.','Gabriela N.','Nicolás E.','Isabela F.','Martín Q.'];
@@ -3631,15 +3640,15 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       return '<div class="pyLad"><div class="pyLadB"><i style="width:'+(pct*100)+'%"></i>'+TIERS.map(function(t,i){ var x=t.p/top*100, ok=st.pts>=t.p; return '<em class="'+(ok?'ok':'')+'" style="left:'+x+'%"><b>'+(i+1)+'</b></em>'; }).join('')+'</div>'+
         '<p>'+(nx?('Te faltan <b>'+fmt(nx.p-st.pts)+' pts</b> para '+nx.n.toLowerCase()):'Llegaste al nivel aspiracional')+'</p></div>'; }
     function tabHtml(){ if(tab==='rank'){ var b=board(cur), me=-1; b.forEach(function(x,i){ if(x.me) me=i; }); var show=b.slice(0,8); if(me>7) show.push(b[me]);
-        return '<div class="pyRk"><div class="pyRkH"><b>'+GAMES[cur].name+' · temporada '+week()+'</b><span>cierra en '+weekLeft()+'</span></div><ol>'+show.map(function(x){ var i=b.indexOf(x); return '<li class="'+(x.me?'me':'')+(i<3?' top':'')+'"><em>'+(i+1)+'</em><span>'+x.n+'</span><b>'+fmt(x.s)+'</b></li>'; }).join('')+'</ol>'+
+        return '<div class="pyRk"><div class="pyRkH"><b>'+GAMES[cur].name+' · ranking de demostración</b><span>cierra en '+weekLeft()+'</span></div><ol>'+show.map(function(x){ var i=b.indexOf(x); return '<li class="'+(x.me?'me':'')+(i<3?' top':'')+'"><em>'+(i+1)+'</em><span>'+x.n+'</span><b>'+fmt(x.s)+'</b></li>'; }).join('')+'</ol>'+
           (me<0?'<p class="pyNote">Juega una vez para entrar al ranking de la semana.</p>':'')+'<div class="pyPrize"><b>El ranking da estatus, no dinero</b><span>Insignia y acceso anticipado a lanzamientos de la marca para el top 3. Premiar el puntaje con saldo atrae bots.</span></div></div>'; }
-      if(tab==='prem'){ return '<div class="pyCat"><div class="pyRkH"><b>Escalera de premios</b><span>'+fmt(st.pts)+' pts</span></div>'+ladder()+
+      if(tab==='prem'){ return '<div class="pyCat"><div class="pyRkH"><b>Escalera de premios · demo</b><span>'+fmt(st.pts)+' pts</span></div>'+ladder()+
           TIERS.map(function(t,i){ return '<div class="pyTier"><div class="pyTierH"><span>Nivel '+(i+1)+' · '+t.n+'</span>'+(t.buy?'<em>requiere 1 compra en 60 días</em>':'')+'</div><div class="pyItems">'+t.items.map(function(c){ var used=c.buy&&redSeason(c.id), can=!used&&st.pts>=c.p, pct=Math.min(1,st.pts/c.p);
-            return '<div class="pyIt'+(c.star?' star':'')+'"><div class="pyItT"><b>'+c.n+'</b><span>'+c.d+'</span><em>vía '+c.prov+'</em></div><div class="pyItR"><b>'+fmt(c.p)+'</b><button data-red="'+c.id+'"'+(can?'':' disabled')+'>'+(used?'Canjeado':(can?'Canjear':'Faltan '+fmt(c.p-st.pts)))+'</button></div><i class="pyBar" style="--p:'+pct+'"></i></div>'; }).join('')+'</div></div>'; }).join('')+
+            return '<div class="pyIt'+(c.star?' star':'')+'"><div class="pyItT"><b>'+c.n+'</b><span>'+c.d+'</span></div><div class="pyItR"><b>'+fmt(c.p)+'</b><button data-red="'+c.id+'"'+(can?'':' disabled')+'>'+(used?'Canjeado':(can?'Canjear':'Faltan '+fmt(c.p-st.pts)))+'</button></div><i class="pyBar" style="--p:'+pct+'"></i></div>'; }).join('')+'</div></div>'; }).join('')+
           (st.red.length?'<div class="pyMine"><b>Mis canjes</b>'+st.red.slice(-3).reverse().map(function(x){ return '<div><span>'+x.n+'</span><code>'+x.c+'</code></div>'; }).join('')+'</div>':'')+
           '<button class="pyChk" data-py="chakra">Ver tu chakra en la capa 06 · Fidelización →</button><button class="pyDemo" data-py="demo">+2.000 pts de demostración</button></div>'; }
       var usd=st.issued*0.002, gid={vuelo:'vuelo-andino',bici:'descenso-andino',feria:'feria'}[cur];
-      return '<div class="pyMar"><div class="pyRkH"><b>Así llega a tu sitio</b><span>una línea</span></div><pre><code>&lt;script async\n  src="https://sdk.cruztrd.com/v1.js"&gt;&lt;/script&gt;\n&lt;cruztrd-game game="'+gid+'"\n  campaign="tu-marca" locale="es-EC"&gt;\n&lt;/cruztrd-game&gt;</code></pre>'+
+      return '<div class="pyMar"><div class="pyRkH"><b>Esto mismo, con tu marca</b><span>demo</span></div>'+
         '<ul><li><b>Tres juegos, una billetera.</b> Vuelo y Descenso en 3D, Feria como puzzle diario; racha y puntos compartidos.</li><li><b>Tu marca dentro del juego.</b> Arcos, banderas y premios con tu marca.</li><li><b>Premios que reemplazan un gasto.</b> Escalera de 5 niveles pensada para Ecuador: cupón, recarga, gustito, despensa y uno aspiracional.</li><li><b>La compra sostiene el programa.</b> Los premios de US$10 o más piden una compra verificada en 60 días; las compras suman 10 pts por US$1.</li><li><b>Costo con tope.</b> El juego da hasta 100 pts al día más bonos de racha; máximo US$15 al mes por persona.</li></ul>'+
         '<div class="pyLive"><b>En vivo, esta demo</b><div><span>Partidas</span><em>'+fmt(st.runs)+'</em></div><div><span>Puntos emitidos</span><em>'+fmt(st.issued)+'</em></div><div><span>Costo estimado</span><em>US$'+usd.toFixed(2).replace('.',',')+'</em></div><div><span>Canjes</span><em>'+st.red.length+'</em></div></div></div>'; }
     function paintTab(){ var t=$q('#pyTab'); if(!t) return; t.innerHTML=tabHtml(); [].slice.call(root.querySelectorAll('.pyTabs button')).forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-tab')===tab); b.setAttribute('aria-selected',b.getAttribute('data-tab')===tab); }); }
@@ -3954,10 +3963,10 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // botones de voz en los paneles de especialistas (se muestran solo si la voz está conectada)
   document.addEventListener('click',function(e){ var b=e.target.closest('[data-vz]'); if(!b) return; e.preventDefault(); var k=b.getAttribute('data-vz'); if(k==='design'){ EQUIPO.open(); return; } VOZ.start(k,{idea:'',dx:EQUIPO.last}); });
   VOZ.avail().then(function(v){ if(v) document.body.classList.add('vzok'); });
-  function openMag(){ closeDir(); panel.classList.remove('open'); kShelf(); magBack.classList.add('open'); magEl.classList.add('open'); document.body.classList.add('magopen'); }
+  function openMag(){ closeDir(); panel.classList.remove('open'); magIndex(); magBack.classList.add('open'); magEl.classList.add('open'); document.body.classList.add('magopen'); }
   function closeMag(){ fbClose(); magEl.classList.remove('open'); magBack.classList.remove('open'); document.body.classList.remove('magopen'); }
   magView.addEventListener('click',function(e){ var t=e.target.closest&&e.target.closest('[data-art],[data-idx],[data-room],[data-shelf],[data-pub],[data-retry]'); if(!t)return;
-    if(t.hasAttribute('data-shelf')){ kShelf(); return; } if(t.hasAttribute('data-retry')){ KD=null; kPaper(t.getAttribute('data-retry')); return; } if(t.hasAttribute('data-pub')){ var k=t.getAttribute('data-pub'); if(k==='rev') magIndex(); else kPaper(k); return; }
+    if(t.hasAttribute('data-shelf')){ closeMag(); return; } if(t.hasAttribute('data-retry')){ KD=null; kPaper(t.getAttribute('data-retry')); return; } if(t.hasAttribute('data-pub')){ var k=t.getAttribute('data-pub'); if(k==='rev') magIndex(); else kPaper(k); return; }
     if(t.hasAttribute('data-art')) magArt(+t.getAttribute('data-art')); else if(t.hasAttribute('data-idx')) magIndex(); else { closeMag(); var r=+t.getAttribute('data-room'); if(r!==cur) goRoom(r); } });
   document.getElementById('magX').onclick=closeMag; magBack.onclick=closeMag;
   addEventListener('keydown',function(e){ if(e.key==='Escape'&&magEl.classList.contains('open'))closeMag(); });
@@ -3981,7 +3990,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     sDump:function(){var rm=ROOMS[cur];return rm.screens?JSON.stringify(rm.screens):'sin screens';},
     sHide:function(b){screens.forEach(function(s){s.mesh.visible=!b;});}};
 
-  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
+  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0; try{ tyaw=yaw=entryYawFor(ROOMS[0]); }catch(e){}
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
   addEventListener('pointermove',function(e){ if(!dragging)return; var dk=ROOMS[cur].flat?camera.fov/70:1; tyaw-=(e.clientX-px)*0.0022*dk; tpitch-=(e.clientY-py)*0.0022*dk; px=e.clientX;py=e.clientY; tpitch=Math.max(-1.0,Math.min(1.0,tpitch)); hideHint();});
   addEventListener('pointerup',function(){dragging=false;cv.classList.remove('drag');});
@@ -4015,7 +4024,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     } else start();
   }
   function disableGyro(){gyro.on=false;gyroBtn.classList.remove('active');removeEventListener('deviceorientation',onOrient,true);}
-  if(('DeviceOrientationEvent' in window)&&(('ontouchstart' in window)||navigator.maxTouchPoints>0)){
+  if(('DeviceOrientationEvent' in window)&&(('ontouchstart' in window)||navigator.maxTouchPoints>0)&&matchMedia('(pointer:coarse)').matches){
     gyroBtn.hidden=false;
     gyroBtn.onclick=function(){ if(gyro.on)disableGyro(); else enableGyro(); };
   }

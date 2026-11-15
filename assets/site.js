@@ -82,7 +82,14 @@
         body: JSON.stringify({ nombre: nombre, correo: correo, mensaje: mensaje })
       }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (res) {
-          if (res.ok) {
+          if (res.ok && res.d && res.d.delivered === false) {
+            // El servidor aún no tiene buzón conectado: el mensaje se entrega por correo o WhatsApp, ya escrito.
+            var cuerpo = 'Hola CruzTRD, soy ' + nombre + ' (' + correo + ').\n\n' + mensaje;
+            var m = 'mailto:esteban@cruztrd.com?subject=' + encodeURIComponent('Contacto web · ' + nombre) + '&body=' + encodeURIComponent(cuerpo);
+            var w = 'https://wa.me/593988011913?text=' + encodeURIComponent(cuerpo);
+            status.innerHTML = 'Tu mensaje está listo. Envíalo con un toque por <a href="' + m + '">correo</a> o por <a href="' + w + '" target="_blank" rel="noopener">WhatsApp</a> y te respondemos enseguida.';
+            status.className = 'form-status ok';
+          } else if (res.ok) {
             form.reset();
             status.textContent = 'Gracias, ' + nombre.split(' ')[0] + '. Recibimos tu mensaje y te responderemos a ' + correo + '.';
             status.className = 'form-status ok';
