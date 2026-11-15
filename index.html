@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="/media/home-estudio.webp" type="image/webp">
+<link rel="preload" as="image" href="/media/home-estudio.webp?v=n1" type="image/webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CruzTRD","legalName":"CRUZTRD CT S.A.S.","url":"https://cruztrd.com","email":"esteban@cruztrd.com","telephone":"+593988011913","taxID":"1793237622001","description":"Empresa ecuatoriana que integra plataformas con inteligencia artificial y desarrolla aplicaciones enfocadas exclusivamente en el modelo D2C.","areaServed":"Ecuador","knowsAbout":["Integración de plataformas","Inteligencia artificial","Aplicaciones D2C","Aplicaciones móviles","Pagos y suscripciones"],"address":{"@type":"PostalAddress","streetAddress":"Calle OE1C S5-213, Santa María, Tumbaco","addressLocality":"Quito","addressRegion":"Pichincha","postalCode":"170184","addressCountry":"EC"},"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"esteban@cruztrd.com","telephone":"+593988011913"}}</script>
 <style>
 :root{
@@ -207,8 +207,8 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
 <main>
 <section class="portada" aria-label="Recepción del Estudio CruzTRD">
   <div class="giro" aria-hidden="true">
-    <img src="/media/home-estudio.webp" alt="" width="4096" height="980">
-    <img src="/media/home-estudio.webp" alt="" width="4096" height="980">
+    <img src="/media/home-estudio.webp?v=n1" alt="" width="4096" height="980">
+    <img src="/media/home-estudio.webp?v=n1" alt="" width="4096" height="980">
   </div>
   <div class="pista" id="pista" aria-hidden="true">Arrastra para mirar alrededor</div>
   <div class="portada-txt"><div class="ancho">
@@ -359,7 +359,7 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
     var caja=document.querySelector('.portada'), tira=document.querySelector('.giro'), pista=document.getElementById('pista'); if(!caja||!tira) return;
     var quieto=false; try{ quieto=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
     var x=0, v=quieto?0:-0.012, base=v, ancho=0, arr=false, px=0, ult=0, t0=0;
-    function medir(){ ancho=tira.scrollWidth/2; if(!x) x=-ancho*(innerWidth<900?0.2:0.03); }
+    function medir(){ ancho=tira.scrollWidth/2; if(!x) x=-(ancho*0.5-innerWidth*(innerWidth<900?0.5:0.72)); }
     function pinta(){ if(ancho){ while(x<=-ancho) x+=ancho; while(x>0) x-=ancho; } tira.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'; }
     function paso(t){ var dt=Math.min(50,t-(t0||t)); t0=t; if(!arr){ x+=v*dt; v+=(base-v)*0.035; } pinta(); requestAnimationFrame(paso); }
     caja.addEventListener('pointerdown',function(e){ if(e.target.closest('a,button')) return; arr=true; px=e.clientX; ult=0; caja.classList.add('arr'); if(pista) pista.classList.add('fuera'); });
