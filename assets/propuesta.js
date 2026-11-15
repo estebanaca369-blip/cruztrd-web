@@ -5,7 +5,7 @@
   /* ---- Datos reales: mercado Ecuador ---- */
   /* ---- Datos reales de mercado por pais (DataReportal / Banco Mundial) ---- */
   var MARKETS={
-    'Ecuador':{stats:[['Población','18,3 M (oct 2025)'],['Usuarios de internet','15,4 M - 83,9%'],['Conexiones móviles','18,4 M - ~100%'],['Compran en línea','~50% de los adultos'],['Mercado e-commerce','US$6.400 millones (2024) a US$11 B en 2027 (+20%/año)'],['Ventas por móvil','75% del volumen']],
+    'Ecuador':{stats:[['Población','18,3 M (oct 2025)'],['Usuarios de internet','15,4 M - 83,9%'],['Conexiones móviles','18,4 M - ~100%'],['Compran en línea','~50% de los adultos'],['Mercado e-commerce','US$6.400 millones (2024) a US$11.000 millones en 2027 (+20%/año)'],['Ventas por móvil','75% del volumen']],
       pagos:[['Tarjeta de crédito','74%'],['Tarjeta de débito','16%'],['Billeteras (DeUna, etc.)','6%'],['Transferencias','3%'],['Efectivo','1%']],
       fuente:'DataReportal Digital 2026 Ecuador; PaymentsCMI 2024-2025.'},
     'Colombia':{stats:[['Población','~52,9 M'],['Usuarios de internet','~77% de la población'],['Conexiones móviles','>130% de la población']],
@@ -197,7 +197,7 @@
     doc.text('Cruz', M, 52); var cw=doc.getTextWidth('Cruz');
     setC(GREEN); doc.text('TRD', M+cw, 52);
     doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(138,160,168);
-    doc.text('A I   S T U D I O   ·   P R O D U C T O S   D 2 C', M, 59);
+    doc.text('E S T U D I O   D E   A P P S   D 2 C', M, 59);
     doc.setFont('helvetica','bold'); doc.setFontSize(34); doc.setTextColor(237,243,241);
     doc.text('Estimación preliminar', M, 92);
     if(m.desc){ doc.setFont('helvetica','italic'); doc.setFontSize(12); doc.setTextColor(199,208,212);
@@ -214,7 +214,7 @@
     doc.setDrawColor(GREEN[0],GREEN[1],GREEN[2]); doc.setLineWidth(0.4);
     doc.roundedRect(M, my+42, 114, 9, 2, 2);
     setC(GREEN); doc.setFont('helvetica','bold'); doc.setFontSize(7.6);
-    doc.text('CONFIDENCIAL  ·  DOCUMENTO DE TRABAJO  ·  USO RESERVADO', M+5, my+47.6);
+    doc.text('ESTIMACIÓN PRELIMINAR  ·  NO ES UNA COTIZACIÓN', M+5, my+47.6);
     doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(120,132,140);
     doc.text('CRUZTRD CT S.A.S.  ·  RUC 1793237622001  ·  Quito, Ecuador  ·  cruztrd.com', M, H-16);
 
@@ -301,7 +301,7 @@
     h2('07','Guía para construirla con IA (p. ej. Claude)');
     para('Si decides construirla tú mismo con una IA de código como Claude, sigue estos pasos y copia los prompts. Están escritos para el stack que recomendamos arriba.',{});
     para('Paso 0 - Arranque del proyecto (copia este prompt):',{style:'bold',size:10,gap:1});
-    para('"Actúa como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos."',{size:9.4,col:INK,lh:4.6,style:'italic'});
+    para('"Actúa como ingeniero full-stack senior. Vamos a construir una '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos."',{size:9.4,col:INK,lh:4.6,style:'italic'});
     var stepN=1;
     keys.forEach(function(k){ if(!GUIDE[k])return;
       para('Paso '+stepN+' - '+nmeOf(k)+':',{style:'bold',size:10,gap:1});
@@ -315,13 +315,15 @@
     if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país (en Ecuador: PayPhone o Kushki).');
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     bullets(need);
+    h2('09','Siguiente paso');
+    para('Escríbenos y revisamos este plan contigo, sin compromiso: esteban@cruztrd.com  ·  WhatsApp +593 98 801 1913  ·  cruztrd.com',{size:10.5,gap:2});
 
     /* Footer en todas las paginas interiores */
     var pages=doc.getNumberOfPages();
     for(var p=2;p<=pages;p++){ doc.setPage(p);
       doc.setDrawColor(LINE[0],LINE[1],LINE[2]); doc.line(M,H-12,W-M,H-12);
       doc.setFont('helvetica','normal'); doc.setFontSize(7.4); setC(MUT);
-      doc.text('CRUZTRD CT S.A.S.  ·  RUC 1793237622001  ·  cruztrd.com  ·  Documento de trabajo · Uso reservado', M, H-8);
+      doc.text('CRUZTRD CT S.A.S.  ·  RUC 1793237622001  ·  cruztrd.com  ·  Estimación preliminar, no es una cotización', M, H-8);
       doc.text(String(p-1), W-M, H-8, {align:'right'});
     }
     return doc;
@@ -393,7 +395,7 @@
     keys.forEach(function(k){ L.push(''); L.push('### '+nmeOf(k)); L.push(LAYER[k]||''); if(k==='pagos') L.push('**Pasarelas ('+m.loc+'):** '+m.rails); var st=[];try{st=(window.LIBS||{})[k]||[];}catch(e){} if(st.length) L.push('**Stack:** '+st.join(', ')); });
     L.push(''); L.push('## Prompts listos (cópialos en orden)'); L.push('');
     L.push('**Paso 0 - Arranque del proyecto**'); L.push('```');
-    L.push('Actúa como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos.');
+    L.push('Actúa como ingeniero full-stack senior. Vamos a construir una '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos.');
     L.push('```'); L.push('');
     var n=1;
     keys.forEach(function(k){ if(!GUIDE[k])return; L.push('**Paso '+n+' - '+nmeOf(k)+'**'); L.push('```'); L.push(GUIDE[k]); L.push('```'); L.push(''); n++; });
@@ -403,7 +405,7 @@
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     need.forEach(function(x){L.push('- '+x);});
     L.push(''); L.push('---');
-    L.push('_Documento de trabajo - Uso reservado - CRUZTRD CT S.A.S. - RUC 1793237622001 - Quito, Ecuador - cruztrd.com_');
+    L.push('_Estimación preliminar - CRUZTRD CT S.A.S. - RUC 1793237622001 - Quito, Ecuador - cruztrd.com_');
     L.push('Si prefieres que lo construyamos nosotros, este plan y el stack ya están listos para arrancar.');
     return L.join('\n');
   }

@@ -59,7 +59,7 @@ p{margin:0}
 .portada{touch-action:pan-y;cursor:grab}.portada.arr{cursor:grabbing}
 .giro{position:absolute;inset:0;display:flex;width:max-content;height:100%;will-change:transform;user-select:none;-webkit-user-select:none}
 .giro img{height:100%;width:auto;max-width:none;flex:none;pointer-events:none;-webkit-user-drag:none}
-.pista{position:absolute;z-index:2;right:var(--pad);top:50%;font-size:14px;color:#fff;background:rgba(7,9,12,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;transition:opacity .5s;pointer-events:none}
+.pista{position:absolute;z-index:2;right:var(--pad);top:104px;font-size:14px;color:#fff;background:rgba(7,9,12,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;transition:opacity .5s;pointer-events:none}
 .pista.fuera{opacity:0}
 .velo{position:fixed;inset:0;z-index:50;background:var(--negro);opacity:0;pointer-events:none;transition:opacity .28s ease}
 .velo.on{opacity:1}
@@ -170,7 +170,7 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
   .barra nav a:not(.fijo){display:none}
   .portada h1{max-width:none;font-size:clamp(30px,8.7vw,40px)}
   .portada::after{background:linear-gradient(180deg,rgba(7,9,12,.62) 0%,rgba(7,9,12,0) 18%,rgba(7,9,12,.35) 34%,rgba(7,9,12,.86) 62%,var(--negro) 100%)}
-  .pista{top:22%;right:auto;left:var(--pad)}
+  .pista{top:84px;right:auto;left:var(--pad)}
   .portada-pie{flex-direction:column;align-items:stretch}
   .acciones .btn{flex:1 1 100%}
   .capas-cab,.pisos,.diag-g,.cierre-g{grid-template-columns:minmax(0,1fr)}
@@ -214,7 +214,7 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
   <div class="portada-txt"><div class="ancho">
     <h1><span><i>Construimos la app</i></span><span><i>con la que vendes</i></span><span><i>directo.</i></span></h1>
     <div class="portada-pie">
-      <p>Somos un estudio de Quito especializado en apps D2C: de tu idea a un producto listo para miles de personas. Lo que ves detrás es nuestra recepción; puedes entrar.</p>
+      <p>Somos un estudio de Quito especializado en apps D2C: de tu idea a un producto listo para miles de personas. Lo que ves detrás es nuestra recepción virtual; puedes entrar.</p>
       <div class="acciones">
         <a class="btn btn-verde" href="/portal360?desde=inicio" data-entrar>Entrar al Estudio 360°</a>
         <a class="btn btn-linea" href="#diagnostico">Diagnosticar mi idea</a>
@@ -227,7 +227,7 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
   <div class="ancho">
     <div class="capas-cab">
       <h2>Una app que vende tiene siete capas. Cada una tiene su piso.</h2>
-      <p>En el estudio, cada capa de tu app ocupa una planta y tiene un especialista que te la explica. Elige una y sube.</p>
+      <p>En el estudio, cada capa de tu app ocupa una planta y tiene un guía virtual que te la explica. Elige una y sube.</p>
     </div>
     <div class="pisos">
       <figure class="visor" id="visor" aria-hidden="true">

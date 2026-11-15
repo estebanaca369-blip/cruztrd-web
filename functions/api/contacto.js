@@ -27,7 +27,25 @@ function esc(s) {
   return String(s).replace(/[<>&]/g, function (c) { return c === '<' ? '&lt;' : c === '>' ? '&gt;' : '&amp;'; });
 }
 
+// Límite de uso por visitante (por IP), guardado en la caché del borde: sin servicios adicionales.
+async function limited(request, name, perMin, perDay) {
+  try {
+    const ip = request.headers.get('cf-connecting-ip') || 'x';
+    const cache = caches.default, now = Date.now();
+    const wins = [[60, perMin, Math.floor(now / 60000)], [86400, perDay, Math.floor(now / 86400000)]];
+    for (const [ttl, max, bucket] of wins) {
+      const key = new Request('https://limite.cruztrd.internal/' + name + '/' + encodeURIComponent(ip) + '/' + ttl + '/' + bucket);
+      const hit = await cache.match(key);
+      const n = hit ? (parseInt(await hit.text(), 10) || 0) : 0;
+      if (n >= max) return true;
+      await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
+    }
+  } catch (e) {}
+  return false;
+}
+
 export async function onRequestPost({ request, env }) {
+  if (await limited(request, 'contacto', 3, 15)) return new Response(JSON.stringify({ error: 'Demasiados envíos. Inténtalo más tarde o escríbenos a esteban@cruztrd.com.' }), { status: 429, headers: { 'content-type': 'application/json; charset=utf-8' } });
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: 'JSON inválido' }, 400); }
 
