@@ -1261,6 +1261,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 /* botón de giroscopio (solo móvil) */
 .gyrobtn{position:fixed;bottom:22px;left:22px;z-index:6;display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:12px;color:#eafff6;background:rgba(6,12,12,.42);border:1px solid rgba(45,212,167,.3);border-radius:999px;padding:10px 15px;backdrop-filter:blur(12px);cursor:pointer;box-shadow:0 8px 28px rgba(0,0,0,.4);text-shadow:0 1px 5px #000;transition:background .2s,border-color .2s}
 .gyrobtn[hidden]{display:none!important}
+.hs,.badge,#roomtag,.topr,.clubpill,.navhub{-webkit-user-select:none;user-select:none}
 .hs:focus-visible,.badge:focus-visible,.clubpill:focus-visible,.navhub:focus-visible{outline:2px solid #2DD4A7;outline-offset:4px;border-radius:12px}
 .gyrobtn.active{background:rgba(45,212,167,.24);border-color:rgba(45,212,167,.7)}
 .gyrobtn .gic{font-family:var(--mono);color:var(--accent2);font-size:14px}
@@ -2294,7 +2295,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   // ===== salas del recorrido =====
   var ROOMS=[
-    {name:'Recepción · Lobby', pano:'media/lab-pano.jpg?v=dv1', lim:{lonA:-179.6,lonB:179.6,latT:72,latB:-72}, entryYaw:-0.17, fx:[{"type":"beam","q":[[2900,650],[2926,650],[2926,1340],[2900,1340]],"color":[0.1,0.34,0.27],"p":[0.16,5.0,0.0,0]},{"type":"glow","x":2856,"y":1100,"r":5,"ry":5,"color":[0.8,1.0,0.95],"p":[0.6,0.2,0.6,0],"bloom":1},{"type":"glow","x":1211,"y":868,"r":16,"ry":6,"color":[1.0,0.93,0.78],"p":[0.35,0.06,0.22,0]}], spots:[
+    {name:'Recepción · Lobby', pano:'media/lab-pano.jpg?v=dv2', lim:{giro:1,lonA:-180,lonB:180,latT:72,latB:-72}, entryYaw:-0.17, fx:[{"type":"beam","q":[[2900,650],[2926,650],[2926,1340],[2900,1340]],"color":[0.1,0.34,0.27],"p":[0.16,5.0,0.0,0]},{"type":"glow","x":2856,"y":1100,"r":5,"ry":5,"color":[0.8,1.0,0.95],"p":[0.6,0.2,0.6,0],"bloom":1},{"type":"glow","x":1211,"y":868,"r":16,"ry":6,"color":[1.0,0.93,0.78],"p":[0.35,0.06,0.22,0]}], spots:[
       {type:'char', lon:10,lat:-9, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas. Llama al ascensor cuando quieras subir a cualquier piso del estudio.',
        sheet:'media/strip-host.webp', cls:'hosta'},
@@ -3817,7 +3818,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   })();
   function openChakra(){ CHAKRA.open(); }
   /* ============ Diseña tu app con el equipo: diagnóstico con IA + voz de los especialistas ============ */
-  var TEAM={intro:{nm:'Tu anfitrión',short:'el anfitrión',role:'Anfitrión del estudio'},infra:{nm:'Mateo',role:'Infraestructura'},seg:{nm:'Diana',role:'Seguridad'},pagos:{nm:'Camilo',role:'Pagos'},susc:{nm:'Bruna',role:'Suscripciones'},mkt:{nm:'Nico',role:'Marketing'},fidel:{nm:'Renata',role:'Fidelización'},dash:{nm:'Andrés',role:'Dashboards & KPIs'}};
+  var TEAM={intro:{nm:'Tu anfitrión',short:'el anfitrión',role:'Anfitrión del estudio'},infra:{nm:'Mateo',role:'Infraestructura'},seg:{nm:'Camilo',role:'Seguridad'},pagos:{nm:'Diana',role:'Pagos'},susc:{nm:'Bruno',role:'Suscripciones'},mkt:{nm:'Nico',role:'Marketing'},fidel:{nm:'Renata',role:'Fidelización'},dash:{nm:'Andrés',role:'Dashboards & KPIs'}};
   var TORDER=['infra','seg','pagos','susc','mkt','fidel','dash'];
   function tRoom(hk){ for(var i=0;i<ROOMS.length;i++){ var sp=ROOMS[i].spots||[]; for(var j=0;j<sp.length;j++) if(sp[j].type==='char'&&sp[j].hk===hk) return i; } return 0; }
   function tAv(hk){ return 'media/av-'+hk+'.webp'; }
@@ -4038,7 +4039,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     yaw+=((tyaw+drift)-yaw)*0.08; pitch+=(tpitch-pitch)*0.08;
     var RF=ROOMS[cur]; if(RF.flat||RF.lim){ var FF=RF.flat||RF.lim,dd=Math.PI/180,hv=camera.fov/2*dd,th=Math.tan(hv)*camera.aspect,tv=Math.tan(hv),ap=Math.abs(pitch),den=Math.cos(ap)-tv*Math.sin(ap),hh=den>0.05?Math.atan2(th,den):1.5;
       var pmx=FF.latT*dd-hv, pmn=FF.latB*dd+hv; if(pmx<pmn){pmx=pmn=(pmx+pmn)/2;} tpitch=Math.max(pmn,Math.min(pmx,tpitch)); pitch=Math.max(pmn,Math.min(pmx,pitch));
-      var ymn=-(FF.lonB*dd-hh), ymx=-(FF.lonA*dd+hh); if(ymn>ymx){ymn=ymx=(ymn+ymx)/2;} tyaw=Math.max(ymn,Math.min(ymx,tyaw)); yaw=Math.max(ymn,Math.min(ymx,yaw)); }
+      if(!FF.giro){ var ymn=-(FF.lonB*dd-hh), ymx=-(FF.lonA*dd+hh); if(ymn>ymx){ymn=ymx=(ymn+ymx)/2;} tyaw=Math.max(ymn,Math.min(ymx,tyaw)); yaw=Math.max(ymn,Math.min(ymx,yaw)); } }
     var cp=Math.cos(pitch);
     fwd.set(Math.sin(yaw)*cp, Math.sin(pitch), Math.cos(yaw)*cp);
     camera.lookAt(fwd.x,fwd.y,fwd.z);
