@@ -10,6 +10,24 @@ function voices(env) {
   try { const v = JSON.parse(env.ELEVEN_VOICES || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; }
 }
 
+
+// Límite de uso por visitante (por IP), guardado en la caché del borde: sin servicios adicionales.
+async function limited(request, name, perMin, perDay) {
+  try {
+    const ip = request.headers.get('cf-connecting-ip') || 'x';
+    const cache = caches.default, now = Date.now();
+    const wins = [[60, perMin, Math.floor(now / 60000)], [86400, perDay, Math.floor(now / 86400000)]];
+    for (const [ttl, max, bucket] of wins) {
+      const key = new Request('https://limite.cruztrd.internal/' + name + '/' + encodeURIComponent(ip) + '/' + ttl + '/' + bucket);
+      const hit = await cache.match(key);
+      const n = hit ? (parseInt(await hit.text(), 10) || 0) : 0;
+      if (n >= max) return true;
+      await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
+    }
+  } catch (e) {}
+  return false;
+}
+
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
   const ready = !!(env.ELEVENLABS_API_KEY && env.ELEVENLABS_AGENT_ID);
@@ -18,10 +36,11 @@ export async function onRequestGet({ request, env }) {
   const origin = request.headers.get('origin') || request.headers.get('referer') || '';
   const o = origin.replace(/\/[^/]*$/, '').replace(/(https?:\/\/[^/]+).*/, '$1');
   if (!ALLOW.some(rx => rx.test(o))) return J({ ok: false, error: 'origen' }, 403);
+  if (await limited(request, 'voz', 3, 12)) return J({ ok: false, error: 'limite' }, 429);
   try {
     const r = await fetch('https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=' + encodeURIComponent(env.ELEVENLABS_AGENT_ID), { headers: { 'xi-api-key': env.ELEVENLABS_API_KEY } });
-    if (!r.ok) return J({ ok: false, error: 'upstream', http: r.status, detail: (await r.text()).slice(0, 200) });
+    if (!r.ok) return J({ ok: false, error: 'upstream' });
     const d = await r.json();
     return J({ ok: true, token: d.token, voices: voices(env) });
-  } catch (e) { return J({ ok: false, error: 'fetch_fail', detail: String(e).slice(0, 160) }); }
+  } catch (e) { return J({ ok: false, error: 'fetch_fail' }); }
 }

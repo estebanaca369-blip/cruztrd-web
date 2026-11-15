@@ -82,12 +82,31 @@ function isIncomplete(parsed) {
   return false;
 }
 
+
+// Límite de uso por visitante (por IP), guardado en la caché del borde: sin servicios adicionales.
+async function limited(request, name, perMin, perDay) {
+  try {
+    const ip = request.headers.get('cf-connecting-ip') || 'x';
+    const cache = caches.default, now = Date.now();
+    const wins = [[60, perMin, Math.floor(now / 60000)], [86400, perDay, Math.floor(now / 86400000)]];
+    for (const [ttl, max, bucket] of wins) {
+      const key = new Request('https://limite.cruztrd.internal/' + name + '/' + encodeURIComponent(ip) + '/' + ttl + '/' + bucket);
+      const hit = await cache.match(key);
+      const n = hit ? (parseInt(await hit.text(), 10) || 0) : 0;
+      if (n >= max) return true;
+      await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
+    }
+  } catch (e) {}
+  return false;
+}
+
 export async function onRequestPost({ request, env }) {
   // Solo desde el propio sitio; cuerpo acotado; campos validados contra listas.
   const origin = request.headers.get('origin') || '';
   if (origin && !/^https:\/\/([a-z0-9-]+\.)?(cruztrd\.com|cruztrd-web\.pages\.dev)$/i.test(origin) && !/^http:\/\/localhost(:\d+)?$/i.test(origin)) return J({ error: 'origen no permitido' }, 403);
   let body = {};
   try { const raw = await request.text(); if (raw.length > 6000) return J({ error: 'solicitud demasiado grande' }, 413); body = JSON.parse(raw); } catch (e) {}
+  if (await limited(request, 'diagnose', 5, 40)) return J({ status: 'error', error: 'limite' });
   const PAISES = ['Ecuador', 'Colombia', 'Perú', 'Peru', 'México', 'Mexico', 'Chile', 'Argentina', 'Otro'];
   const country = PAISES.indexOf(String(body.country || '')) >= 0 ? String(body.country) : 'Ecuador';
   const scale = SCLBL[body.scale] ? body.scale : 's2';

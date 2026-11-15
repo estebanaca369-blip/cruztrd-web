@@ -21,13 +21,13 @@
   };
   var CKEY={'Ecuador':'Ecuador','Colombia':'Colombia','Peru':'Peru','Perú':'Peru','Mexico':'Mexico','México':'Mexico','Chile':'Chile','Argentina':'Argentina'};
   var PAYRAILS={
-    'Ecuador':'Stripe (internacional) + PayPhone, Kushki, Datafast y DeUna (local)',
-    'Colombia':'Stripe / Mercado Pago + PSE, Nequi y Wompi (local)',
-    'Peru':'Stripe / Mercado Pago + Yape, Niubiz, Culqi y PagoEfectivo (local)',
+    'Ecuador':'PayPhone, Kushki, Datafast y DeUna (local). Stripe solo si tienes una entidad en un país donde opera',
+    'Colombia':'Mercado Pago, PSE, Nequi y Wompi (local). Stripe solo con entidad en un país donde opera',
+    'Peru':'Mercado Pago, Yape, Niubiz, Culqi y PagoEfectivo (local). Stripe solo con entidad en un país donde opera',
     'Mexico':'Stripe / Mercado Pago + SPEI, Clip y OXXO Pay (local)',
-    'Chile':'Stripe + Webpay (Transbank), Khipu y Mercado Pago (local)',
-    'Argentina':'Stripe / Mercado Pago + MODO y Uala (local)',
-    'Otro':'Stripe y PayPal (internacional)'
+    'Chile':'Webpay (Transbank), Khipu y Mercado Pago (local). Stripe solo con entidad en un país donde opera',
+    'Argentina':'Mercado Pago, MODO y Ualá (local). Stripe solo con entidad en un país donde opera',
+    'Otro':'Stripe o PayPal, según dónde esté constituida tu empresa'
   };
   function mkFor(c){ return MARKETS[CKEY[c]||c]||null; }
   function railsFor(c){ return PAYRAILS[CKEY[c]||c]||PAYRAILS['Otro']; }
@@ -59,8 +59,8 @@
   var LAYER={
     infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y sus datos quedan respaldados.',
     seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, así que aunque roben la base no sirven. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
-    pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con Stripe para lo internacional y PayPhone / Kushki / Datafast para el mercado local. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
-    susc:'Planes y membresías que se cobran y renuevan solos con Stripe Billing: prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
+    pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con la pasarela local de tu país (en Ecuador: PayPhone, Kushki o Datafast). Stripe es una opción para cobros internacionales si tu empresa tiene una entidad en un país donde opera. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
+    susc:'Planes y membresías que se cobran y renuevan solos con cobro recurrente de la pasarela (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible): prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
     mkt:'Google Analytics 4 y PostHog para saber de donde vienen tus usuarios y que hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde si convierte.',
     fidel:'Motor de recompensas y referidos para que tus usuarios traigan más usuarios, soporte por Intercom y WhatsApp API, y encuestas NPS para medir satisfacción. Retener cuesta mucho menos que captar.',
     dash:'Panel con tus métricas en vivo (Metabase + Recharts): ventas, usuarios activos, cohortes de retención y alertas cuando algo se sale de rango. Exportas a CSV/Excel. Decides con datos, no a ciegas.'
@@ -70,8 +70,8 @@
   var GUIDE={
     infra:'Configura el despliegue en un Droplet de DigitalOcean (2 vCPU / 4 GB) con Docker y Nginx como reverse proxy, una base PostgreSQL gestionada y variables de entorno. Dame el docker-compose, la config de Nginx y los pasos de despliegue.',
     seg:'Implementa autenticación con Auth.js (OAuth Google + email), contraseñas con bcrypt, sesiones JWT, rate-limiting y 2FA opcional (TOTP), con middleware de seguridad Helmet. Incluye el flujo de registro, login y recuperación.',
-    pagos:'Integra pagos con Stripe (tarjetas internacionales) y deja preparada la integración con PayPhone para Ecuador. Implementa el checkout dentro de la app y los webhooks de confirmación de pago.',
-    susc:'Añade suscripciones con Stripe Billing: planes mensual y anual, prorrateo al cambiar de plan, cupones y reintentos (dunning) cuando falle el cobro. Muestra el estado de la suscripción en el perfil del usuario.',
+    pagos:'Integra pagos con la pasarela local (PayPhone o Kushki en Ecuador) y deja preparada la integración con Stripe para cuando haya una entidad en un país donde opera. Implementa el checkout dentro de la app y los webhooks de confirmación de pago.',
+    susc:'Añade suscripciones con el cobro recurrente de la pasarela elegida: planes mensual y anual, prorrateo al cambiar de plan, cupones y reintentos (dunning) cuando falle el cobro. Muestra el estado de la suscripción en el perfil del usuario.',
     mkt:'Integra Google Analytics 4 y PostHog, configura SEO técnico (metadatos dinámicos y sitemap) y un formulario de captura de correos conectado a Mailchimp.',
     fidel:'Crea un sistema de referidos con código único por usuario y recompensas por puntos, y conecta un widget de soporte/chat. Guarda el historial de recompensas por usuario.',
     dash:'Crea un panel de métricas con Recharts: ventas diarias, usuarios activos, retención por cohortes y alertas por umbral, con exportación a CSV.'
@@ -312,7 +312,7 @@
 
     h2('08','Qué necesitamos de tu lado');
     var need=['Tu idea, textos e imágenes (o los creamos contigo).','Tu dominio y los accesos de tu marca.','Tu revisión y visto bueno en cada entrega.'];
-    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuentas en las pasarelas de pago (Stripe / PayPhone / Kushki).');
+    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país (en Ecuador: PayPhone o Kushki).');
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     bullets(need);
 
@@ -399,7 +399,7 @@
     keys.forEach(function(k){ if(!GUIDE[k])return; L.push('**Paso '+n+' - '+nmeOf(k)+'**'); L.push('```'); L.push(GUIDE[k]); L.push('```'); L.push(''); n++; });
     L.push('## Que necesitas de tu lado');
     var need=['Tu idea, textos e imágenes.','Tu dominio y los accesos de tu marca.','Tu revisión y visto bueno en cada entrega.'];
-    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuentas en las pasarelas de pago (Stripe / PayPhone / Kushki).');
+    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país (en Ecuador: PayPhone o Kushki).');
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     need.forEach(function(x){L.push('- '+x);});
     L.push(''); L.push('---');
