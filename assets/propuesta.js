@@ -116,7 +116,8 @@
     if(monet==='sub'){ var price=6, conv=0.04; var paying=Math.round(USERS*conv); var mrr=paying*price;
       var net=Math.round(mrr*(1-COMM)-monthlyCost); var be=Math.ceil(monthlyCost/(price*(1-COMM)));
       biz.price=price; biz.conv=conv; biz.paying=paying; biz.mrr=mrr; biz.net=net; biz.breakEven=be;
-      biz.recover=(net>0?Math.ceil(setupMid/net):null); }
+      biz.recover=(net>0?Math.ceil(setupMid/net):null);
+      var pay2=Math.round(USERS*0.015), net2=Math.round(pay2*price*(1-COMM)-monthlyCost); biz.paying2=pay2; biz.net2=net2; biz.recover2=(net2>0?Math.ceil(setupMid/net2):null); }
     else if(monet==='once'){ var t=15, cvr=0.06; var buyers=Math.round(USERS*cvr);
       biz.price=t; biz.conv=cvr; biz.buyers=buyers; biz.rev=buyers*t;
       biz.breakEven=Math.ceil(monthlyCost/(t*(1-COMM))); }
@@ -276,7 +277,9 @@
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
         ['Escenario base','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
         ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión':'aún por debajo del costo en este escenario')],
-        ['Recuperas la inversión',(bz.recover?'en ~'+bz.recover+' meses':'requiere más clientes o mayor precio')]
+        ['Recuperas la inversión',(bz.recover?'en ~'+bz.recover+' meses':'requiere más clientes o mayor precio')],
+        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión en ~'+bz.recover2+' meses':'no cubre la operación mensual; hay que crecer primero')],
+        ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
     } else if(m.monet==='once'){
       para('Escenario con pago único (supuestos: ticket $'+bz.price+'; 6% de tus usuarios compran):',{style:'bold',size:10,gap:1});

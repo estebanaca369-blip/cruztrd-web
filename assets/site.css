@@ -181,3 +181,12 @@ section{padding:clamp(28px,4.5vw,60px) 0}
 .site-footer{background:transparent}
 .nav .links a[aria-current="page"]::after{background:var(--ink)}
 .nav .links a,.foot-links a{padding-top:10px;padding-bottom:10px}
+
+/* páginas internas: una vista del estudio en la cabecera y enlaces sin verde */
+.phero{position:relative}
+@media(min-width:900px){
+  .phero>*{position:relative;z-index:1;max-width:56%}
+  .phero::after{content:"";position:absolute;z-index:0;right:24px;top:clamp(56px,9vw,120px);bottom:clamp(20px,3vw,40px);width:40%;background:var(--foto,none) center/cover no-repeat;border-radius:3px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 42%);mask-image:linear-gradient(90deg,transparent,#000 42%);opacity:.92}
+}
+main a[href^="mailto:"],main a[href^="tel:"],main a[href^="https://wa.me"]{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
+main a[href^="mailto:"]:hover,main a[href^="tel:"]:hover,main a[href^="https://wa.me"]:hover{text-decoration-color:#fff}

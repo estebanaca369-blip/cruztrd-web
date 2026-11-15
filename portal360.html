@@ -1364,7 +1364,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .pyGo:hover{background:#e9eeec!important}
 .chCard h2{text-shadow:0 2px 18px rgba(0,0,0,.55)}
 /* objetivos táctiles */
-.badge{padding:10px 0}
+.badge{padding:10px 0;margin-top:-10px}
 .clubpill{min-height:44px}
 .dclose,#panelX,#magX,.clubcard .cx,.pyBack,.gyrobtn{min-width:44px;min-height:44px}
 .pyItR button,.clubcard .cbtn,.clubcard .cm button,.eqR button,.pySw,.pyTabs button{min-height:44px}
@@ -1420,7 +1420,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 
 <div class="magback" id="magBack"></div>
 <section class="mag" id="mag" aria-label="Revista CruzTRD"><button class="x" id="magX" aria-label="Cerrar">✕</button><div class="magview" id="magView"></div></section>
-<section class="ply" id="ply" aria-label="CruzTRD Play · Vuelo Andino"><div class="plyStage" id="plyStage"><canvas id="plyCv"></canvas></div><div class="plyShade"></div><div class="plyRoom" id="plyRoom"></div><div class="plyHud"><div class="hS"><b id="hS">0</b><span>puntos de vuelo</span></div><div class="hM" id="hM">×1</div><div class="hD" id="hD">0 m</div><button class="hX" data-py="quit" aria-label="Terminar vuelo">✕</button><div id="hPop"></div><div class="hTip">Arrastra o mueve el ratón para volar · cruza los arcos</div></div><div class="plyFeria" id="plyFeria"><button class="frX" data-py="quit" aria-label="Salir de la feria">✕</button><div id="frHost"></div></div><div class="plyOver" id="plyOver"></div><div class="plyModal" id="plyModal"></div></section><section class="chk" id="chakra" aria-label="Chakra · huerto de fidelidad"><div class="chStage"><canvas id="chCv"></canvas></div><div class="chShade"></div><header class="chTop"><button class="pyBack" data-ch="close">← Volver a la capa 06</button><div class="pyBrand">Chakra <span>· tu huerto de fidelidad</span></div><div class="pyWal chPts"><span>Puntos</span><b>0</b></div></header><aside class="chCard"></aside><div class="chFruit"></div><p class="chFoot">Para marcas: la planta es la billetera hecha visible. Los mismos puntos y la misma escalera de CruzTRD Play; nunca se encoge al canjear.</p></section>
+<section class="ply" id="ply" aria-label="CruzTRD Play · Vuelo Andino"><div class="plyStage" id="plyStage"><canvas id="plyCv"></canvas></div><div class="plyShade"></div><div class="plyRoom" id="plyRoom"></div><div class="plyHud"><div class="hS"><b id="hS">0</b><span>puntos de vuelo</span></div><div class="hM" id="hM">×1</div><div class="hD" id="hD">0 m</div><button class="hX" data-py="quit" aria-label="Terminar vuelo">✕</button><div id="hPop"></div><div class="hTip">Arrastra o mueve el ratón para volar · cruza los arcos</div></div><div class="plyFeria" id="plyFeria"><button class="frX" data-py="quit" aria-label="Salir de la feria">✕</button><div id="frHost"></div></div><div class="plyOver" id="plyOver"></div><div class="plyModal" id="plyModal"></div></section><section class="chk" id="chakra" aria-label="Chakra · huerto de fidelidad"><div class="chStage"><canvas id="chCv"></canvas></div><div class="chShade"></div><header class="chTop"><button class="pyBack" data-ch="close">← Volver a la capa 06</button><div class="pyBrand">Chakra <span>· demo para marcas</span></div><div class="pyWal chPts"><span>Puntos</span><b>0</b></div></header><aside class="chCard"></aside><div class="chFruit"></div><p class="chFoot">Para marcas: la planta es la billetera hecha visible. Los mismos puntos y la misma escalera de CruzTRD Play; nunca se encoge al canjear.</p></section>
 <section class="eqp" id="equipo" aria-label="Diseña tu app con el equipo"></section>
 <div class="dirback" id="dirBack"></div>
 <div class="dirmodal" id="dirPanel">
@@ -2623,7 +2623,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   addEventListener('pointerdown',function(e){ if(clubCard&&clubCard.classList.contains('on')&&!clubCard.contains(e.target)&&!(e.target.closest&&e.target.closest('.clubpill,.hs'))) clubCard.classList.remove('on'); },true);
   // tocar la sala (sin arrastrar) cierra el panel abierto; al abrir, el foco va al botón de cierre
   (function(){ var dx=0,dy=0, cz=document.getElementById('c'); cz.addEventListener('pointerdown',function(e){ dx=e.clientX; dy=e.clientY; }); cz.addEventListener('pointerup',function(e){ if(panel.classList.contains('open')&&Math.abs(e.clientX-dx)+Math.abs(e.clientY-dy)<8) panel.classList.remove('open'); }); })();
-  try{ new MutationObserver(function(){ if(panel.classList.contains('open')){ var x=document.getElementById('panelX'); if(x) setTimeout(function(){ try{ x.focus({preventScroll:true}); }catch(e){} },80); } }).observe(panel,{attributes:true,attributeFilter:['class']}); }catch(e){}
+  // diálogos: cerrados no reciben foco; al abrir, el foco entra y al cerrar vuelve a donde estaba
+  (function(){ [['panel','Capa del estudio'],['dirPanel','Directorio de pisos'],['mag','Revista CruzTRD']].forEach(function(d){ var el=document.getElementById(d[0]); if(!el) return; var prev=null;
+    if(!el.getAttribute('role')) el.setAttribute('role','dialog'); if(!el.getAttribute('aria-label')) el.setAttribute('aria-label',d[1]);
+    function sync(){ var on=el.classList.contains('open'); if(on===!el.inert) return; el.inert=!on;
+      if(on){ prev=document.activeElement; setTimeout(function(){ try{ var b=el.querySelector('button,[href],[tabindex="0"]'); if(b) b.focus({preventScroll:true}); }catch(e){} },90); }
+      else if(prev&&prev.focus&&document.contains(prev)){ try{ prev.focus({preventScroll:true}); }catch(e){} prev=null; } }
+    el.inert=!el.classList.contains('open'); try{ new MutationObserver(sync).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){ el.inert=false; } }); })();
   // directorio (hub): lista las capas y salta a cada una
   var dirPanel=document.getElementById('dirPanel'), dirList=document.getElementById('dirList'), dirBack=document.getElementById('dirBack');
   function closeDir(){dirPanel.classList.remove('open');dirBack.classList.remove('open');}
@@ -2648,19 +2654,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   // ===== Revista CruzTRD: revistero de la sala de espera =====
   var magEl=document.getElementById('mag'), magBack=document.getElementById('magBack'), magView=document.getElementById('magView');
-  function magRead(){ return (CLUB.st.read||[]); }
-  function magIndex(){
-    var R=magRead(), h='<div class="kbar"><button class="kback" data-shelf="1">← Volver al estudio</button></div><div class="spread">';
-    h+='<div class="mcover"><div class="mmast">Revista<span>Cruz<b>TRD</b></span></div><div class="mmeta"><span>Edición 01</span><span>Octubre 2026</span></div>'+
-       '<div class="mbigd">D2C</div><div class="mhead">Vender directo ya no es opcional</div>'+
-       '<ul class="mlines"><li>Las 7 capas de una app D2C</li><li>Cobrar en Ecuador sin fricción</li><li>El cliente que vuelve</li><li>Cinco números para decidir</li></ul>'+
-       '<div class="mfoot"><span>Gratis para visitantes del estudio</span><span class="mbar"></span></div></div>';
-    h+='<div class="mtoc"><div class="mte">En esta edición</div><div class="mtl">';
-    MAG.forEach(function(a,i){ var rd=R.indexOf(a.id)>-1;
-      h+='<button class="mitem'+(rd?' rd':'')+'" data-art="'+i+'"><span class="mn">0'+(i+1)+'</span><span class="mt"><i>'+a.kick+'</i><b>'+a.title+'</b><em>'+a.deck+'</em></span><span class="mm">'+(rd?'Leído ✓':a.min+' min')+'</span></button>'; });
-    h+='</div><div class="mpts"><span>★</span> Cada artículo que leas suma <b>+25 pts</b> al Club CruzTRD · '+R.length+'/'+MAG.length+' leídos</div></div></div>';
-    magView.innerHTML=h; magView.className='magview vidx'; magEl.scrollTop=0;
-  }
+  
+  
   function magArt(i){
     var a=MAG[i], h='<article class="mpage"><div class="mtop"><button class="mback" data-idx="1">← Volver a la revista</button><span class="mpg">'+(i+1)+' / '+MAG.length+'</span></div>';
     h+='<div class="mk">'+a.kick+'</div><h1>'+a.title+'</h1><p class="mdeck">'+a.deck+'</p><div class="mby">Revista CruzTRD · Edición 01 · Lectura de '+a.min+' min</div><div class="mbody">';
@@ -2693,24 +2688,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     return fetch('/api/kiosco?v=2').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ KD={}; j.sources.forEach(function(x){ KD[x.key]=x; }); KDt=Date.now(); return KD; }); }
   function kAgo(iso){ if(!iso) return ''; var m=Math.max(1,Math.round((Date.now()-Date.parse(iso))/60000)); if(m<60) return 'hace '+m+' min'; var h=Math.round(m/60); if(h<24) return 'hace '+h+' h'; var d=Math.round(h/24); return 'hace '+d+(d===1?' día':' días'); }
   function kToday(){ try{ return new Date().toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }catch(e){ return new Date().toDateString(); } }
-  function kMini(k,src){ var P=KP[k], it=src&&src.items&&src.items[0], it2=src&&src.items&&src.items[1];
-    if(P.kind==='mag') return '<div class="kmz '+P.tone+'"><div class="kzt"><span>'+P.mast+'</span><i>'+P.lang+'</i></div><div class="kzs">'+esc(P.sub)+'</div>'+(it?'<div class="kzh">'+esc(it.title)+'</div><div class="kzl">'+(it2?esc(it2.title):'')+'</div>':'<div class="kzh sk"></div>')+'<div class="kzf">'+kToday()+'</div></div>';
-    return '<div class="kpaper '+P.tone+'">'+(P.lang!=='ES'?'<i class="klang">'+P.lang+'</i>':'')+'<div class="kpm">'+P.mast+'</div><div class="kpd">'+kToday()+'</div>'+
-      (it?'<div class="kph">'+esc(it.title)+'</div><div class="kpcols"><p>'+esc(it.summary||'')+'</p><p>'+(it2?'<b>'+esc(it2.title)+'</b> '+esc(it2.summary||''):'')+'</p></div>'
-         :'<div class="kph sk"></div><div class="kpcols"><p class="sk"></p><p class="sk"></p></div>')+'<i class="kfold"></i></div>'; }
-  function kShelf(){
-    var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Lee mientras esperas: una revista propia, periódicos y revistas de tecnología, ciencia y mundo que se actualizan solos, y la prensa de Ecuador a un toque.</p></div>';
-    KSHELVES.forEach(function(sh){ h+='<div class="krow"><div class="krt">'+sh[0]+'</div><div class="kgrid">';
-      sh[1].forEach(function(k){
-        if(k==='rev'){ h+='<button class="kpub rev" data-pub="rev"><div class="kobj"><div class="kmag"><div class="kmm">Revista<span>Cruz<b>TRD</b></span></div><div class="kmd">Edición 01 · Octubre 2026</div><div class="kmb">D2C</div><div class="kmh">Vender directo ya no es opcional</div></div></div><div class="klab"><b>Revista CruzTRD</b><span>Edición 01 · '+MAG.length+' artículos · +25 pts c/u</span></div></button>'; return; }
-        var src=KD&&KD[k]; h+='<button class="kpub" data-pub="'+k+'"><div class="kobj">'+kMini(k,src)+'</div><div class="klab"><b>'+KP[k].mast+'</b><span>'+esc(KP[k].sub)+(src&&src.items.length?' · '+kAgo(src.items[0].date):'')+'</span></div></button>'; });
-      h+='</div></div>'; });
-    h+='<div class="krow"><div class="krt">Prensa de Ecuador</div><div class="kloc">'+KLOCAL.map(function(m){ return '<a class="klm" href="'+m[2]+'" target="_blank" rel="noopener"><b>'+m[0]+'</b><span>'+m[1]+'</span><i>Abrir su sitio ↗</i></a>'; }).join('')+'</div>'+
-       '<div class="knote">Enlaces a los sitios oficiales de cada medio. No reproducimos su contenido ni sus marcas: para eso hace falta su autorización.</div></div>';
-    h+='<div class="knote">Las publicaciones de tecnología, ciencia y mundo muestran títulos y resúmenes de medios que permiten reutilizar su contenido. Cada nota enlaza a su fuente original y lleva su crédito.</div></div>';
-    magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
-    if(!KD) kLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){});
-  }
+  
+  
   function kPaper(k){
     var P=KP[k];
     function render(src){
@@ -2738,37 +2717,17 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     ilart:'La Ilustración Artística (Barcelona) · Wikimedia Commons · Dominio público.',
     pm:'Popular Mechanics (Chicago) · Wikimedia Commons · Dominio público.',
     psm:'Popular Science Monthly · Wikimedia Commons / Wikisource · Dominio público.'};
-  function hLoad(){ if(HD&&Date.now()-HDt<1800000) return Promise.resolve(HD);
-    return fetch('/api/hemeroteca?v=4').then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(j){ HD={}; j.collections.forEach(function(c){ HD[c.key]=c; }); HDt=Date.now(); return HD; }); }
+  
   function hThumb(it,page,w){ return String(it.thumb).replace(/\?.*$/,'').replace(/page1-\d+px/,'page'+page+'-'+(w||960)+'px'); }
-  function hPick(list,n){ if(!list||!list.length) return []; var wk=Math.floor(Date.now()/604800000), out=[]; for(var i=0;i<Math.min(n,list.length);i++) out.push(list[(wk*7+i*Math.max(1,Math.floor(list.length/n)))%list.length]); return out; }
+  
   var PDFJS=null;
   function hPdfLib(){ if(PDFJS) return PDFJS; PDFJS=new Promise(function(ok,ko){ var sc=document.createElement('script'); sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
       sc.onload=function(){ window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; ok(window.pdfjsLib); }; sc.onerror=ko; document.head.appendChild(sc); }); return PDFJS; }
-  function hFcDoc(n,lang){ var k=n+'_'+lang; if(FCC[k]) return FCC[k];
-    FCC[k]=hPdfLib().then(function(L){ return L.getDocument({url:'/api/hemeroteca?pdf=fc&n='+n+'&lang='+lang, disableAutoFetch:true, disableStream:false, rangeChunkSize:262144}).promise; }); return FCC[k]; }
+  
   var PCACHE={};
-  function hPdfPage(doc,key,i,w){ var ck=key+':'+i+':'+w; if(PCACHE[ck]) return PCACHE[ck];
-    PCACHE[ck]=doc.getPage(i+1).then(function(pg){ var v=pg.getViewport({scale:1}), sc=w/v.width, vp=pg.getViewport({scale:sc}), cv=document.createElement('canvas'); cv.width=Math.round(vp.width); cv.height=Math.round(vp.height);
-      return pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise.then(function(){ return cv.toDataURL('image/jpeg',0.86); }); }); return PCACHE[ck]; }
-  function hCover(it,k,title,sub){ return '<button class="hcov" data-hem="'+k+'" data-hi="'+it.__i+'"><span class="hci'+(k==='fc'?' land':'')+'">'+(it.__img?'<img loading="lazy" alt="" src="'+esc(it.__img)+'">':'<i class="hsk sk" data-fccov="'+it.n+'"></i>')+'</span><b>'+esc(title)+'</b><em>'+esc(sub)+'</em></button>'; }
-  function kShelf(){ fbClose();
-    var h='<div class="kshelf"><div class="khead"><div class="ke">Sala de espera</div><h2>Kiosco del Estudio</h2><p>Revistas y periódicos en su edición original, página por página. Solo publicaciones que permiten mostrarse completas.</p></div>';
-    if(!HD){ h+='<div class="krow"><div class="hgrid">'+'<span class="hcov"><span class="hci"><i class="hsk sk"></i></span></span>'.repeat(6)+'</div></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ magView.querySelector('.hgrid').innerHTML='<div class="kerr" style="color:#e9f1ee"><b>No pudimos abrir el kiosco ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
-    var fc=HD.fc, row=function(t,items){ return '<div class="krow"><div class="krt">'+t+'</div><div class="hgrid">'+items.join('')+'</div></div>'; };
-    if(fc&&fc.issues&&fc.issues.length) h+=row('Tecnología · Full Circle Magazine (mensual)', fc.issues.map(function(it,i){ it.__i=i; return hCover(it,'fc','Full Circle #'+it.n,(i===0?'Última edición':'Edición anterior')+' · inglés'); }));
-    h+='<div class="krow"><div class="krt">De la casa</div><div class="hgrid"><button class="hcov" data-pub="rev"><span class="hci rvthumb"><span class="rvp">'+rvPage(0)+'</span></span><b>Revista CruzTRD</b><em>Edición 01 · 16 páginas · +25 pts por artículo</em></button></div></div>';
-    [['byn','Hemeroteca en español · Blanco y Negro (Madrid)'],['ilus','Hemeroteca en español · La Ilustración Española y Americana (Madrid)'],['ilart','Hemeroteca en español · La Ilustración Artística (Barcelona)'],
-     ['sciam','Hemeroteca de ciencia y tecnología · Scientific American'],['pm','Hemeroteca de ciencia y tecnología · Popular Mechanics'],['psm','Hemeroteca de ciencia y tecnología · Popular Science Monthly']].forEach(function(c){
-      var C=HD[c[0]]; if(!C||!C.issues||!C.issues.length) return;
-      var cnt={}; C.issues.forEach(function(it){ cnt[it.label]=(cnt[it.label]||0)+1; });
-      C.issues.forEach(function(it,i){ it.__i=i; it.__img=hThumb(it,1,500); if(cnt[it.label]>1||/encuadernado/.test(it.label||'')) it.label=(/^Año/.test(it.label)?it.label+' · ':'')+'Tomo '+(i+1)+' de '+C.issues.length; });
-      h+=row(c[1], hPick(C.issues,4).map(function(it){ return hCover(it,c[0],it.label||C.name,it.pages+' páginas · '+(C.lang==='ES'?'español':'inglés')); })); });
-    h+='<div class="knote">Full Circle se publica bajo licencia CC BY-SA 3.0. La hemeroteca reúne escaneos de dominio público de Wikimedia Commons. Las publicaciones comerciales actuales no permiten mostrar su edición completa sin un acuerdo.</div></div>';
-    magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
-    [].slice.call(magView.querySelectorAll('[data-fccov]')).forEach(function(el){ var n=+el.getAttribute('data-fccov');
-      hFcDoc(n,'en').then(function(doc){ return hPdfPage(doc,'fc'+n,0,420); }).then(function(u){ var it=fc.issues.filter(function(x){return x.n===n;})[0]; if(it) it.__img=u; var im=new Image(); im.alt=''; im.src=u; el.replaceWith(im); }).catch(function(){ el.classList.remove('sk'); }); });
-  }
+  
+  
+  
   // ===== Revista CruzTRD maquetada como revista: 16 páginas que se pasan como las demás =====
   var RVN=16, RVROOMN=['','Infraestructura','Seguridad','Pagos','Suscripciones','Marketing','Fidelización','Dashboards'];
   function rvStack(big){ var h='', cx=130, nm=['Infraestructura','Seguridad','Pagos','Suscripciones','Marketing','Fidelización','Dashboards'];
@@ -2886,44 +2845,16 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // ---------- kiosco ----------
   function fbKeyOf(k,it){ return k==='rev'?'rev01':(k==='fc'?'fc'+it.n:String(it.thumb||'').replace(/\?.*$/,'').slice(-120)); }
   function kLabel(k,it){ if(k==='fc') return 'Edición #'+it.n; if(k==='sciam'||k==='pm'||k==='psm') return it.label||''; var y=(String(it.title||'').match(/\b(1[89]\d\d)\b/)||[])[1]; return y?'Año '+y:'Tomo encuadernado'; }
-  function kItems(k){ var C=HD&&HD[k]; if(!C||!C.issues) return []; C.issues.forEach(function(it,i){ it.__i=i; }); return C.issues.filter(function(it){ return k==='fc'||(it.pages||0)>=4; }); }
+  
   var KCOV={}; try{ KCOV=JSON.parse(localStorage.getItem('cruztrd_cov_v1')||'{}'); }catch(e){}
   // color dominante de una portada (para teñir tarjeta y sala de lectura)
-  function kTint(im){ try{ var c=document.createElement('canvas'); c.width=c.height=24; var x=c.getContext('2d',{willReadFrequently:true}); x.drawImage(im,0,0,24,24); var d=x.getImageData(0,0,24,24).data, r=0,g=0,b=0,w=0;
-      for(var i=0;i<d.length;i+=4){ var R=d[i],G=d[i+1],B=d[i+2], mx=Math.max(R,G,B), mn=Math.min(R,G,B), sat=mx?(mx-mn)/mx:0, k=.15+sat*sat*3*(mx>40?1:.2); r+=R*k; g+=G*k; b+=B*k; w+=k; }
-      r/=w; g/=w; b/=w; var L=.3*r+.59*g+.11*b, f=L<90?90/Math.max(L,1):1; return [Math.min(255,r*f),Math.min(255,g*f),Math.min(255,b*f)].map(Math.round).join(','); }catch(e){ return ''; } }
-  function kTintOn(im){ var host=im.closest('.kc,.kf,.lbf'); if(!host) return; var t=kTint(im); if(t) host.style.setProperty('--tint',t); }
-  function kCard(k,it,o){ o=o||{}; var C=HD[k], fc=k==='fc', saved=+fbMem(fbKeyOf(k,it))||0, lang=fc?'EN':C.lang, pg=KCOV[fbKeyOf(k,it)]||1;
-    var cov=fc?(FCCOV[it.n]?'<img alt="" src="'+FCCOV[it.n]+'">':'<i class="hsk sk" data-fccov="'+it.n+'"></i>'):'<img alt="" loading="lazy" decoding="async" src="'+hImg(it,pg,500)+'" data-chk="'+k+'|'+it.__i+'|'+pg+'">';
-    var type=fc?'Linux y software libre':((it.pages||0)>220?'Tomo · '+nf(it.pages)+' págs.':'Número · '+it.pages+' págs.');
-    return '<button class="kc'+(fc?' land':'')+'" data-hem="'+k+'" data-hi="'+it.__i+'" aria-label="'+esc((fc?'Full Circle #'+it.n:C.name)+' · '+kLabel(k,it))+'"><span class="kcv">'+cov+'<i class="kgl"></i><em class="kl">'+lang+'</em>'+(o.badge?'<em class="kb">'+o.badge+'</em>':'')+(saved>1?'<em class="kp"><i style="width:'+Math.min(100,Math.round((saved+1)/Math.max(1,it.pages||48)*100))+'%"></i>Seguir · pág. '+(saved+1)+'</em>':'')+'</span>'+
-      '<span class="kct"><em>'+esc(o.pub||(fc?'Full Circle':C.name))+'</em><b>'+esc(o.sub||kLabel(k,it))+'</b><span>'+esc(o.meta||type)+'</span></span></button>'; }
+  
+  
+  
   var KROWN=0;
-  function kRow(t,s,cards,land){ if(!cards.length) return ''; KROWN++; return '<section class="kr rack'+(land?' land':'')+'"><header><span class="krk">'+(KROWN<10?'0':'')+KROWN+'</span><div><b>'+t+'</b><span>'+s+'</span></div><span class="krb"><button class="krn" data-krs="-1" aria-label="Anteriores">'+FBIC.prev+'</button><button class="krn" data-krs="1" aria-label="Siguientes">'+FBIC.next+'</button></span></header><div class="krs">'+cards.join('')+'</div></section>'; }
+  
   var MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-  function kShelf(){ fbClose(); magEl.classList.remove('reading'); magEl.style.removeProperty('--tint'); KROWN=0;
-    var hoy=''; try{ hoy=new Date().toLocaleDateString('es-EC',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }catch(e){}
-    var h='<div class="kshelf v3 lib"><div class="lbwall"><div class="lblamps" aria-hidden="true"><i></i><i></i><i></i></div>'+
-      '<header class="lbsign"><span class="lbk">Sala de espera · Quito</span><h2>Librería <em>del Estudio</em></h2><span class="lbd">'+esc(hoy)+'</span></header>'+
-      '<p class="lbintro">Ediciones completas, página por página. Hojéalas como revista, desliza para leerlas en grande o, en la revista de la casa, pásalas a texto.</p>';
-    if(!HD){ h+='<div class="lbtable"><div class="lbitems"><span class="lbf sk"></span><span class="lbf sk"></span></div><div class="lbtop"></div><div class="lbapron"></div></div></div></div>'; magView.innerHTML=h; magView.className='magview vshelf'; hLoad().then(function(){ if(magView.className.indexOf('vshelf')>-1) kShelf(); }).catch(function(){ var f=magView.querySelector('.lbitems'); if(f) f.innerHTML='<div class="kerr" style="color:#f4ecdc"><b>No pudimos abrir la librería ahora.</b><span>Intenta en unos minutos.</span></div>'; }); return; }
-    var R=(CLUB.st.read||[]).length, sv=+fbMem('rev01')||0, pm=kItems('pm').filter(function(it){ return /1928/.test(it.title||''); });
-    var mi=new Date().getMonth(), feat=pm.filter(function(it){ return (it.label||'').indexOf(MESES[mi])===0; })[0]||pm[0];
-    h+='<div class="lbtable"><div class="lbitems">';
-    h+='<button class="lbf" data-pub="rev" style="--tint:45,212,167"><span class="lbcv kfc rvthumb"><span class="rvp">'+rvPage(0)+'</span><i class="kgl"></i></span><span class="lbtalk"><i>Recomendado del estudio</i><b>Revista CruzTRD · Edición 01</b><span>Las 7 capas de una app D2C, en 16 páginas. '+(R?R+' de '+MAG.length+' artículos leídos.':'+25 pts por cada artículo.')+'</span><u>'+(sv>1?'Seguir en la página '+(sv+1):'Leer ahora')+' →</u></span></button>';
-    if(feat){ var fs=+fbMem(fbKeyOf('pm',feat))||0, yrs=new Date().getFullYear()-1928, pg=KCOV[fbKeyOf('pm',feat)]||1;
-      h+='<button class="lbf" data-hem="pm" data-hi="'+feat.__i+'"><span class="lbcv kfc"><img alt="" decoding="async" src="'+hImg(feat,pg,500)+'" data-chk="pm|'+feat.__i+'|'+pg+'"><i class="kgl"></i></span><span class="lbtalk r"><i>'+(feat.label.indexOf(MESES[mi])===0?'Hace '+yrs+' años, este mes':'Joya del archivo')+'</i><b>Popular Mechanics · '+esc(feat.label)+'</b><span>Así se imaginaba el futuro: inventos, máquinas y anuncios de época. '+feat.pages+' páginas.</span><u>'+(fs>1?'Seguir en la página '+(fs+1):'Hojear el número')+' →</u></span></button>'; }
-    h+='</div><div class="lbtop"></div><div class="lbapron"><span>Novedades</span></div></div>';
-    if(pm.length) h+='<section class="lbsec"><header class="lbplate"><b>Popular Mechanics · 1928</b><span>La colección completa del año · '+pm.length+' números · dominio público</span></header><div class="lbgrid">'+
-      pm.map(function(it){ var m=(it.label||'').split(' ')[0]; return kCard('pm',it,{pub:'Popular Mechanics',sub:m.charAt(0).toUpperCase()+m.slice(1)+' de 1928',meta:it.pages+' páginas'}); }).join('')+'</div></section>';
-    h+='<div class="knote">Popular Mechanics de 1928 está en dominio público; los escaneos provienen de Wikimedia Commons y la primera vez que se abre una página puede tardar unos segundos en prepararse.</div></div></div>';
-    magView.innerHTML=h; magView.className='magview vshelf'; magEl.scrollTop=0;
-    [].slice.call(magView.querySelectorAll('.kc img,.lbf img')).forEach(function(im){ var chk=function(){ var a=(im.getAttribute('data-chk')||'').split('|');
-        if(a.length===3){ var k=a[0], it=HD[k].issues[+a[1]], pg=+a[2]; if(isBlank(inkOf(im))){ if(pg>=6){ var c=im.closest('.kc'); if(c) c.remove(); return; }
-          pg++; KCOV[fbKeyOf(k,it)]=pg; try{ localStorage.setItem('cruztrd_cov_v1',JSON.stringify(KCOV)); }catch(e){} im.setAttribute('data-chk',k+'|'+a[1]+'|'+pg); im.src=hImg(it,pg,500); return; } }
-        var c=im.closest('.kcv,.kfc'); if(c) c.classList.add('ok'); kTintOn(im); };
-      if(im.complete&&im.naturalWidth) chk(); else im.addEventListener('load',chk); });
-  }
+  
   magView.addEventListener('click',function(e){ var b=e.target.closest&&e.target.closest('[data-krs]'); if(!b) return; e.stopPropagation(); var s=b.closest('.kr').querySelector('.krs'); s.scrollBy({left:+b.getAttribute('data-krs')*s.clientWidth*.85,behavior:'smooth'}); });
   // portada que se inclina siguiendo el cursor
   magView.addEventListener('pointermove',function(e){ if(e.pointerType!=='mouse') return; var c=e.target.closest&&e.target.closest('.kcv,.kfc'); if(!c||!c.closest('.vshelf')) return; var r=c.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
@@ -3728,7 +3659,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         '<div class="pyWal" title="Billetera de puntos canjeables"><span>Puntos</span><b id="pyPts">'+fmt(st.pts)+'</b></div><button class="pySnd'+(VAUD.muted?' off':'')+'" data-py="snd" aria-label="Sonido"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="w" d="M16.5 8.5a5 5 0 010 7M19 6a8.5 8.5 0 010 12"/></svg></button></header>'+
         '<div class="pyMain"><div class="pyHero"><div class="pySws">'+sw+'</div><span class="pyEye"><i></i>'+G.eye+' nº '+dayNo()+' · '+fecha+'</span><h1>'+G.h1+'</h1><p>'+G.desc+'</p>'+
         '<div class="pyCta"><button class="pyGo" data-py="go"><span>'+(dg?G.again:G.cta)+'</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button><span class="pyHint">'+G.hint+'</span></div>'+
-        '<div class="pyStreak"><div class="pyDays">'+cells+'</div><div class="pyStx"><b>'+(sk?('Racha de '+sk+' '+(sk===1?'día':'días')):'Empieza tu racha hoy')+'</b><span>'+(nm?('Día '+nm.d+' de racha: +'+nm.p+' pts de bono · cuenta cualquier juego'):'Racha máxima: sigue así')+'</span></div></div>'+
+        '<div class="pyStreak"><div class="pyDays">'+cells+'</div><div class="pyStx"><b>'+(sk?('Racha de '+sk+' '+(sk===1?'día':'días')):'Empieza tu racha hoy')+'</b><span>'+(nm?('Al día '+nm.d+' de racha: +'+nm.p+' pts de bono · cuenta cualquier juego'):'Racha máxima: sigue así')+'</span></div></div>'+
         '<div class="pyStats"><div><b>'+fmt(dg)+'</b><span>Récord de hoy</span></div><div><b>'+fmt(st.bestG[cur]||0)+'</b><span>Tu mejor</span></div><div><b>'+fmt(st.runsG[cur]||0)+'</b><span>'+G.unit+'</span></div></div></div>'+
         '<aside class="pyPanel"><nav class="pyTabs" role="tablist"><button data-tab="rank">Ranking</button><button data-tab="prem">Premios</button><button data-tab="mar">Para marcas</button></nav><div class="pyTab" id="pyTab"></div></aside></div>'+
         '<footer class="pyFoot">Demo de CruzTRD Play · el ranking usa jugadores de demostración y los códigos mostrados no son canjeables</footer>'; }
@@ -3806,7 +3737,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       hud={s:$q('#hS'),m:$q('#hM'),d:$q('#hD')};
       try{ if(!E) E=VUELO.create($q('#plyCv'),{inputEl:$q('#plyStage'),onHud:onHud,onEvent:onEvent,onOver:onOver}); }catch(err){ E=null; }
       room();
-      if(!st.welcome){ st.welcome=1; st.pts+=60; st.issued+=60; save(); var w=$q('#pyPts'); if(w) w.textContent=fmt(st.pts); timers.push(setTimeout(function(){ toast('Bono de bienvenida · +60 pts','Ya vas en el 20% de tu primer premio'); },900)); } }
+      if(!st.welcome){ st.welcome=1; st.pts+=60; st.issued+=60; save(); var w=$q('#pyPts'); if(w) w.textContent=fmt(st.pts); timers.push(setTimeout(function(){ toast('Bono de bienvenida · +60 pts','Puntos de demostración: así se vería en tu marca'); },900)); } }
     function close(){ timers.forEach(clearTimeout); timers=[]; VAUD.pad(false); VAUD.music(null); if(F){ F.destroy(); F=null; } if(E){ E.destroy(); E=null; } if(root){ root.className='ply'; $q('#plyModal').classList.remove('on'); } document.body.classList.remove('magopen','plyopen'); }
     function addPts(n,why){ st.pts+=n; st.issued+=n; if(why==='buy'){ st.buys=(st.buys||0)+1; st.lastBuy=Date.now(); } save(); }
     function water(){ var k=ymd(); if(st.days.indexOf(k)<0){ st.days.push(k); st.days=st.days.slice(-60); } st.water=k; save(); }
@@ -4099,7 +4030,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     sDump:function(){var rm=ROOMS[cur];return rm.screens?JSON.stringify(rm.screens):'sin screens';},
     sHide:function(b){screens.forEach(function(s){s.mesh.visible=!b;});}};
 
-  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0; try{ tyaw=yaw=entryYawFor(ROOMS[0]); if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]capa=/.test(location.search)) yaw=tyaw+1.62; }catch(e){}
+  var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
+  addEventListener('keydown',function(e){ var k=e.key; if(k!=='ArrowLeft'&&k!=='ArrowRight'&&k!=='ArrowUp'&&k!=='ArrowDown') return; var t=e.target, tg=t&&t.tagName; if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT') return; if(document.body.classList.contains('magopen')||document.querySelector('.panel.open,.dirmodal.open,.clubcard.on,.ply.open,.chakra.open,.bienv:not([hidden])')) return; e.preventDefault(); if(k==='ArrowLeft') tyaw+=0.2; else if(k==='ArrowRight') tyaw-=0.2; else if(k==='ArrowUp') tpitch=Math.min(1.1,tpitch+0.1); else tpitch=Math.max(-1.1,tpitch-0.1); }); try{ tyaw=yaw=entryYawFor(ROOMS[0]); if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]capa=/.test(location.search)) yaw=tyaw+1.62; }catch(e){}
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
   addEventListener('pointermove',function(e){ if(!dragging)return; var dk=ROOMS[cur].flat?camera.fov/70:1; tyaw-=(e.clientX-px)*0.0022*dk; tpitch-=(e.clientY-py)*0.0022*dk; px=e.clientX;py=e.clientY; tpitch=Math.max(-1.0,Math.min(1.0,tpitch)); hideHint();});
   addEventListener('pointerup',function(){dragging=false;cv.classList.remove('drag');});
@@ -4154,10 +4086,10 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     var spots=ROOMS[cur].spots; for(var i=0;i<spots.length;i++){var s=spots[i];
       proj.copy(s.pos).project(camera);
       var vis=proj.z<1 && proj.x>-1.08 && proj.x<1.08 && proj.y>-1.08 && proj.y<1.08 && s.dir.dot(fwd)>0.12;
-      if(vis){s.el.style.opacity='1';s.el.style.pointerEvents='auto';
+      if(vis){s.el.style.opacity='1';s.el.style.pointerEvents='auto';if(s.el.tabIndex!==0)s.el.tabIndex=0;
         s.el.style.left=((proj.x*0.5+0.5)*innerWidth)+'px';
         s.el.style.top=((-proj.y*0.5+0.5)*innerHeight)+'px';
-      } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';}
+      } else {s.el.style.opacity='0';s.el.style.pointerEvents='none';if(s.el.tabIndex!==-1)s.el.tabIndex=-1;}
     }
     var chs=edgeH.__s; if(chs){ var cvis=chs.el.style.opacity==='1', sn=chs.el.classList.contains('seen');
       if(!cvis&&!sn&&!moving&&!panel.classList.contains('open')&&e>2200){ var v3=chs.dir.clone().transformDirection(camera.matrixWorldInverse); edgeH.classList.add('on'); edgeH.classList.toggle('r',v3.x>0); edgeH.classList.toggle('l',!(v3.x>0)); }
