@@ -255,6 +255,7 @@
 
     h2('05','Inversión y tiempo estimados');
     kvTable([
+      ['Alcance','Aplicación web adaptable (se instala desde el navegador). Las apps nativas para App Store y Google Play se estiman aparte'],
       ['Puesta en marcha (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD  ·  diseño, desarrollo y despliegue'],
       ['Infraestructura mensual','$'+m.tierTotal+' USD/mes en DigitalOcean (escala: '+m.tier.label+')'],
       ['Modelo de monetización',m.monetLbl],
@@ -269,14 +270,14 @@
       ['Inversión inicial (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD'],
       ['Costo mensual de operación','$'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)'],
       ['Comisión de pasarela','~3,5% + IVA sobre cada venta (varía por pasarela)'],
-      ['Usuarios estimados al lanzar','~'+bz.users.toLocaleString('es-EC')+' (según tu escala)']
+      ['Usuarios al cierre del primer año','~'+bz.users.toLocaleString('es-EC')+' (supuesto según tu escala)']
     ],62);
     if(m.monet==='sub'){
       para('Escenario con suscripción (supuestos: precio $'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
-        ['Escenario base','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
-        ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión':'aún por debajo del costo en este escenario')],
+        ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
+        ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
         ['Recuperas la inversión',(bz.recover?'en ~'+bz.recover+' meses':'requiere más clientes o mayor precio')],
         ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión en ~'+bz.recover2+' meses':'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
@@ -285,7 +286,7 @@
       para('Escenario con pago único (supuestos: ticket $'+bz.price+'; 6% de tus usuarios compran):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' ventas al mes cubren la operación'],
-        ['Escenario base','~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')+' de ingreso']
+        ['Escenario favorable','~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')+' de ingreso']
       ],62);
     } else if(m.monet==='fee'){
       para('Escenario con comisiones (supuestos: ticket $'+bz.order+'; 5% de comisión; 10% de usuarios transaccionan al mes):',{style:'bold',size:10,gap:1});
@@ -384,11 +385,11 @@
       L.push('- **Inversión inicial (una vez):** $'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD');
       L.push('- **Costo mensual de operación:** $'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)');
       L.push('- **Comisión de pasarela:** ~3,5% + IVA sobre cada venta');
-      L.push('- **Usuarios estimados al lanzar:** ~'+bz.users.toLocaleString('es-EC'));
+      L.push('- **Usuarios al cierre del primer año (supuesto):** ~'+bz.users.toLocaleString('es-EC'));
       if(m.monet==='sub'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' clientes de pago (a $'+bz.price+'/mes) cubren la operación');
-        L.push('- **Escenario base:** ~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes'+(bz.recover?'; recuperas la inversión en ~'+bz.recover+' meses':'')); }
+        L.push('- **Escenario favorable:** ~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes'+(bz.recover?'; recuperas la inversión en ~'+bz.recover+' meses':'')); }
       else if(m.monet==='once'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' ventas/mes (ticket $'+bz.price+')');
-        L.push('- **Escenario base:** ~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')); }
+        L.push('- **Escenario favorable:** ~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')); }
       else if(m.monet==='fee'){ L.push('- **GMV estimado:** ~$'+bz.gmv.toLocaleString('es-EC')+'/mes; tu comisión ~$'+bz.rev.toLocaleString('es-EC')+'/mes');
         L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' transacciones/mes'); }
       else if(m.monet==='ads'){ L.push('- Ingreso por publicidad depende del tráfico/CPM; conviene combinarla con otra fuente.'); }
