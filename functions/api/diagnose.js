@@ -83,21 +83,29 @@ function isIncomplete(parsed) {
 }
 
 export async function onRequestPost({ request, env }) {
+  // Solo desde el propio sitio; cuerpo acotado; campos validados contra listas.
+  const origin = request.headers.get('origin') || '';
+  if (origin && !/^https:\/\/([a-z0-9-]+\.)?(cruztrd\.com|cruztrd-web\.pages\.dev)$/i.test(origin) && !/^http:\/\/localhost(:\d+)?$/i.test(origin)) return J({ error: 'origen no permitido' }, 403);
   let body = {};
-  try { body = await request.json(); } catch (e) {}
-  const { idea, country, scale, monet, hasBase } = body;
+  try { const raw = await request.text(); if (raw.length > 6000) return J({ error: 'solicitud demasiado grande' }, 413); body = JSON.parse(raw); } catch (e) {}
+  const PAISES = ['Ecuador', 'Colombia', 'Perú', 'Peru', 'México', 'Mexico', 'Chile', 'Argentina', 'Otro'];
+  const country = PAISES.indexOf(String(body.country || '')) >= 0 ? String(body.country) : 'Ecuador';
+  const scale = SCLBL[body.scale] ? body.scale : 's2';
+  const monet = Object.prototype.hasOwnProperty.call(MOLBL, body.monet || '') ? (body.monet || '') : '';
+  const hasBase = body.hasBase === true;
+  const idea = String(body.idea || '').replace(/[\u0000-\u001f"`\\]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 800);
 
   if (!idea || !String(idea).trim()) return J({ error: 'idea requerida' }, 400);
   if (!env.ANTHROPIC_API_KEY) return J({ error: 'falta ANTHROPIC_API_KEY' }, 500);
 
   const key = env.ANTHROPIC_API_KEY;
-  const prompt = buildPrompt(String(idea).slice(0, 1200), country, scale, monet, hasBase);
+  const prompt = buildPrompt(idea, country, scale, monet, hasBase);
 
   try {
     let model = resolveModel(env);
     let r;
     try { r = await callMessages(key, model, prompt); }
-    catch (e) { return J({ status: 'error', error: 'network', detail: String(e).slice(0, 160) }); }
+    catch (e) { return J({ status: 'error', error: 'network' }); }
 
     // Si el modelo por defecto no existe para esta key, descubre uno válido y reintenta una vez.
     if (r.status === 404) {
@@ -106,39 +114,38 @@ export async function onRequestPost({ request, env }) {
       if (alt && alt !== model) {
         MODEL_CACHE = alt; model = alt;
         try { r = await callMessages(key, model, prompt); }
-        catch (e) { return J({ status: 'error', error: 'network', detail: String(e).slice(0, 160) }); }
+        catch (e) { return J({ status: 'error', error: 'network' }); }
       }
     }
     // IMPORTANTE: nunca devolver 5xx. Cloudflare reemplaza cualquier 5xx de la Function
     // por su propia pagina HTML y el frontend no puede leer el JSON. Siempre 200 + status.
     if (!r.ok) {
       const detail = await r.text().catch(() => '');
-      return J({ status: 'error', error: 'upstream', http: r.status, model, detail: detail.slice(0, 200) });
+      return J({ status: 'error', error: 'upstream' });
     }
 
     const data = await r.json();
     const text = (data && data.content && data.content[0] && data.content[0].text) || '';
     const parsed = extractJSON(text);
-    if (!parsed) return J({ status: 'error', error: 'sin_json', model, raw: text.slice(0, 200) });
+    if (!parsed) return J({ status: 'error', error: 'sin_json' });
 
     // "incompleto": el frontend muestra al anfitrión pidiendo más datos.
     if (isIncomplete(parsed)) {
       MODEL_CACHE = model;
-      return J({ status: 'incompleto', reason: parsed.reason || parsed.summary || '', questions: Array.isArray(parsed.questions) ? parsed.questions : [], example: parsed.example || '', __model: model });
+      return J({ status: 'incompleto', reason: parsed.reason || parsed.summary || '', questions: Array.isArray(parsed.questions) ? parsed.questions : [], example: parsed.example || '' });
     }
-    if (!parsed.caps || !parsed.caps.length) return J({ status: 'error', error: 'sin_caps', model, raw: text.slice(0, 200) });
+    if (!parsed.caps || !parsed.caps.length) return J({ status: 'error', error: 'sin_caps' });
 
     MODEL_CACHE = model;
     parsed.status = 'ok';
-    parsed.__model = model;
     return J(parsed);
   } catch (e) {
-    return J({ status: 'error', error: 'fetch_fail', detail: String(e).slice(0, 200) });
+    return J({ status: 'error', error: 'fetch_fail' });
   }
 }
 
 // Salud: GET /api/diagnose -> {ok, hasKey, model}
 export async function onRequestGet({ env }) {
-  const out = { ok: true, service: 'cruztrd-diagnose', hasKey: !!(env && env.ANTHROPIC_API_KEY), model: resolveModel(env), cruzModel: (env && env.CRUZ_MODEL) || null };
+  const out = { ok: true, service: 'cruztrd-diagnose', ready: !!(env && env.ANTHROPIC_API_KEY) };
   return J(out);
 }

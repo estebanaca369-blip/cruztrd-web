@@ -79,7 +79,7 @@
       fetch('/api/contacto', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: nombre, correo: correo, mensaje: mensaje })
+        body: JSON.stringify({ nombre: nombre, correo: correo, mensaje: mensaje, website: (document.getElementById('website')||{}).value||'' })
       }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (res) {
           if (res.ok && res.d && res.d.delivered === false) {

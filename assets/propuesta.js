@@ -5,7 +5,7 @@
   /* ---- Datos reales: mercado Ecuador ---- */
   /* ---- Datos reales de mercado por pais (DataReportal / Banco Mundial) ---- */
   var MARKETS={
-    'Ecuador':{stats:[['Población','18,3 M (oct 2025)'],['Usuarios de internet','15,4 M - 83,9%'],['Conexiones móviles','18,4 M - ~100%'],['Compran en línea','~50% de los adultos'],['Mercado e-commerce','US$6,4 B (2024) a US$11 B en 2027 (+20%/año)'],['Ventas por móvil','75% del volumen']],
+    'Ecuador':{stats:[['Población','18,3 M (oct 2025)'],['Usuarios de internet','15,4 M - 83,9%'],['Conexiones móviles','18,4 M - ~100%'],['Compran en línea','~50% de los adultos'],['Mercado e-commerce','US$6.400 millones (2024) a US$11 B en 2027 (+20%/año)'],['Ventas por móvil','75% del volumen']],
       pagos:[['Tarjeta de crédito','74%'],['Tarjeta de débito','16%'],['Billeteras (DeUna, etc.)','6%'],['Transferencias','3%'],['Efectivo','1%']],
       fuente:'DataReportal Digital 2026 Ecuador; PaymentsCMI 2024-2025.'},
     'Colombia':{stats:[['Población','~52,9 M'],['Usuarios de internet','~77% de la población'],['Conexiones móviles','>130% de la población']],
@@ -57,8 +57,8 @@
 
   /* ---- Como ayuda de verdad cada capa ---- */
   var LAYER={
-    infra:'Tu app corre en servidores dedicados de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y sus datos quedan respaldados.',
-    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan cifradas con bcrypt, así que aunque roben la base no sirven. Sesiones con JWT, cifrado TLS de extremo a extremo, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
+    infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y sus datos quedan respaldados.',
+    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, así que aunque roben la base no sirven. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
     pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con Stripe para lo internacional y PayPhone / Kushki / Datafast para el mercado local. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
     susc:'Planes y membresías que se cobran y renuevan solos con Stripe Billing: prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
     mkt:'Google Analytics 4 y PostHog para saber de donde vienen tus usuarios y que hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde si convierte.',
@@ -199,7 +199,7 @@
     doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(138,160,168);
     doc.text('A I   S T U D I O   ·   P R O D U C T O S   D 2 C', M, 59);
     doc.setFont('helvetica','bold'); doc.setFontSize(34); doc.setTextColor(237,243,241);
-    doc.text('Propuesta comercial', M, 92);
+    doc.text('Estimación preliminar', M, 92);
     if(m.desc){ doc.setFont('helvetica','italic'); doc.setFontSize(12); doc.setTextColor(199,208,212);
       var q=doc.splitTextToSize('"'+m.desc+'"', CW-6); doc.text(q, M, 104); }
     var my=104+(m.desc?doc.splitTextToSize('"'+m.desc+'"',CW-6).length*6+14:8);
@@ -222,14 +222,14 @@
     doc.addPage(); y=M+2;
 
     h2('01','Objetivo');
-    para('Llevar tu idea a una aplicación lista para el mercado bajo un modelo D2C (directo a las personas, sin intermediarios). CruzTRD arma y despliega cada capa; tú te quedas con la fórmula y el control. Este documento resume qué construimos, con qué tecnología real, cuánto cuesta y cómo puedes construirla tú mismo si lo prefieres.',{});
+    para('Llevar tu idea a una aplicación lista para el mercado bajo un modelo D2C (directo a las personas, sin intermediarios). CruzTRD arma y despliega cada capa; tú te quedas con el código y el control. Este documento resume qué construimos, con qué tecnología real, cuánto cuesta y cómo puedes construirla tú mismo si lo prefieres.',{});
     if(m.desc){ para('Tu idea, en tus palabras: "'+m.desc+'"',{style:'italic',col:MUT,size:10}); }
 
     h2('02','Contexto de mercado  ·  '+m.loc);
     if(m.market){
       para('Panorama digital de '+m.loc+':',{style:'bold',size:10.5,gap:1});
       kvTable(m.market.stats,60);
-      if(m.market.pagos){ para('Cómo paga la gente (share del volumen de e-commerce):',{style:'bold',size:10.5,gap:1}); kvTable(m.market.pagos,60); }
+      if(m.market.pagos){ para('Cómo paga la gente (participación en el volumen de e-commerce):',{style:'bold',size:10.5,gap:1}); kvTable(m.market.pagos,60); }
       para('Medios de pago que integramos en '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.6});
       para('Fuente: '+m.market.fuente,{size:8.2,col:MUT,lh:4});
     } else {
@@ -254,7 +254,7 @@
 
     h2('05','Inversión y tiempo estimados');
     kvTable([
-      ['Puesta en marcha (una vez)','$'+m.sl.toLocaleString('en-US')+' - $'+m.sh.toLocaleString('en-US')+' USD  ·  diseño, desarrollo y despliegue'],
+      ['Puesta en marcha (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD  ·  diseño, desarrollo y despliegue'],
       ['Infraestructura mensual','$'+m.tierTotal+' USD/mes en DigitalOcean (escala: '+m.tier.label+')'],
       ['Modelo de monetización',m.monetLbl],
       ['Tiempo hasta el lanzamiento','~'+m.wl+' a '+m.wh+' semanas']
@@ -265,50 +265,50 @@
     var bz=m.biz;
     para('Cifras de referencia para dimensionar la operación. Son supuestos ajustables (precio, conversión, usuarios) que afinamos con tus datos reales.',{});
     kvTable([
-      ['Inversión inicial (una vez)','$'+m.sl.toLocaleString('en-US')+' - $'+m.sh.toLocaleString('en-US')+' USD'],
+      ['Inversión inicial (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD'],
       ['Costo mensual de operación','$'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)'],
       ['Comisión de pasarela','~3,5% + IVA sobre cada venta (varía por pasarela)'],
-      ['Usuarios estimados al lanzar','~'+bz.users.toLocaleString('en-US')+' (según tu escala)']
+      ['Usuarios estimados al lanzar','~'+bz.users.toLocaleString('es-EC')+' (según tu escala)']
     ],62);
     if(m.monet==='sub'){
       para('Escenario con suscripción (supuestos: precio $'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
-        ['Escenario base','~'+bz.paying.toLocaleString('en-US')+' clientes de pago = $'+bz.mrr.toLocaleString('en-US')+'/mes de ingreso'],
-        ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('en-US')+'/mes tras costos y comisión':'aún por debajo del costo en este escenario')],
+        ['Escenario base','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
+        ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión':'aún por debajo del costo en este escenario')],
         ['Recuperas la inversión',(bz.recover?'en ~'+bz.recover+' meses':'requiere más clientes o mayor precio')]
       ],62);
     } else if(m.monet==='once'){
       para('Escenario con pago único (supuestos: ticket $'+bz.price+'; 6% de tus usuarios compran):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' ventas al mes cubren la operación'],
-        ['Escenario base','~'+bz.buyers.toLocaleString('en-US')+' compradores = $'+bz.rev.toLocaleString('en-US')+' de ingreso']
+        ['Escenario base','~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')+' de ingreso']
       ],62);
     } else if(m.monet==='fee'){
       para('Escenario con comisiones (supuestos: ticket $'+bz.order+'; 5% de comisión; 10% de usuarios transaccionan al mes):',{style:'bold',size:10,gap:1});
       kvTable([
-        ['Volumen transado (GMV)','~$'+bz.gmv.toLocaleString('en-US')+'/mes'],
-        ['Tu ingreso por comisión','~$'+bz.rev.toLocaleString('en-US')+'/mes'],
+        ['Volumen transado (GMV)','~$'+bz.gmv.toLocaleString('es-EC')+'/mes'],
+        ['Tu ingreso por comisión','~$'+bz.rev.toLocaleString('es-EC')+'/mes'],
         ['Punto de equilibrio','~'+bz.breakEven+' transacciones/mes cubren la operación']
       ],62);
     } else if(m.monet==='ads'){
       para('Monetizas con publicidad: el ingreso depende del tráfico y del CPM. Con una base pequeña, la publicidad rara vez cubre costos al inicio; conviene combinarla con otra fuente. Definimos metas de tráfico contigo.',{});
     } else {
-      para('Aún no defines como monetizar. El caso de negocio se activa al elegir un modelo (suscripción, pago único o comisiones); por ahora considera el costo de operación de $'+bz.monthlyCost+'/mes más la inversión inicial.',{});
+      para('Aún no defines cómo monetizar. El caso de negocio se activa al elegir un modelo (suscripción, pago único o comisiones); por ahora considera el costo de operación de $'+bz.monthlyCost+'/mes más la inversión inicial.',{});
     }
     para('Importante: son proyecciones orientativas, no una promesa de resultados. Los números reales dependen de tu producto, precio, conversión y marketing. Ajustamos este caso con tus datos.',{size:8.6,col:MUT,lh:4.4});
 
     h2('07','Guía para construirla con IA (p. ej. Claude)');
     para('Si decides construirla tú mismo con una IA de código como Claude, sigue estos pasos y copia los prompts. Están escritos para el stack que recomendamos arriba.',{});
     para('Paso 0 - Arranque del proyecto (copia este prompt):',{style:'bold',size:10,gap:1});
-    para('"Actua como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos."',{size:9.4,col:INK,lh:4.6,style:'italic'});
+    para('"Actúa como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos."',{size:9.4,col:INK,lh:4.6,style:'italic'});
     var stepN=1;
     keys.forEach(function(k){ if(!GUIDE[k])return;
       para('Paso '+stepN+' - '+nmeOf(k)+':',{style:'bold',size:10,gap:1});
       para('"'+GUIDE[k]+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
       stepN++;
     });
-    para('Consejo: pídele a la IA que trabaje capa por capa, que escriba pruebas y que te explique cada archivo. Si en algun punto quieres que lo tomemos nosotros, este documento ya deja el plan y el stack listos.',{size:8.8,col:MUT,lh:4.4});
+    para('Consejo: pídele a la IA que trabaje capa por capa, que escriba pruebas y que te explique cada archivo. Si en algún punto quieres que lo tomemos nosotros, este documento ya deja el plan y el stack listos.',{size:8.8,col:MUT,lh:4.4});
 
     h2('08','Qué necesitamos de tu lado');
     var need=['Tu idea, textos e imágenes (o los creamos contigo).','Tu dominio y los accesos de tu marca.','Tu revisión y visto bueno en cada entrega.'];
@@ -336,7 +336,7 @@
     try{
       var jsPDF=await loadJsPDF();
       var doc=makePDF(jsPDF, m);
-      var name='Propuesta-CruzTRD-Confidencial.pdf';
+      var name='Estimacion-CruzTRD.pdf';
       var blob=doc.output('blob');
       var dl=(window.claude&&window.claude.use)?(await window.claude.use('downloads')):null;
       if(dl){ try{ await dl.save({filename:name, data:blob}); }catch(se){ if(!(se&&se.code==='declined')){ try{ var u0=URL.createObjectURL(blob); var a0=document.createElement('a'); a0.href=u0; a0.download=name; document.body.appendChild(a0); a0.click(); a0.remove(); }catch(e0){} } restore(); return; } restore(); return; }
@@ -346,9 +346,9 @@
       // Fallback: documento de marca en HTML (listo para imprimir a PDF)
       try{ var html=buildProposalHTML();
         var dl=(window.claude&&window.claude.use)?(await window.claude.use('downloads')):null;
-        if(dl){ await dl.save({filename:'Propuesta-CruzTRD-Confidencial.html', data:html}); restore(); return; }
+        if(dl){ await dl.save({filename:'Estimacion-CruzTRD.html', data:html}); restore(); return; }
         var b=new Blob([html],{type:'text/html'}); var u=URL.createObjectURL(b);
-        var a2=document.createElement('a'); a2.href=u; a2.download='Propuesta-CruzTRD-Confidencial.html'; document.body.appendChild(a2); a2.click(); a2.remove();
+        var a2=document.createElement('a'); a2.href=u; a2.download='Estimacion-CruzTRD.html'; document.body.appendChild(a2); a2.click(); a2.remove();
       }catch(e2){}
       restore();
     }
@@ -376,15 +376,15 @@
     (m.tier?m.tier.rows:[]).forEach(function(r){ L.push('- **'+r[0]+'** — '+r[1]+' — $'+r[2]+'/mes'); });
     L.push('- **Total:** $'+m.tierTotal+' USD/mes'); L.push('');
     (function(){ var bz=m.biz; L.push('## Caso de negocio (referencia, ajustable)');
-      L.push('- **Inversión inicial (una vez):** $'+m.sl.toLocaleString('en-US')+' - $'+m.sh.toLocaleString('en-US')+' USD');
+      L.push('- **Inversión inicial (una vez):** $'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD');
       L.push('- **Costo mensual de operación:** $'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)');
       L.push('- **Comisión de pasarela:** ~3,5% + IVA sobre cada venta');
-      L.push('- **Usuarios estimados al lanzar:** ~'+bz.users.toLocaleString('en-US'));
+      L.push('- **Usuarios estimados al lanzar:** ~'+bz.users.toLocaleString('es-EC'));
       if(m.monet==='sub'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' clientes de pago (a $'+bz.price+'/mes) cubren la operación');
-        L.push('- **Escenario base:** ~'+bz.paying.toLocaleString('en-US')+' clientes de pago = $'+bz.mrr.toLocaleString('en-US')+'/mes'+(bz.recover?'; recuperas la inversión en ~'+bz.recover+' meses':'')); }
+        L.push('- **Escenario base:** ~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes'+(bz.recover?'; recuperas la inversión en ~'+bz.recover+' meses':'')); }
       else if(m.monet==='once'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' ventas/mes (ticket $'+bz.price+')');
-        L.push('- **Escenario base:** ~'+bz.buyers.toLocaleString('en-US')+' compradores = $'+bz.rev.toLocaleString('en-US')); }
-      else if(m.monet==='fee'){ L.push('- **GMV estimado:** ~$'+bz.gmv.toLocaleString('en-US')+'/mes; tu comisión ~$'+bz.rev.toLocaleString('en-US')+'/mes');
+        L.push('- **Escenario base:** ~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')); }
+      else if(m.monet==='fee'){ L.push('- **GMV estimado:** ~$'+bz.gmv.toLocaleString('es-EC')+'/mes; tu comisión ~$'+bz.rev.toLocaleString('es-EC')+'/mes');
         L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' transacciones/mes'); }
       else if(m.monet==='ads'){ L.push('- Ingreso por publicidad depende del tráfico/CPM; conviene combinarla con otra fuente.'); }
       else { L.push('- Elige un modelo de monetización para activar la proyección de ingresos.'); }
@@ -393,7 +393,7 @@
     keys.forEach(function(k){ L.push(''); L.push('### '+nmeOf(k)); L.push(LAYER[k]||''); if(k==='pagos') L.push('**Pasarelas ('+m.loc+'):** '+m.rails); var st=[];try{st=(window.LIBS||{})[k]||[];}catch(e){} if(st.length) L.push('**Stack:** '+st.join(', ')); });
     L.push(''); L.push('## Prompts listos (cópialos en orden)'); L.push('');
     L.push('**Paso 0 - Arranque del proyecto**'); L.push('```');
-    L.push('Actua como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos.');
+    L.push('Actúa como ingeniero full-stack senior. Vamos a construir '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos.');
     L.push('```'); L.push('');
     var n=1;
     keys.forEach(function(k){ if(!GUIDE[k])return; L.push('**Paso '+n+' - '+nmeOf(k)+'**'); L.push('```'); L.push(GUIDE[k]); L.push('```'); L.push(''); n++; });
