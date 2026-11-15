@@ -1,0 +1,151 @@
+/* CRUZTRD CT S.A.S. — sitio corporativo
+   Sistema de estilos compartido · modo claro y oscuro · mobile-first */
+
+:root{
+  --accent:#19C37D;     /* firma de marca */
+  --accent-2:#2DD4A7;
+  --accent-ink:#0E8F5B; /* verde legible sobre fondo claro (texto/enlaces) */
+  --bg:#ffffff;
+  --bg-2:#f3f6f6;
+  --ink:#0B0E14;        /* tinta sobre claro (guía de marca) */
+  --muted:#59676e;
+  --card:#ffffff;
+  --line:rgba(11,14,20,.12);
+  --line-soft:rgba(11,14,20,.07);
+  --shadow:0 1px 2px rgba(11,14,20,.04),0 10px 30px rgba(11,14,20,.06);
+  --focus:#0E8F5B;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --accent:#19C37D;--accent-2:#2DD4A7;--accent-ink:#2DD4A7;
+    --bg:#07090C;--bg-2:#0b0f14;--ink:#EDF3F1;--muted:#9AA6AD;
+    --card:#0d1116;--line:rgba(255,255,255,.10);--line-soft:rgba(255,255,255,.06);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.45);
+    --focus:#2DD4A7;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --accent:#19C37D;--accent-2:#2DD4A7;--accent-ink:#2DD4A7;
+  --bg:#07090C;--bg-2:#0b0f14;--ink:#EDF3F1;--muted:#9AA6AD;
+  --card:#0d1116;--line:rgba(255,255,255,.10);--line-soft:rgba(255,255,255,.06);
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.45);
+  --focus:#2DD4A7;color-scheme:dark;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.65;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+img{max-width:100%;display:block}
+a{color:var(--accent-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+
+/* ---------- Navegación ---------- */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line-soft)}
+.nav-in{max-width:960px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:18px}
+.brand{font-family:'Poppins';font-weight:700;font-size:20px;color:var(--ink);letter-spacing:-.3px}
+.brand b{color:var(--accent)}
+.nav .links{margin-left:auto;display:flex;gap:26px}
+.nav .links a{color:var(--muted);font-size:15px;font-weight:500;padding:4px 0;position:relative}
+.nav .links a:hover{color:var(--ink);text-decoration:none}
+.nav .links a[aria-current="page"]{color:var(--ink)}
+.nav .links a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--accent);border-radius:2px}
+.nav-actions{display:flex;align-items:center;gap:8px;margin-left:8px}
+.icon-btn{appearance:none;background:transparent;border:1px solid var(--line);color:var(--ink);width:40px;height:40px;border-radius:10px;font-size:17px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s}
+.icon-btn:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.burger{display:none}
+@media (max-width:760px){
+  .nav .links{position:fixed;inset:64px 0 auto 0;margin:0;flex-direction:column;gap:0;background:var(--bg);border-bottom:1px solid var(--line);padding:8px 0;transform:translateY(-130%);transition:transform .22s ease;box-shadow:var(--shadow)}
+  .nav .links.open{transform:translateY(0)}
+  .nav .links a{padding:14px 24px;font-size:16px;border-bottom:1px solid var(--line-soft)}
+  .nav .links a[aria-current="page"]::after{display:none}
+  .nav .links a[aria-current="page"]{color:var(--accent-ink)}
+  .burger{display:inline-flex}
+}
+
+/* ---------- Hero de página ---------- */
+.phero{padding:64px 0 14px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;color:var(--accent-ink);font-family:'Poppins';font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
+h1{font-family:'Poppins';font-weight:700;font-size:clamp(30px,5vw,46px);letter-spacing:-.6px;line-height:1.08;margin:14px 0 10px}
+.lead{color:var(--muted);font-size:clamp(16px,1.6vw,19px);max-width:62ch}
+h2{font-family:'Poppins';font-weight:600;font-size:clamp(21px,2.4vw,26px);letter-spacing:-.3px;margin:0 0 6px}
+h3{font-family:'Poppins';font-weight:600;font-size:18px;margin:0 0 4px}
+p{margin:10px 0}
+strong{color:var(--ink);font-weight:600}
+
+/* ---------- Secciones y tarjetas ---------- */
+main{padding:24px 0 10px}
+section{padding:22px 0}
+.grid{display:grid;gap:18px}
+.grid.two{grid-template-columns:repeat(2,1fr)}
+.grid.three{grid-template-columns:repeat(3,1fr)}
+@media (max-width:760px){.grid.two,.grid.three{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+.card p{color:var(--muted)}
+.card .step-n{font-family:'Share Tech Mono',ui-monospace,monospace;color:var(--accent-ink);font-size:13px;letter-spacing:1px}
+.list{list-style:none;margin:12px 0 0}
+.list li{position:relative;padding-left:22px;color:var(--muted);margin-top:9px}
+.list li::before{content:"";position:absolute;left:3px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.list li strong{color:var(--ink)}
+
+/* Ficha de datos legales */
+.data{display:grid;grid-template-columns:max-content 1fr;gap:8px 20px;margin-top:8px;font-size:15px}
+.data dt{color:var(--muted)}
+.data dd{color:var(--ink)}
+@media (max-width:520px){.data{grid-template-columns:1fr;gap:2px 0}.data dd{margin-bottom:10px}}
+
+.note{background:color-mix(in srgb,var(--accent) 7%,transparent);border:1px solid color-mix(in srgb,var(--accent) 28%,transparent);border-radius:12px;padding:14px 16px;margin-top:18px;color:var(--ink);font-size:14.5px}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:'Poppins';font-weight:600;font-size:15px;padding:12px 20px;border-radius:11px;border:1px solid transparent;cursor:pointer;transition:transform .12s,box-shadow .15s,background .15s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#07140d;box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 35%,transparent)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--accent)}
+
+/* Producto */
+.prod{display:flex;flex-direction:column;gap:14px}
+.prod .tag{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:12px;letter-spacing:1px;color:var(--accent-ink);border:1px solid var(--line);border-radius:999px;padding:4px 12px;width:max-content}
+.prod h2{display:flex;align-items:baseline;gap:10px}
+
+/* Formulario */
+.form{display:grid;gap:16px;max-width:560px}
+.field{display:grid;gap:7px}
+.field label{font-size:14px;font-weight:600;color:var(--ink)}
+.field input,.field textarea{font:inherit;color:var(--ink);background:var(--bg-2);border:1px solid var(--line);border-radius:11px;padding:13px 14px;width:100%;transition:border-color .15s}
+.field textarea{min-height:140px;resize:vertical}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.field .err{color:#d14343;font-size:13px;min-height:16px}
+.form-status{font-size:14.5px;margin-top:4px;min-height:20px}
+.form-status.ok{color:var(--accent-ink)}
+.form-status.bad{color:#d14343}
+.contact-cols{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start}
+@media (max-width:760px){.contact-cols{grid-template-columns:1fr;gap:28px}}
+.contact-data a{color:var(--accent-ink)}
+.contact-data .row{margin:10px 0}
+.contact-data .k{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-family:'Share Tech Mono',monospace;margin-bottom:2px}
+
+/* 404 */
+.center-stage{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:40px 24px}
+.center-stage .code{font-family:'Share Tech Mono',monospace;color:var(--accent-ink);font-size:15px;letter-spacing:3px}
+
+/* ---------- Pie ---------- */
+.site-footer{border-top:1px solid var(--line);margin-top:40px;background:var(--bg-2)}
+.foot-in{max-width:960px;margin:0 auto;padding:34px 24px 46px;display:grid;gap:14px}
+.foot-brand{font-family:'Poppins';font-weight:700;font-size:19px;color:var(--ink)}
+.foot-brand b{color:var(--accent)}
+address.foot-legal{font-style:normal;color:var(--muted);font-size:14px;line-height:1.75}
+address.foot-legal a{color:var(--muted)}
+address.foot-legal a:hover{color:var(--accent-ink)}
+.foot-links{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px}
+.foot-links a{color:var(--muted)}
+.foot-links a:hover{color:var(--accent-ink)}
+.foot-copy{color:var(--muted);font-size:13px;border-top:1px solid var(--line-soft);padding-top:14px}
