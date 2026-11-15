@@ -1,0 +1,27 @@
+// Cloudflare Pages Function — GET /api/voz
+// Voz de los especialistas (ElevenLabs Agents). La API key vive SOLO como secreto
+// de Cloudflare (env.ELEVENLABS_API_KEY); el navegador recibe un token de un solo uso.
+//   GET /api/voz        -> { ok, voice:true|false }   (salud: ¿está conectada la voz?)
+//   GET /api/voz?t=1    -> { ok, token, voices }        (token WebRTC para una conversación)
+const ALLOW = [/^https:\/\/([a-z0-9-]+\.)?cruztrd\.com$/, /^https:\/\/([a-z0-9-]+\.)?cruztrd-web\.pages\.dev$/, /^http:\/\/localhost(:\d+)?$/];
+const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
+
+function voices(env) {
+  try { const v = JSON.parse(env.ELEVEN_VOICES || '{}'); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; }
+}
+
+export async function onRequestGet({ request, env }) {
+  const url = new URL(request.url);
+  const ready = !!(env.ELEVENLABS_API_KEY && env.ELEVENLABS_AGENT_ID);
+  if (!url.searchParams.get('t')) return J({ ok: true, voice: ready });
+  if (!ready) return J({ ok: false, error: 'voz_no_configurada' });
+  const origin = request.headers.get('origin') || request.headers.get('referer') || '';
+  const o = origin.replace(/\/[^/]*$/, '').replace(/(https?:\/\/[^/]+).*/, '$1');
+  if (!ALLOW.some(rx => rx.test(o))) return J({ ok: false, error: 'origen' }, 403);
+  try {
+    const r = await fetch('https://api.elevenlabs.io/v1/convai/conversation/token?agent_id=' + encodeURIComponent(env.ELEVENLABS_AGENT_ID), { headers: { 'xi-api-key': env.ELEVENLABS_API_KEY } });
+    if (!r.ok) return J({ ok: false, error: 'upstream', http: r.status, detail: (await r.text()).slice(0, 200) });
+    const d = await r.json();
+    return J({ ok: true, token: d.token, voices: voices(env) });
+  } catch (e) { return J({ ok: false, error: 'fetch_fail', detail: String(e).slice(0, 160) }); }
+}
