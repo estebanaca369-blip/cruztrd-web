@@ -11,14 +11,14 @@
     var caja=document.querySelector('.portada'), tira=document.querySelector('.giro'), pista=document.getElementById('pista'); if(!caja||!tira) return;
     var quieto=false; try{ quieto=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
     var x=0, v=quieto?0:-0.012, base=v, ancho=0, arr=false, px=0, ult=0, t0=0;
-    function medir(){ ancho=tira.scrollWidth/2; if(!x) x=-(ancho*0.5-innerWidth*(innerWidth<900?0.4:0.72)); }
+    var puesto=false; function medir(){ var w=tira.scrollWidth/2; if(w<200){ setTimeout(medir,120); return; } ancho=w; if(!puesto){ puesto=true; x=-(ancho*0.5-innerWidth*(innerWidth<900?0.4:0.72)); } }
     function pinta(){ if(ancho){ while(x<=-ancho) x+=ancho; while(x>0) x-=ancho; } tira.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'; }
-    function paso(t){ var dt=Math.min(50,t-(t0||t)); t0=t; if(!arr){ x+=v*dt; v+=(base-v)*0.035; } pinta(); requestAnimationFrame(paso); }
+    function paso(t){ var dt=Math.min(50,t-(t0||t)); t0=t; if(!arr&&puesto){ x+=v*dt; v+=(base-v)*0.035; } pinta(); requestAnimationFrame(paso); }
     caja.addEventListener('pointerdown',function(e){ if(e.target.closest('a,button')) return; arr=true; px=e.clientX; ult=0; caja.classList.add('arr'); if(pista) pista.classList.add('fuera'); });
     addEventListener('pointermove',function(e){ if(!arr) return; var d=e.clientX-px; px=e.clientX; x+=d; ult=d; });
     function suelta(){ if(!arr) return; arr=false; caja.classList.remove('arr'); v=Math.max(-2.2,Math.min(2.2,ult/16)); }
     addEventListener('pointerup',suelta); addEventListener('pointercancel',suelta);
-    var im=tira.querySelector('img'); if(im.complete) medir(); else im.addEventListener('load',medir); addEventListener('resize',function(){ ancho=tira.scrollWidth/2; });
+    var im=tira.querySelector('img'); im.addEventListener('load',medir); medir(); addEventListener('resize',function(){ ancho=tira.scrollWidth/2; });
     setTimeout(function(){ if(pista) pista.classList.add('fuera'); },6000);
     requestAnimationFrame(paso);
   })();
