@@ -148,7 +148,8 @@
       return t.replace(' Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',' Sienta la base para cumplir la ley de protección de datos de tu país.')
               .replace(' -el 90% del volumen de e-commerce en Ecuador-','')
               .replace(' (en Ecuador: PayPhone, Kushki o Datafast)','')
-              .replace(' (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible)',''); }
+              .replace(' (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible)','')
+              .replace(/m[eé]xico/i.test(m.loc||'')?' Stripe es una opción para cobros internacionales si tu empresa tiene una entidad en un país donde opera.':'\u0000',''); }
     var doc=new jsPDF({unit:'mm',format:'a4'});
     var W=210,H=297,M=18,CW=W-2*M, y=0;
     function setC(c){ doc.setTextColor(c[0],c[1],c[2]); }
@@ -191,7 +192,8 @@
       // total
       ensure(8); doc.setFont('helvetica','bold'); doc.setFontSize(9.2); setC(GREEN);
       var tot=sum(list);
-      doc.text('Total mensual DigitalOcean', M, y+4); doc.text('$'+tot+' /mes', M+CW, y+4, {align:'right'}); y+=9;
+      doc.text('Total mensual DigitalOcean', M, y+4); doc.text('US$'+tot+' /mes', M+CW, y+4, {align:'right'}); y+=9;
+      if(m.scale==='s3'||m.scale==='s4'){ doc.setFont('helvetica','normal'); doc.setFontSize(8.6); setC(MUT); doc.text('A esta escala el costo real depende de la carga: tómalo como un piso, no como un presupuesto.', M, y+2); y+=7; }
     }
     function bullets(arr){ arr.forEach(function(t){ ensure(5);
       doc.setFont('helvetica','normal'); doc.setFontSize(10); setC(GREEN); doc.text('•', M, y+3.4);
@@ -276,7 +278,7 @@
       ['Inversión inicial (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')],
       ['Costo mensual de operación','US$'+bz.monthlyCost+'/mes (infraestructura DigitalOcean)'],
       ['Comisión de pasarela',(esEc?'~3,5% + IVA':'~3,5% más impuestos')+' sobre cada venta (varía por pasarela)'],
-      ['Usuarios al cierre del primer año','~'+bz.users.toLocaleString('es-EC')+' (supuesto según tu escala)']
+      ['Usuarios de referencia','~'+bz.users.toLocaleString('es-EC')+' (punto medio de la escala que elegiste)']
     ],62);
     if(m.monet==='sub'){
       para('Escenario con suscripción (supuestos: precio US$'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
@@ -315,7 +317,7 @@
     var stepN=1;
     keys.forEach(function(k){ if(!GUIDE[k])return;
       para('Paso '+stepN+' - '+nmeOf(k)+':',{style:'bold',size:10,gap:1});
-      para('"'+(esEc?GUIDE[k]:GUIDE[k].replace(' (PayPhone o Kushki en Ecuador)',''))+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
+      para('"'+(esEc?GUIDE[k]:GUIDE[k].replace(' (PayPhone o Kushki en Ecuador)','').replace(/m[eé]xico/i.test(m.loc||'')?' y deja preparada la integración con Stripe para cuando haya una entidad en un país donde opera':'\u0000',''))+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
       stepN++;
     });
     para('Consejo: pídele a la IA que trabaje capa por capa, que escriba pruebas y que te explique cada archivo. Si en algún punto quieres que lo tomemos nosotros, este documento ya deja el plan y el stack listos.',{size:8.8,col:MUT,lh:4.4});

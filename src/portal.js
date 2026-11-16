@@ -935,7 +935,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   // ===== salas del recorrido =====
   var ROOMS=[
-    {name:'Recepción · Lobby', pano:'media/lab-pano.webp?v=w1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], spots:[
+    {name:'Recepción · Lobby', pano:'media/lab-pano.webp?v=w2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], spots:[
       {type:'char', lon:0,lat:-7, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas. Llama al ascensor cuando quieras subir a cualquier piso del estudio.',
        sheet:'media/strip-host.webp', cls:'hosta'},
@@ -970,7 +970,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
        sheet:'media/strip-susc.webp', cls:'susca'},
       {type:'door', lon:48,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 05 · Marketing', pano:'media/sala6.webp?v=w1', p6:'media/sala6-6k.webp?v=w1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 05 · Marketing', pano:'media/sala6.webp?v=w2', p6:'media/sala6-6k.webp?v=w2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'char', lon:0,lat:-18, hk:'mkt', eye:'Capa 05', title:'Marketing', who:'GUÍA VIRTUAL · MARKETING',
        text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.',
        sheet:'media/strip-mkt.webp', cls:'mkta'},
@@ -984,7 +984,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
        sheet:'media/strip-fidel.webp', cls:'fidela'},
       {type:'door', lon:-35.328,lat:-3.237, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 07 · Dashboards', pano:'media/sala8.webp?v=w1', p6:'media/sala8-6k.webp?v=w1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 07 · Dashboards', pano:'media/sala8.webp?v=w2', p6:'media/sala8-6k.webp?v=w2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:42,lat:-15},
       {type:'char', lon:0,lat:-9, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'GUÍA VIRTUAL · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
@@ -1021,6 +1021,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     if(clubCard) clubCard.classList.remove('on'); try{ closeDir(); }catch(e){}
     CLUB.spec(s.hk);
     pChar.className='charspr '+s.cls; pChar.style.backgroundImage='url('+s.sheet+')';
+    try{ var __n={intro:0,infra:1,seg:2,pagos:3,susc:4,mkt:5,fidel:6,dash:7}[s.hk]||0; pChar.parentNode.style.backgroundImage='url(/media/'+(__n?('home-capa-0'+__n+'.webp?v=n4'):'home-recepcion.webp?v=1')+')'; }catch(e){}
     void pChar.offsetWidth; pChar.classList.add('go','reveal');
     var D=SPEC[s.hk]; document.getElementById('pNum').textContent=D?D.n:'';
     if(s.el){ s.el.classList.add('seen'); s.el.classList.remove('say'); }
@@ -1153,7 +1154,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     if(!RM) ding();
     await wait(RM?120:380);
     elev.classList.remove('riding');
-    tyaw=yaw=entryYawFor(ROOMS[to]); tpitch=pitch=0; // prepara la vista + re-dispara el FOV de entrada
+    tyaw=yaw=entryYawFor(ROOMS[to]); tpitch=pitch=(innerWidth<innerHeight&&!ROOMS[to].flat)?0.13:0; window.__czTocado=false; // prepara la vista + re-dispara el FOV de entrada
     if(gyro.on)gyro.have=false;                     // recalibra el giroscopio a la nueva sala
     t0=performance.now();
     elev.classList.remove('shut');                  // puertas abren → sala destino
@@ -2560,7 +2561,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   document.getElementById('navHub').onclick=openDir;
 
   // arranque en Recepción
-  try{ if(renderer.capabilities.maxTextureSize>=8192&&!matchMedia('(pointer:coarse)').matches&&innerWidth>=1100&&(navigator.deviceMemory||8)>=4){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w1'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
+  try{ if(renderer.capabilities.maxTextureSize>=8192&&!matchMedia('(pointer:coarse)').matches&&innerWidth>=1100&&(navigator.deviceMemory||8)>=4){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w2'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);
     // bienvenida (una vez por visita) o entrada directa a un piso desde el inicio (?capa=N)
     var capa=0; try{ capa=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){}
@@ -2589,7 +2590,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var yaw=0, pitch=0, tyaw=0, tpitch=0, dragging=false, px=0, py=0;
   addEventListener('keydown',function(e){ var k=e.key; if(k!=='ArrowLeft'&&k!=='ArrowRight'&&k!=='ArrowUp'&&k!=='ArrowDown') return; var t=e.target, tg=t&&t.tagName; if(tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT') return; if(document.body.classList.contains('magopen')||document.querySelector('.panel.open,.dirmodal.open,.clubcard.on,.ply.open,.chakra.open,.bienv:not([hidden])')) return; e.preventDefault(); if(k==='ArrowLeft') tyaw+=0.2; else if(k==='ArrowRight') tyaw-=0.2; else if(k==='ArrowUp') tpitch=Math.min(1.1,tpitch+0.1); else tpitch=Math.max(-1.1,tpitch-0.1); }); try{ tyaw=yaw=entryYawFor(ROOMS[0]); if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!/[?&]capa=/.test(location.search)) yaw=tyaw+1.62; }catch(e){}
   cv.addEventListener('pointerdown',function(e){dragging=true;px=e.clientX;py=e.clientY;cv.classList.add('drag');});
-  addEventListener('pointermove',function(e){ if(!dragging)return; var dk=ROOMS[cur].flat?camera.fov/70:1; tyaw+=(e.clientX-px)*0.0022*dk; tpitch+=(e.clientY-py)*0.0022*dk; px=e.clientX;py=e.clientY; tpitch=Math.max(-1.0,Math.min(1.0,tpitch)); hideHint();});
+  addEventListener('pointermove',function(e){ if(!dragging)return; window.__czTocado=true; var dk=ROOMS[cur].flat?camera.fov/70:1; tyaw+=(e.clientX-px)*0.0022*dk; tpitch+=(e.clientY-py)*0.0022*dk; px=e.clientX;py=e.clientY; tpitch=Math.max(-1.0,Math.min(1.0,tpitch)); hideHint();});
   addEventListener('pointerup',function(){dragging=false;cv.classList.remove('drag');});
   addEventListener('wheel',function(e){camera.fov=capFov(Math.max(38,Math.min(Math.max(86,fovBase()),camera.fov+e.deltaY*0.03)));camera.updateProjectionMatrix();},{passive:true});
   var hint=document.getElementById('hint'), hintHid=false;
@@ -2632,7 +2633,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     requestAnimationFrame(loop); if(document.body.classList.contains('plyopen')) return;
     var now=performance.now(), e=now-t0;
     if(e<ENTER){var k=e/ENTER;k=1-Math.pow(1-k,3);camera.fov=ROOMS[cur].flat?capFov(99)*(0.84+0.16*k):capFov(FOV0+(fovBase()-FOV0)*k);camera.updateProjectionMatrix();}
-    var drift=noDrift?0:Math.sin(now/4200)*0.05;
+    var __v=innerWidth<innerHeight&&!ROOMS[cur].flat&&!window.__czTocado; var drift=noDrift?0:(__v?Math.sin((now-t0)/5200)*0.2:Math.sin(now/4200)*0.05);
     yaw+=((tyaw+drift)-yaw)*0.08; pitch+=(tpitch-pitch)*0.08;
     var RF=ROOMS[cur]; if(RF.flat||RF.lim){ var FF=RF.flat||RF.lim,dd=Math.PI/180,hv=camera.fov/2*dd,th=Math.tan(hv)*camera.aspect,tv=Math.tan(hv),ap=Math.abs(pitch),den=Math.cos(ap)-tv*Math.sin(ap),hh=den>0.05?Math.atan2(th,den):1.5;
       var pmx=FF.latT*dd-hv, pmn=FF.latB*dd+hv; if(pmx<pmn){pmx=pmn=(pmx+pmn)/2;} tpitch=Math.max(pmn,Math.min(pmx,tpitch)); pitch=Math.max(pmn,Math.min(pmx,pitch));

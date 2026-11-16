@@ -1388,3 +1388,9 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .charspr{filter:grayscale(.85) contrast(1.04) brightness(.92) drop-shadow(0 20px 26px rgba(0,0,0,.6))}
 
 .clubcard:not(.on){visibility:hidden}
+
+/* el panel abre con la pantalla real de la sala, no con un personaje */
+.charwrap{height:200px;flex:none;margin:0 0 10px;border-radius:10px;background:#0b0e14 center/cover no-repeat;border:1px solid rgba(255,255,255,.08)}
+.charwrap::after{display:none}
+.charwrap .charspr{display:none!important}
+@media(max-width:520px){.charwrap{height:170px;flex:none}}
