@@ -1383,3 +1383,6 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .panel .x{background:rgba(7,9,12,.85)}
 
 .dcard .dav,.dlobby .dav,.edgeh .eav{display:none}
+
+/* guía del panel en tono sobrio, acorde a las salas nocturnas */
+.charspr{filter:grayscale(.85) contrast(1.04) brightness(.92) drop-shadow(0 20px 26px rgba(0,0,0,.6))}
