@@ -705,7 +705,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // ===== FIDELIZACIÓN (foto nueva): lounge del Club CruzTRD =====
   var TIK=['#8a4f2a','#56636b','#8f6410','#2c7690'];          // tinta oscura por nivel
   var TMET=[['#3a2418','#b8774f','#f6c3a0'],['#2a3034','#9aa7ae','#f4f8fa'],['#33260c','#c49634','#ffe3a3'],['#1d3540','#8fc2d4','#eefcff']];
-  var TREW=['Bienvenida al Club','Guía de capas para tu app (PDF)','Diagnóstico de tu app con IA','Sesión 1:1 con el equipo'];
+  var TREW=['Bienvenida al Club','Estimación de tu idea (PDF)','Diagnóstico de tu app con IA','Sesión 1:1 con el equipo'];
   function wrapL(c,txt,maxW){ var w=txt.split(' '),L=[],cur=''; for(var i=0;i<w.length;i++){ var tt=cur?cur+' '+w[i]:w[i]; if(c.measureText(tt).width>maxW&&cur){L.push(cur);cur=w[i];} else cur=tt; } if(cur)L.push(cur); return L; }
   function star(c,x,y,R,col){ c.beginPath(); for(var i=0;i<10;i++){ var a=-Math.PI/2+i*Math.PI/5, r=i%2?R*0.45:R; c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);} c.closePath(); c.fillStyle=col; c.fill(); }
   function hola(){ var h=new Date().getHours(); return (h<5||h>=19)?'Buenas noches':(h<12?'Buenos días':'Buenas tardes'); }
@@ -944,8 +944,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       {type:'act', act:'equipo', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>', label:'Diagnostica tu idea con IA', lon:-133,lat:-4},
       {type:'dir', lon:49,lat:-1, label:'Subir a los pisos'}
     ]},
-    {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg?v=n1', p6:'media/sala2-6k.jpg?v=n1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
-      {type:'char', lon:0,lat:-9, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'GUÍA VIRTUAL · INFRA',
+    {name:'Capa 01 · Infraestructura', pano:'media/sala2.jpg?v=n2', p6:'media/sala2-6k.jpg?v=n2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: las 7 capas de una app', pg:5, lon:62,lat:-6},
+      {type:'char', lon:0,lat:-17, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'GUÍA VIRTUAL · INFRA',
        text:'La base que deja tu app lista para crecer sin rehacerla.',
        sheet:'media/strip-infra.webp', cls:'infraa'},
       {type:'door', lon:-46,lat:-2, to:0, label:'Volver a Recepción'}
@@ -957,32 +958,34 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       {type:'door', lon:-47,lat:-1, to:0, label:'Volver a Recepción'}
     ]},
     {name:'Capa 03 · Pagos', pano:'media/sala4.jpg?v=n1', p6:'media/sala4-6k.jpg?v=n1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cobrar en Ecuador sin fricción', pg:7, lon:128,lat:-12},
       {type:'char', lon:0,lat:-9, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'GUÍA VIRTUAL · PAGOS',
        text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.',
        sheet:'media/strip-pagos.webp', cls:'pagosa'},
       {type:'door', lon:48,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 04 · Suscripciones', pano:'media/sala5.jpg?v=n1', p6:'media/sala5-6k.jpg?v=n1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 04 · Suscripciones', pano:'media/sala5.jpg?v=n2', p6:'media/sala5-6k.jpg?v=n2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'char', lon:0,lat:-12, hk:'susc', eye:'Capa 04', title:'Suscripciones', who:'GUÍA VIRTUAL · SUSCRIPCIONES',
        text:'Ingresos recurrentes: planes, renovaciones y reintentos que crecen mes a mes.',
        sheet:'media/strip-susc.webp', cls:'susca'},
       {type:'door', lon:48,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 05 · Marketing', pano:'media/sala6.jpg?v=n1', p6:'media/sala6-6k.jpg?v=n1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
-      {type:'char', lon:0,lat:-11, hk:'mkt', eye:'Capa 05', title:'Marketing', who:'GUÍA VIRTUAL · MARKETING',
+    {name:'Capa 05 · Marketing', pano:'media/sala6.jpg?v=n2', p6:'media/sala6-6k.jpg?v=n2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+      {type:'char', lon:0,lat:-18, hk:'mkt', eye:'Capa 05', title:'Marketing', who:'GUÍA VIRTUAL · MARKETING',
        text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.',
        sheet:'media/strip-mkt.webp', cls:'mkta'},
       {type:'door', lon:166,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 06 · Fidelización', pano:'media/sala7f.jpg', flat:{lonA:-45.3617,lonB:45.3948,latT:18.4474,latB:-18.6971}, es:3, entryYaw:0, fx:[], screens:[{"ui":"cardtv","act":[[1955.604,962.702],[2140.559,962.791],[2140.497,1069.398],[1955.684,1069.473]],"rad":[0,0,0,0],"res":760,"iv":60,"glass":0.035,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":0,"act":[[2209.426,946.863],[2248.031,951.339],[2248.036,1090.555],[2209.479,1094.612]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":1,"act":[[2269.035,953.847],[2302.932,958.092],[2302.852,1084.402],[2269.029,1088.22]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":2,"act":[[2321.562,960.629],[2352.232,964.813],[2352.217,1078.432],[2321.461,1082.062]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":3,"act":[[2368.639,967.061],[2390.314,970.087],[2390.323,1073.721],[2368.588,1076.452]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"invite","act":[[1854.389,1011.904],[1886.586,1011.55],[1883.924,1075.659],[1851.706,1074.331]],"rad":[0,0,0,0],"res":640,"iv":66,"glass":0.04,"fxui":1},{"ui":"reward","act":[[2484.325,963.984],[2535.743,960.834],[2535.629,1056.519],[2484.325,1055.202]],"rad":[0,0,0,0],"res":900,"iv":66,"glass":0.04,"fxui":1},{"ui":"tabglow","act":[[2492.376,1073.968],[2532.63,1075.102],[2528.882,1078.178],[2482.923,1076.721]],"rad":[0.6,0.6,0.6,0.6],"res":90,"iv":80,"glass":0.0,"fxui":1}], spots:[
-      {type:'act', act:'card', icon:'★', label:'Mi tarjeta Club CruzTRD', lon:0.009,lat:-5.231},
+    {name:'Capa 06 · Fidelización', pano:'media/sala7f.jpg?v=n1', flat:{lonA:-45.3617,lonB:45.3948,latT:18.4474,latB:-18.6971}, es:3, entryYaw:0, fx:[], screens:[{"ui":"cardtv","act":[[1955.604,962.702],[2140.559,962.791],[2140.497,1069.398],[1955.684,1069.473]],"rad":[0,0,0,0],"res":760,"iv":60,"glass":0.035,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":0,"act":[[2209.426,946.863],[2248.031,951.339],[2248.036,1090.555],[2209.479,1094.612]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":1,"act":[[2269.035,953.847],[2302.932,958.092],[2302.852,1084.402],[2269.029,1088.22]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":2,"act":[[2321.562,960.629],[2352.232,964.813],[2352.217,1078.432],[2321.461,1082.062]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":3,"act":[[2368.639,967.061],[2390.314,970.087],[2390.323,1073.721],[2368.588,1076.452]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"invite","act":[[1854.389,1011.904],[1886.586,1011.55],[1883.924,1075.659],[1851.706,1074.331]],"rad":[0,0,0,0],"res":640,"iv":66,"glass":0.04,"fxui":1},{"ui":"reward","act":[[2484.325,963.984],[2535.743,960.834],[2535.629,1056.519],[2484.325,1055.202]],"rad":[0,0,0,0],"res":900,"iv":66,"glass":0.04,"fxui":1},{"ui":"tabglow","act":[[2492.376,1073.968],[2532.63,1075.102],[2528.882,1078.178],[2482.923,1076.721]],"rad":[0.6,0.6,0.6,0.6],"res":90,"iv":80,"glass":0.0,"fxui":1}], spots:[
+      {type:'act', act:'card', icon:'★', label:'Mi tarjeta del Club', lon:0.009,lat:-5.231},
       {type:'act', act:'chakra', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z"/><path d="M7 21h10"/></svg>', label:'Chakra · tu huerto de fidelidad', lon:21.5,lat:-8.2},
       {type:'char', lon:-5.534,lat:-6.2, hk:'fidel', eye:'Capa 06', title:'Fidelización', who:'GUÍA VIRTUAL · FIDELIZACIÓN',
        text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.',
        sheet:'media/strip-fidel.webp', cls:'fidela'},
       {type:'door', lon:-35.328,lat:-3.237, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg?v=n1', p6:'media/sala8-6k.jpg?v=n1', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg?v=n2', p6:'media/sala8-6k.jpg?v=n2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:-152,lat:3},
       {type:'char', lon:0,lat:-9, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'GUÍA VIRTUAL · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
        sheet:'media/strip-dash.webp', cls:'dasha'},
@@ -1043,7 +1046,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
       else if(s.type==='act'){ el.className='hs act'+(s.act==='mag'?' mag':'');
         el.innerHTML='<div class="mk"><span class="ic">'+s.icon+'</span></div><div class="lbl">'+s.label+'</div>';
-        el.addEventListener('click',function(ev){ev.stopPropagation(); if(s.act==='share')clubShare(); else if(s.act==='card')clubLounge(); else if(s.act==='mag')openMag(); else if(s.act==='play')openPlay(); else if(s.act==='chakra')openChakra(); else if(s.act==='equipo')openEquipo();}); }
+        el.addEventListener('click',function(ev){ev.stopPropagation(); if(s.act==='share')clubShare(); else if(s.act==='card')clubLounge(); else if(s.act==='mag'){ if(s.pg) window.__revp=s.pg; openMag(); } else if(s.act==='play')openPlay(); else if(s.act==='chakra')openChakra(); else if(s.act==='equipo')openEquipo();}); }
       else if(s.type==='dir'){ el.className='hs dir';
         el.innerHTML='<div class="mk"><span class="ic">⊞</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); openDir();}); }
