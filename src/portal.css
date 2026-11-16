@@ -1394,3 +1394,8 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .charwrap::after{display:none}
 .charwrap .charspr{display:none!important}
 @media(max-width:520px){.charwrap{height:170px;flex:none}}
+
+/* ronda 7: movimiento reducido, pies legales, revista en pantallas angostas */
+@media (prefers-reduced-motion:reduce){.hint span,.edgeh .earr{animation:none!important}}
+@media(max-width:400px){.fbmodes button svg{display:none}.fbmodes button{padding:0 4px;min-width:0}}
+.colo{font-size:.88em;gap:.2em;padding:.9em 1.2em;margin-bottom:3.4em}.colo span:last-child{display:none}

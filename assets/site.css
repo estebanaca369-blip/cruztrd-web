@@ -187,9 +187,13 @@ section{padding:clamp(28px,4.5vw,60px) 0}
 
 /* páginas internas: la recepción nocturna a todo el ancho en la cabecera; enlaces sin verde */
 .phero{position:relative;isolation:isolate;min-height:clamp(300px,38vw,460px);display:flex;flex-direction:column;justify-content:flex-end}
-.phero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.62) 42%,rgba(7,9,12,.12) 100%),linear-gradient(180deg,rgba(7,9,12,.2) 55%,#07090C 100%),url(/media/home-estudio.webp?v=n4) var(--pos,50%) 50%/auto 135% no-repeat}
+.phero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.6) 40%,rgba(7,9,12,0) 78%),linear-gradient(180deg,rgba(7,9,12,0) 62%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n5)) 100% 50%/cover no-repeat}
 .phero>*{max-width:min(640px,100%)}
 main a[href^="mailto:"],main a[href^="tel:"],main a[href^="https://wa.me"]{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
 main a[href^="mailto:"]:hover,main a[href^="tel:"]:hover,main a[href^="https://wa.me"]:hover{text-decoration-color:#fff}
 
 .form input,.form textarea,form input,form textarea{scroll-margin-top:96px}
+.foot-links a,address.foot-legal a{display:inline-block;padding:10px 2px;margin:-6px 0}
+
+@media(max-width:700px){.phero::before{background-image:linear-gradient(180deg,rgba(7,9,12,.55) 0%,rgba(7,9,12,.82) 60%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n5));background-position:78% 50%}}
+.phero>p{max-width:min(520px,100%)}
