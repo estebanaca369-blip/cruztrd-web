@@ -23,9 +23,9 @@
 <meta name="twitter:image" content="https://cruztrd.com/media/og.jpg?v=3">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307090C'/%3E%3Ctext%20x='50'%20y='71'%20font-family='Arial,sans-serif'%20font-size='62'%20font-weight='700'%20text-anchor='middle'%20fill='%232DD4A7'%3EC%3C/text%3E%3C/svg%3E">
 <meta name="author" content="CRUZTRD CT S.A.S.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
+<link rel="stylesheet" href="/assets/fuentes.css?v=1">
 <link rel="preload" as="image" href="/media/home-estudio.webp?v=n2" type="image/webp">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CruzTRD","legalName":"CRUZTRD CT S.A.S.","url":"https://cruztrd.com","email":"esteban@cruztrd.com","telephone":"+593988011913","taxID":"1793237622001","description":"Empresa ecuatoriana que integra plataformas con inteligencia artificial y desarrolla aplicaciones enfocadas exclusivamente en el modelo D2C.","areaServed":"Ecuador","knowsAbout":["Integración de plataformas","Inteligencia artificial","Aplicaciones D2C","Aplicaciones móviles","Pagos y suscripciones"],"address":{"@type":"PostalAddress","streetAddress":"Calle OE1C S5-213, Santa María, Tumbaco","addressLocality":"Quito","addressRegion":"Pichincha","postalCode":"170184","addressCountry":"EC"},"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"esteban@cruztrd.com","telephone":"+593988011913"}}</script>
 <style>
@@ -422,7 +422,7 @@ footer{border-top:1px solid var(--linea);padding:34px 0 44px;font-size:14px;colo
   /* Propuesta en PDF: el generador se carga solo cuando se pide */
   var cargando=null;
   function generador(){ if(window.__cruzGenPDF) return Promise.resolve(); if(cargando) return cargando;
-    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
+    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js?v=3'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
   document.getElementById('fcta').addEventListener('click',function(e){ e.preventDefault();
     generador().then(function(){ return window.__cruzGenPDF(); }).catch(function(){ avisar('No pudimos generar el PDF. Escríbenos por WhatsApp y te lo enviamos.'); });
   });

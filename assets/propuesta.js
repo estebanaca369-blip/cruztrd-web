@@ -1,4 +1,4 @@
-/* ================= CruzTRD · Documento confidencial (PDF real) ================= */
+/* ================= CruzTRD · Estimación preliminar en PDF ================= */
 (function(){
   var GREEN=[45,212,167], BLACK=[7,9,12], INK=[22,26,32], MUT=[95,105,115], LINE=[228,232,236], SOFT=[244,250,247];
 
@@ -143,6 +143,12 @@
 
   /* ---------- Layout ---------- */
   function makePDF(jsPDF, m){
+    var esEc=m.esEc;
+    function capaTxt(k){ var t=LAYER[k]||''; if(esEc) return t;
+      return t.replace(' Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',' Sienta la base para cumplir la ley de protección de datos de tu país.')
+              .replace(' -el 90% del volumen de e-commerce en Ecuador-','')
+              .replace(' (en Ecuador: PayPhone, Kushki o Datafast)','')
+              .replace(' (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible)',''); }
     var doc=new jsPDF({unit:'mm',format:'a4'});
     var W=210,H=297,M=18,CW=W-2*M, y=0;
     function setC(c){ doc.setTextColor(c[0],c[1],c[2]); }
@@ -242,7 +248,7 @@
     var keys=m.keys.slice(); if(keys.indexOf('infra')<0) keys.unshift('infra');
     keys.forEach(function(k){
       para(nmeOf(k),{style:'bold',size:11,gap:0.5});
-      para(LAYER[k]||'',{size:10,lh:4.8});
+      para(capaTxt(k),{size:10,lh:4.8});
       if(k==='pagos'){ para('Pasarelas para '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.4}); }
       var st=[]; try{ st=(window.LIBS||{})[k]||[]; }catch(e){}
       if(st.length){ para('Stack: '+st.join('  ·  '),{size:8.6,col:GREEN,lh:4,gap:4}); }
@@ -269,7 +275,7 @@
     kvTable([
       ['Inversión inicial (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD'],
       ['Costo mensual de operación','$'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)'],
-      ['Comisión de pasarela','~3,5% + IVA sobre cada venta (varía por pasarela)'],
+      ['Comisión de pasarela',(esEc?'~3,5% + IVA':'~3,5% más impuestos')+' sobre cada venta (varía por pasarela)'],
       ['Usuarios al cierre del primer año','~'+bz.users.toLocaleString('es-EC')+' (supuesto según tu escala)']
     ],62);
     if(m.monet==='sub'){
@@ -309,14 +315,14 @@
     var stepN=1;
     keys.forEach(function(k){ if(!GUIDE[k])return;
       para('Paso '+stepN+' - '+nmeOf(k)+':',{style:'bold',size:10,gap:1});
-      para('"'+GUIDE[k]+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
+      para('"'+(esEc?GUIDE[k]:GUIDE[k].replace(' (PayPhone o Kushki en Ecuador)',''))+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
       stepN++;
     });
     para('Consejo: pídele a la IA que trabaje capa por capa, que escriba pruebas y que te explique cada archivo. Si en algún punto quieres que lo tomemos nosotros, este documento ya deja el plan y el stack listos.',{size:8.8,col:MUT,lh:4.4});
 
     h2('08','Qué necesitamos de tu lado');
     var need=['Tu idea, textos e imágenes (o los creamos contigo).','Tu dominio y los accesos de tu marca.','Tu revisión y visto bueno en cada entrega.'];
-    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país (en Ecuador: PayPhone o Kushki).');
+    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país'+(esEc?' (PayPhone o Kushki).':'.'));
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     bullets(need);
     h2('09','Siguiente paso');
@@ -360,127 +366,4 @@
     }
   };
 
-  /* ---------- Guia en Markdown para pegar en Claude ---------- */
-  function buildMD(m){
-    var keys=m.keys.slice(); if(keys.indexOf('infra')<0) keys.unshift('infra');
-    var L=[];
-    L.push('# Guía de construcción - '+m.appType+' (CruzTRD)'); L.push('');
-    if(m.desc) L.push('**Idea:** '+m.desc);
-    L.push('**País de lanzamiento:** '+m.loc);
-    L.push('**Usuarios al lanzar:** '+((m.tier&&m.tier.label)||''));
-    L.push('**Monetización:** '+m.monetLbl);
-    L.push('**Fecha:** '+m.fecha); L.push('');
-    L.push('> Pega este archivo en Claude (o tu IA de código) y pídele que construya la app paso a paso, capa por capa, escribiendo pruebas y explicándote cada archivo.'); L.push('');
-    L.push('## Stack recomendado');
-    L.push('- **Frontend:** Next.js');
-    L.push('- **Backend:** Node.js / Express');
-    L.push('- **Base de datos:** PostgreSQL (DigitalOcean Managed, con backups diarios)');
-    L.push('- **Infraestructura:** Docker + Nginx en Droplet(s) de DigitalOcean; Cloudflare para CDN, DNS y SSL');
-    L.push('- **Pasarelas de pago ('+m.loc+'):** '+m.rails);
-    L.push('- **Infra mensual estimada:** $'+m.tierTotal+' USD/mes en DigitalOcean (escala: '+((m.tier&&m.tier.label)||'')+')'); L.push('');
-    L.push('## Infraestructura DigitalOcean para tu escala');
-    (m.tier?m.tier.rows:[]).forEach(function(r){ L.push('- **'+r[0]+'** — '+r[1]+' — $'+r[2]+'/mes'); });
-    L.push('- **Total:** $'+m.tierTotal+' USD/mes'); L.push('');
-    (function(){ var bz=m.biz; L.push('## Caso de negocio (referencia, ajustable)');
-      L.push('- **Inversión inicial (una vez):** $'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD');
-      L.push('- **Costo mensual de operación:** $'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)');
-      L.push('- **Comisión de pasarela:** ~3,5% + IVA sobre cada venta');
-      L.push('- **Usuarios al cierre del primer año (supuesto):** ~'+bz.users.toLocaleString('es-EC'));
-      if(m.monet==='sub'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' clientes de pago (a $'+bz.price+'/mes) cubren la operación');
-        L.push('- **Escenario favorable:** ~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes'+(bz.recover?'; recuperas la inversión en ~'+bz.recover+' meses':'')); }
-      else if(m.monet==='once'){ L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' ventas/mes (ticket $'+bz.price+')');
-        L.push('- **Escenario favorable:** ~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')); }
-      else if(m.monet==='fee'){ L.push('- **GMV estimado:** ~$'+bz.gmv.toLocaleString('es-EC')+'/mes; tu comisión ~$'+bz.rev.toLocaleString('es-EC')+'/mes');
-        L.push('- **Punto de equilibrio:** ~'+bz.breakEven+' transacciones/mes'); }
-      else if(m.monet==='ads'){ L.push('- Ingreso por publicidad depende del tráfico/CPM; conviene combinarla con otra fuente.'); }
-      else { L.push('- Elige un modelo de monetización para activar la proyección de ingresos.'); }
-      L.push('- _Proyecciones orientativas, no una promesa de resultados; dependen de producto, precio, conversión y marketing._'); L.push(''); })();
-    L.push('## Capas de tu app');
-    keys.forEach(function(k){ L.push(''); L.push('### '+nmeOf(k)); L.push(LAYER[k]||''); if(k==='pagos') L.push('**Pasarelas ('+m.loc+'):** '+m.rails); var st=[];try{st=(window.LIBS||{})[k]||[];}catch(e){} if(st.length) L.push('**Stack:** '+st.join(', ')); });
-    L.push(''); L.push('## Prompts listos (cópialos en orden)'); L.push('');
-    L.push('**Paso 0 - Arranque del proyecto**'); L.push('```');
-    L.push('Actúa como ingeniero full-stack senior. Vamos a construir una '+m.appType.toLowerCase()+(m.desc?' ('+m.desc+')':'')+'. Stack: Next.js + Node/Express, base de datos PostgreSQL, contenedores Docker y despliegue en DigitalOcean. Genera la estructura inicial del proyecto, el docker-compose y el esquema base de la base de datos.');
-    L.push('```'); L.push('');
-    var n=1;
-    keys.forEach(function(k){ if(!GUIDE[k])return; L.push('**Paso '+n+' - '+nmeOf(k)+'**'); L.push('```'); L.push(GUIDE[k]); L.push('```'); L.push(''); n++; });
-    L.push('## Que necesitas de tu lado');
-    var need=['Tu idea, textos e imágenes.','Tu dominio y los accesos de tu marca.','Tu revisión y visto bueno en cada entrega.'];
-    if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país (en Ecuador: PayPhone o Kushki).');
-    if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
-    need.forEach(function(x){L.push('- '+x);});
-    L.push(''); L.push('---');
-    L.push('_Estimación preliminar - CRUZTRD CT S.A.S. - RUC 1793237622001 - Quito, Ecuador - cruztrd.com_');
-    L.push('Si prefieres que lo construyamos nosotros, este plan y el stack ya están listos para arrancar.');
-    return L.join('\n');
-  }
-  window.__cruzGenMD=async function(){
-    var b2=document.getElementById('fmd'); var o2=b2?b2.textContent:'';
-    if(b2){ b2.textContent='Generando...'; b2.style.pointerEvents='none'; }
-    var rr=function(){ if(b2){ b2.textContent=o2; b2.style.pointerEvents=''; } };
-    var m=buildModel(); var md=buildMD(m); var name='Guia-CruzTRD-para-Claude.md';
-    try{ var dl=(window.claude&&window.claude.use)?(await window.claude.use('downloads')):null;
-         if(dl){ await dl.save({filename:name, data:md}); rr(); return; } }catch(e){}
-    try{ var b=new Blob([md],{type:'text/markdown'}); var u=URL.createObjectURL(b);
-      var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function(){URL.revokeObjectURL(u);},1500);
-    }catch(e2){}
-    rr();
-  };
-  document.addEventListener('click',function(e){ var t=e.target;
-    if(t && (t.id==='fmd' || (t.closest && t.closest('#fmd')))){ e.preventDefault(); window.__cruzGenMD(); }
-  });
-
-  /* ---------- Picker personalizado (dark, on-brand) que reemplaza el <select> nativo ---------- */
-  function enhanceSelect(sel){
-    if(!sel || sel.__pk) return; sel.__pk=1;
-    sel.style.display='none';
-    var wrap=document.createElement('div'); wrap.className='pk';
-    var field=document.createElement('button'); field.type='button'; field.className='pk-field';
-    var ICONS={
-      aiCountry:'<svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M1.8 8h12.4M8 1.8c1.7 1.7 2.6 3.9 2.6 6.2S9.7 12.5 8 14.2C6.3 12.5 5.4 10.3 5.4 8S6.3 3.5 8 1.8z" stroke="currentColor" stroke-width="1.1"/></svg>',
-      aiScale:'<svg viewBox="0 0 18 16" width="15" height="13" fill="none"><circle cx="6" cy="5.4" r="2.6" stroke="currentColor" stroke-width="1.3"/><path d="M1.6 13.4c0-2.4 2-4 4.4-4s4.4 1.6 4.4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M12.2 3.3a2.4 2.4 0 010 4.5M13.4 13.4c0-1.7-.9-3-2.3-3.6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>',
-      aiMonet:'<svg viewBox="0 0 16 16" width="13" height="13" fill="none"><circle cx="8" cy="8" r="6.2" stroke="currentColor" stroke-width="1.3"/><path d="M8 4.4v7.2M9.9 6c-.4-.7-1.1-1-1.9-1-1 0-1.8.6-1.8 1.5S7 8.8 8 9s1.8.5 1.8 1.5-.8 1.5-1.9 1.5c-.8 0-1.5-.3-1.9-1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>'
-    };
-    if(ICONS[sel.id]){ var ic=document.createElement('span'); ic.className='pk-ic'; ic.innerHTML=ICONS[sel.id]; field.appendChild(ic); }
-    var lbl=document.createElement('span'); lbl.className='pk-lbl';
-    var chev=document.createElement('span'); chev.className='pk-chev';
-    chev.innerHTML='<svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    field.appendChild(lbl); field.appendChild(chev);
-    wrap.appendChild(field);
-    sel.parentNode.insertBefore(wrap, sel);
-    function setLbl(){ var o=sel.options[sel.selectedIndex]; lbl.textContent=o?o.text:''; }
-    setLbl();
-    var menu=null;
-    function close(){ if(!menu)return; var m=menu; menu=null; m.classList.remove('on');
-      field.classList.remove('open'); document.body.classList.remove('pk-open');
-      document.removeEventListener('mousedown',onDoc,true); window.removeEventListener('scroll',close,true); window.removeEventListener('resize',close);
-      setTimeout(function(){ if(m&&m.parentNode) m.parentNode.removeChild(m); },180);
-    }
-    function onDoc(e){ if(menu && !menu.contains(e.target) && !field.contains(e.target)) close(); }
-    function open(){
-      if(menu){ close(); return; }
-      document.body.classList.add('pk-open');
-      menu=document.createElement('div'); menu.className='pk-menu';
-      Array.prototype.forEach.call(sel.options,function(o,i){
-        var it=document.createElement('div'); it.className='pk-opt'+(i===sel.selectedIndex?' sel':''); it.textContent=o.text;
-        it.addEventListener('click',function(ev){ ev.stopPropagation(); sel.selectedIndex=i;
-          try{ sel.dispatchEvent(new Event('change',{bubbles:true})); }catch(_e){}
-          setLbl(); close(); });
-        menu.appendChild(it);
-      });
-      document.body.appendChild(menu);
-      var r=field.getBoundingClientRect();
-      var mw=Math.max(r.width, 168);
-      menu.style.width=mw+'px';
-      var left=Math.max(8, Math.min(r.left, window.innerWidth-mw-8));
-      menu.style.left=left+'px';
-      var mh=menu.offsetHeight;
-      if(r.bottom+mh+8>window.innerHeight && r.top-mh-8>0){ menu.style.top=(r.top-mh-6)+'px'; menu.style.transformOrigin='bottom center'; }
-      else { menu.style.top=(r.bottom+6)+'px'; }
-      field.classList.add('open');
-      requestAnimationFrame(function(){ if(menu) menu.classList.add('on'); });
-      setTimeout(function(){ document.addEventListener('mousedown',onDoc,true); window.addEventListener('scroll',close,true); window.addEventListener('resize',close); },0);
-    }
-    field.addEventListener('click',function(e){ e.stopPropagation(); e.preventDefault(); open(); });
-  }
-  try{ ['aiCountry','aiScale','aiMonet'].forEach(function(id){ enhanceSelect(document.getElementById(id)); }); }catch(e){}
 })();
