@@ -191,3 +191,5 @@ section{padding:clamp(28px,4.5vw,60px) 0}
 .phero>*{max-width:min(640px,100%)}
 main a[href^="mailto:"],main a[href^="tel:"],main a[href^="https://wa.me"]{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
 main a[href^="mailto:"]:hover,main a[href^="tel:"]:hover,main a[href^="https://wa.me"]:hover{text-decoration-color:#fff}
+
+.form input,.form textarea,form input,form textarea{scroll-margin-top:96px}

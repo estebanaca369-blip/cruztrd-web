@@ -985,7 +985,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       {type:'door', lon:-35.328,lat:-3.237, to:0, label:'Volver a Recepción'}
     ]},
     {name:'Capa 07 · Dashboards', pano:'media/sala8.jpg?v=n2', p6:'media/sala8-6k.jpg?v=n2', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
-      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:-152,lat:3},
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:42,lat:-15},
       {type:'char', lon:0,lat:-9, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'GUÍA VIRTUAL · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.',
        sheet:'media/strip-dash.webp', cls:'dasha'},
@@ -1044,7 +1044,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       if(s.type==='door'){ el.className='hs door';
         el.innerHTML='<div class="mk"><span class="ic">↗</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); goRoom(s.to);}); }
-      else if(s.type==='act'){ el.className='hs act'+(s.act==='mag'?' mag':'');
+      else if(s.type==='act'){ el.className='hs act'+(s.act==='mag'?' rev':'');
         el.innerHTML='<div class="mk"><span class="ic">'+s.icon+'</span></div><div class="lbl">'+s.label+'</div>';
         el.addEventListener('click',function(ev){ev.stopPropagation(); if(s.act==='share')clubShare(); else if(s.act==='card')clubLounge(); else if(s.act==='mag'){ if(s.pg) window.__revp=s.pg; openMag(); } else if(s.act==='play')openPlay(); else if(s.act==='chakra')openChakra(); else if(s.act==='equipo')openEquipo();}); }
       else if(s.type==='dir'){ el.className='hs dir';

@@ -34,10 +34,10 @@
     var burger = document.getElementById('burger');
     var links = document.getElementById('navlinks');
     if (!burger || !links) return;
-    burger.addEventListener('click', function () {
-      var open = links.classList.toggle('open');
-      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
+    function poner(open) { links.classList.toggle('open', open); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú'); }
+    burger.addEventListener('click', function (e) { e.stopPropagation(); poner(!links.classList.contains('open')); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && links.classList.contains('open')) { poner(false); burger.focus(); } });
+    document.addEventListener('click', function (e) { if (links.classList.contains('open') && !links.contains(e.target)) poner(false); });
     links.addEventListener('click', function (e) {
       if (e.target.tagName === 'A') { links.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
     });

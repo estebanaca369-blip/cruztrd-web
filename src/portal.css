@@ -130,9 +130,9 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .pBtn.soon{background:rgba(255,255,255,.03);color:#9fb3ae;border:1px dashed rgba(45,212,167,.35);cursor:default;pointer-events:none}
 .pBtn .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;border-radius:6px;background:rgba(45,212,167,.14);color:var(--accent2)}
 .pNote{font-size:12.5px;line-height:1.45;color:#8fa29d}
-.hs.act.mag .mk{width:40px;height:40px;border-color:rgba(255,236,200,.95);background:rgba(20,16,10,.45);box-shadow:0 0 18px rgba(255,220,160,.35)}
-.hs.act.mag .mk .ic{color:#fff3dc;display:flex}
-.hs.act.mag .lbl{opacity:1;transform:translateX(-50%);top:50px;background:rgba(18,14,8,.62);border-color:rgba(255,220,160,.4)}
+.hs.act.rev .mk{width:40px;height:40px;border-color:rgba(255,236,200,.95);background:rgba(20,16,10,.45);box-shadow:0 0 18px rgba(255,220,160,.35)}
+.hs.act.rev .mk .ic{color:#fff3dc;display:flex}
+.hs.act.rev .lbl{opacity:1;transform:translateX(-50%);top:50px;background:rgba(18,14,8,.62);border-color:rgba(255,220,160,.4)}
 .krow{margin-top:34px}.krow:first-of-type{margin-top:0}
 .krt{font:600 13px 'Inter Tight',sans-serif;letter-spacing:.3px;color:#e9f1ee;margin:0 0 12px;display:flex;align-items:center;gap:10px}.krt::after{content:"";flex:1;height:1px;background:rgba(255,255,255,.14)}
 .klang{position:absolute;top:8px;right:8px;z-index:2;font:700 9px 'Share Tech Mono',monospace;letter-spacing:1px;padding:2px 5px;border-radius:3px;background:#17150f;color:#f1ece0;font-style:normal}
@@ -1377,3 +1377,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hs.act,.hs.door,.hs.dir{min-width:44px;min-height:44px}
 @media (max-width:820px){.hs .lbl{width:max-content;max-width:190px}}
 @media (max-width:430px){.pyBack{font-size:0!important}.pyBack::before{content:"← Volver";font-size:13px}.pyWal span{display:none}}
+
+.hs .lbl{pointer-events:auto;cursor:pointer}
+@media (max-height:780px){.chFoot{display:none}}
+.panel .x{background:rgba(7,9,12,.85)}
