@@ -237,7 +237,7 @@
       para('Panorama digital de '+m.loc+':',{style:'bold',size:10.5,gap:1});
       kvTable(m.market.stats,60);
       if(m.market.pagos){ para('Cómo paga la gente (participación en el volumen de e-commerce):',{style:'bold',size:10.5,gap:1}); kvTable(m.market.pagos,60); }
-      para('Medios de pago que integramos en '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.6});
+      para('Medios de pago habituales en '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.6});
       para('Fuente: '+m.market.fuente,{size:8.2,col:MUT,lh:4});
     } else {
       para(sinPais?'Aún no definiste el país de lanzamiento. El panorama digital y los medios de pago locales se definen al inicio del proyecto.':'Lanzarás en '+m.loc+'. Definimos el panorama digital y los medios de pago locales al inicio del proyecto.',{});
@@ -284,8 +284,8 @@
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
         ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = US$'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
         ['Utilidad mensual estimada',(bz.net>0?'~US$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
-        ['Recuperas la inversión',(bz.recover?'~'+bz.recover+' meses después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento)':'requiere más clientes o mayor precio')],
-        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión ~'+bz.recover2+' meses después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
+        ['Recuperas la inversión',(bz.recover?(bz.recover===1?'~1 mes':'~'+bz.recover+' meses')+' después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento)':'requiere más clientes o mayor precio')],
+        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión '+(bz.recover2===1?'~1 mes':'~'+bz.recover2+' meses')+' después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
     } else if(m.monet==='once'){
@@ -358,14 +358,7 @@
       try{ doc.save(name); }catch(e){ var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
       restore(); return;
     }catch(err){
-      // Fallback: documento de marca en HTML (listo para imprimir a PDF)
-      try{ var html=buildProposalHTML();
-        var dl=(window.claude&&window.claude.use)?(await window.claude.use('downloads')):null;
-        if(dl){ await dl.save({filename:'Estimacion-CruzTRD.html', data:html}); restore(); return; }
-        var b=new Blob([html],{type:'text/html'}); var u=URL.createObjectURL(b);
-        var a2=document.createElement('a'); a2.href=u; a2.download='Estimacion-CruzTRD.html'; document.body.appendChild(a2); a2.click(); a2.remove();
-      }catch(e2){}
-      restore();
+      restore(); throw err;
     }
   };
 

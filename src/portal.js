@@ -1123,7 +1123,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     runElevator(cur,idx);
   }
   var RM=false; try{ RM=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
-  addEventListener('popstate',function(){ var c=0; try{ c=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){} if(c>=0&&c<=7&&c!==cur&&!moving){ window.__czPop=true; goRoom(c); } });
+  addEventListener('popstate',function(){ var c=0; try{ c=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){} if(moving){ window.__czPend=true; return; } if(c>=0&&c<=7&&c!==cur){ window.__czPop=true; goRoom(c); } });
   async function runElevator(from,to){
     moving=true;
     panel.classList.remove('open');
@@ -1159,6 +1159,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     elev.classList.remove('shut');                  // puertas abren → sala destino
     await wait(640);
     elev.classList.remove('on'); moving=false;
+    if(window.__czPend){ window.__czPend=false; var __c=0; try{ __c=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){} if(__c>=0&&__c<=7&&__c!==cur){ window.__czPop=true; setTimeout(function(){ goRoom(__c); },60); } }
     CLUB.room(to);
   }
   addEventListener('keydown',function(e){ if(e.key!=='Escape') return;

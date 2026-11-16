@@ -39,7 +39,7 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && links.classList.contains('open')) { poner(false); burger.focus(); } });
     document.addEventListener('click', function (e) { if (links.classList.contains('open') && !links.contains(e.target)) poner(false); });
     links.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') { links.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
+      if (e.target.tagName === 'A') poner(false);
     });
   }
 
@@ -75,7 +75,7 @@
       if (nombre.length < 2) { setErr('nombre', 'Escribe tu nombre.'); ok = false; }
       if (!emailOk(correo)) { setErr('correo', 'Escribe un correo válido.'); ok = false; }
       if (mensaje.length < 10) { setErr('mensaje', 'Cuéntanos un poco más (mínimo 10 caracteres).'); ok = false; }
-      if (!ok) { var mal = form.querySelector('[aria-invalid="true"]'); if (mal) mal.focus(); return; }
+      if (!ok) { var mal = form.querySelector('[aria-invalid="true"]'); if (mal) { mal.focus({ preventScroll: true }); requestAnimationFrame(function () { mal.scrollIntoView({ block: 'center' }); }); } return; }
 
       btn.disabled = true; var orig = btn.textContent; btn.textContent = 'Enviando…';
       fetch('/api/contacto', {
