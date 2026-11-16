@@ -1168,15 +1168,15 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // tocar la sala (sin arrastrar) cierra el panel abierto; al abrir, el foco va al botón de cierre
   (function(){ var dx=0,dy=0, cz=document.getElementById('c'); cz.addEventListener('pointerdown',function(e){ dx=e.clientX; dy=e.clientY; }); cz.addEventListener('pointerup',function(e){ if(panel.classList.contains('open')&&Math.abs(e.clientX-dx)+Math.abs(e.clientY-dy)<8) panel.classList.remove('open'); }); })();
   // Atrás del navegador cierra lo que esté a pantalla completa (revista, Play, Chakra)
-  (function(){ var ov=null, cierra={mag:function(){ closeMag(); }, ply:function(){ closePlay(); }, chakra:function(){ CHAKRA.close(); }};
+  (function(){ var ov=null, t=0, cierra={mag:function(){ closeMag(); }, ply:function(){ closePlay(); }, chakra:function(){ CHAKRA.close(); }, panel:function(){ panel.classList.remove('open'); }, dirPanel:function(){ closeDir(); }};
     addEventListener('popstate',function(){ if(ov){ var id=ov; ov=null; try{ cierra[id](); }catch(e){} } },true);
-    ['mag','ply','chakra'].forEach(function(id){ var el=document.getElementById(id); if(!el) return; try{ new MutationObserver(function(){ var on=el.classList.contains('open');
-      if(on&&ov!==id){ ov=id; try{ history.pushState({ov:id},''); }catch(e){} }
-      else if(!on&&ov===id){ ov=null; try{ if(history.state&&history.state.ov===id) history.back(); }catch(e){} } }).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){} }); })();
+    ['mag','ply','chakra','panel','dirPanel'].forEach(function(id){ var el=document.getElementById(id); if(!el) return; try{ new MutationObserver(function(){ var on=el.classList.contains('open');
+      if(on&&ov!==id){ ov=id; clearTimeout(t); try{ if(history.state&&history.state.ov) history.replaceState({ov:id},''); else history.pushState({ov:id},''); }catch(e){} }
+      else if(!on&&ov===id){ ov=null; clearTimeout(t); t=setTimeout(function(){ try{ if(!ov&&history.state&&history.state.ov) history.back(); }catch(e){} },140); } }).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){} }); })();
   // diálogos: cerrados no reciben foco; al abrir, el foco entra y al cerrar vuelve a donde estaba
   (function(){ [['panel','Capa del estudio'],['dirPanel','Directorio de pisos'],['mag','Revista CruzTRD'],['ply','CruzTRD Play, demo'],['chakra','Chakra, demo']].forEach(function(d){ var el=document.getElementById(d[0]); if(!el) return; var prev=null;
     if(!el.getAttribute('role')) el.setAttribute('role','dialog'); if(!el.getAttribute('aria-label')) el.setAttribute('aria-label',d[1]);
-    function sync(){ var on=el.classList.contains('open'); if(on===!el.inert) return; el.inert=!on;
+    function sync(){ var on=el.classList.contains('open'); if(on===!el.inert) return; el.inert=!on; try{ var hay=!!document.querySelector('#panel.open,#dirPanel.open,#mag.open,#ply.open,#chakra.open'); document.querySelectorAll('#c,.badge,#navHub,.clubpill,.edgeh,.hs,#roomtag').forEach(function(x){ x.inert=hay; }); }catch(e){}
       if(on){ prev=document.activeElement; setTimeout(function(){ try{ var b=el.querySelector('button,[href],[tabindex="0"]'); if(b) b.focus({preventScroll:true}); }catch(e){} },90); }
       else if(prev&&prev.focus&&document.contains(prev)){ try{ prev.focus({preventScroll:true}); }catch(e){} prev=null; } }
     el.inert=!el.classList.contains('open'); try{ new MutationObserver(sync).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){ el.inert=false; } }); })();
@@ -2237,7 +2237,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function room(){ timers.forEach(clearTimeout); timers=[]; if(F){ F.destroy(); F=null; } setView('room'); paintRoom(); attract(); VAUD.music(null); VAUD.pad(true); }
     function go(){ VAUD.ok(); VAUD.ui(); VAUD.pad(false); VAUD.music({vuelo:'vuelo_tema',bici:'descenso_tema',feria:'feria_tema'}[cur]); lastHud={}; var G=GAMES[cur];
       if(G.kind==='feria'){ setView('feria'); if(E) E.pause(true); if(F) F.destroy(); F=FERIA.create($q('#frHost'),{onOver:onOver}); F.run(seed(cur)); return; }
-      setView('game'); $q('#hPop').innerHTML=''; var hl=$q('.hS span'); if(hl) hl.textContent=G.kind==='bike'?'puntos de descenso':'puntos de vuelo'; var tip=$q('.hTip'); tip.textContent=G.tip; tip.classList.remove('off'); timers.push(setTimeout(function(){ tip.classList.add('off'); },3600)); E.pause(false); E.run('play',seed(cur),G.kind); }
+      setView('game'); $q('#hPop').innerHTML=''; var hl=$q('.hS span'); if(hl) hl.textContent=G.kind==='bike'?'puntos de descenso':'puntos de vuelo'; var tip=$q('.hTip'); tip.textContent=G.tip; tip.classList.remove('off'); timers.push(setTimeout(function(){ tip.classList.add('off'); },3600)); if(E)E.pause(false); E.run('play',seed(cur),G.kind); }
     function onHud(S){ var s=S.score, m=S.mult, d=Math.floor(S.dist);
       if(s!==lastHud.s){ hud.s.textContent=fmt(s); lastHud.s=s; } if(m!==lastHud.m){ hud.m.textContent='×'+m; hud.m.classList.toggle('hot',m>1); hud.m.classList.remove('bump'); void hud.m.offsetWidth; hud.m.classList.add('bump'); lastHud.m=m; }
       var dd=Math.floor(d/10)*10; if(dd!==lastHud.d){ hud.d.textContent=fmt(dd)+' m'; lastHud.d=dd; } }

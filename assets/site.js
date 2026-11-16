@@ -58,7 +58,9 @@
 
     function setErr(name, msg) {
       var e = form.querySelector('[data-err="' + name + '"]');
-      if (e) e.textContent = msg || '';
+      if (e) { e.textContent = msg || ''; e.setAttribute('role', 'alert'); if (!e.id) e.id = 'err-' + name; }
+      var f = form[name];
+      if (f && f.setAttribute) { if (msg) { f.setAttribute('aria-invalid', 'true'); if (e) f.setAttribute('aria-describedby', e.id); } else { f.removeAttribute('aria-invalid'); } }
     }
     function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
@@ -73,7 +75,7 @@
       if (nombre.length < 2) { setErr('nombre', 'Escribe tu nombre.'); ok = false; }
       if (!emailOk(correo)) { setErr('correo', 'Escribe un correo válido.'); ok = false; }
       if (mensaje.length < 10) { setErr('mensaje', 'Cuéntanos un poco más (mínimo 10 caracteres).'); ok = false; }
-      if (!ok) return;
+      if (!ok) { var mal = form.querySelector('[aria-invalid="true"]'); if (mal) mal.focus(); return; }
 
       btn.disabled = true; var orig = btn.textContent; btn.textContent = 'Enviando…';
       fetch('/api/contacto', {
@@ -88,18 +90,18 @@
             var m = 'mailto:esteban@cruztrd.com?subject=' + encodeURIComponent('Contacto web · ' + nombre) + '&body=' + encodeURIComponent(cuerpo);
             var w = 'https://wa.me/593988011913?text=' + encodeURIComponent(cuerpo);
             status.innerHTML = 'Tu mensaje está listo. Envíalo con un toque por <a href="' + m + '">correo</a> o por <a href="' + w + '" target="_blank" rel="noopener">WhatsApp</a> y te respondemos enseguida.';
-            status.className = 'form-status ok';
+            status.className = 'form-status ok'; try { status.setAttribute('tabindex','-1'); status.scrollIntoView({block:'center'}); status.focus({preventScroll:true}); } catch (e) {}
           } else if (res.ok) {
             form.reset();
             status.textContent = 'Gracias, ' + nombre.split(' ')[0] + '. Recibimos tu mensaje y te responderemos a ' + correo + '.';
-            status.className = 'form-status ok';
+            status.className = 'form-status ok'; try { status.setAttribute('tabindex','-1'); status.scrollIntoView({block:'center'}); status.focus({preventScroll:true}); } catch (e) {}
           } else {
             throw new Error((res.d && res.d.error) || 'error');
           }
         })
         .catch(function () {
           status.innerHTML = 'No pudimos enviar el formulario. Escríbenos directamente a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a>.';
-          status.className = 'form-status bad';
+          status.className = 'form-status bad'; try { status.setAttribute('tabindex','-1'); status.scrollIntoView({block:'center'}); status.focus({preventScroll:true}); } catch (e) {}
         })
         .then(function () { btn.disabled = false; btn.textContent = orig; });
     });

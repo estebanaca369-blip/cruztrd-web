@@ -68,6 +68,9 @@ a:hover{text-decoration:underline}
   .nav .links a[aria-current="page"]::after{display:none}
   .nav .links a[aria-current="page"]{color:var(--accent-ink)}
   .burger{display:inline-flex}
+  .nav-actions{margin-left:auto}
+  .icon-btn{width:44px;height:44px}
+  .nav .links:not(.open){visibility:hidden}
 }
 
 /* ---------- Hero de página ---------- */
