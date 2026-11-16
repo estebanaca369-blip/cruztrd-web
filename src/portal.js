@@ -11,11 +11,11 @@ var INFO={
   sec:'Las capas del estudio',
   items:['<b>01 · Infraestructura.</b> La base lista para crecer sin rehacerla.','<b>02 · Seguridad.</b> Tus datos y los de tus usuarios, protegidos por defecto.','<b>03 · Pagos.</b> Cobros directos, sin fricción.','<b>04 · Suscripciones.</b> Ingresos que se repiten mes a mes.','<b>05 · Marketing.</b> Atraer a las personas correctas.','<b>06 · Fidelización.</b> Que vuelvan y recomienden.','<b>07 · Dashboards.</b> Todo tu negocio en una pantalla.'],
   note:'Llama al ascensor o abre el Directorio para subir a cualquier piso. En cada sala, toca al guía para conocer su capa.'},
- infra:{lead:'Es la base sobre la que corre toda tu app. Dejamos listos servidores, base de datos y caché desde el primer día, configurados para crecer solos cuando sube el tráfico, sin tener que rehacer nada.',
+ infra:{lead:'Es la base sobre la que corre toda tu app. Dejamos listos servidores, base de datos y caché desde el primer día, preparados para ampliar capacidad cuando sube el tráfico, sin tener que rehacer nada.',
   items:['<b>Despliegue automático.</b> Cada mejora sale a producción en minutos y sin cortar el servicio.','<b>Datos rápidos y ordenados.</b> PostgreSQL para tu información y Redis para que todo responda al instante.','<b>Escala cuando lo necesitas.</b> Más capacidad cuando llegan usuarios y menos costo cuando bajan.','<b>Respaldos y monitoreo.</b> Copias de seguridad programadas y alertas antes de que un problema llegue a tus clientes.']},
  seg:{lead:'Protegemos tu negocio y a tus usuarios desde el diseño, no como un parche al final. Quién entra, qué puede ver y cómo viajan los datos queda resuelto por defecto.',
-  items:['<b>Acceso seguro.</b> Inicio de sesión con OAuth 2.0, contraseñas cifradas y verificación en dos pasos (2FA).','<b>Roles y permisos.</b> Cada persona de tu equipo ve y edita solo lo que le corresponde.','<b>Cifrado de extremo a extremo.</b> Los datos viajan y se guardan protegidos.','<b>Defensa activa.</b> Límite de intentos, cabeceras seguras y registro de accesos para auditar.']},
- pagos:{lead:'Cobra desde el primer día, directo a tu cuenta y sin intermediarios. Integramos las pasarelas líderes, también las locales, para que tus clientes paguen como prefieren.',
+  items:['<b>Acceso seguro.</b> Inicio de sesión con OAuth 2.0, contraseñas cifradas y verificación en dos pasos (2FA).','<b>Roles y permisos.</b> Cada persona de tu equipo ve y edita solo lo que le corresponde.','<b>Cifrado en tránsito y en reposo.</b> Los datos viajan y se guardan protegidos.','<b>Defensa activa.</b> Límite de intentos, cabeceras seguras y registro de accesos para auditar.']},
+ pagos:{lead:'Cobra desde el primer día, directo a tu cuenta. Integramos las pasarelas líderes, también las locales, para que tus clientes paguen como prefieren.',
   items:['<b>Checkout sin fricción.</b> Pago en pocos pasos, en web y en móvil.','<b>Pasarelas globales y locales.</b> Stripe, PayPhone, Kushki o Datafast según tu mercado.','<b>Facturación automática.</b> Comprobantes generados y enviados en cada venta.','<b>Todo conectado.</b> Cada pago confirmado activa al instante lo que sigue: acceso, envío o aviso.']},
  susc:{lead:'Convierte clientes en ingresos que se repiten. Planes, renovaciones y cobros recurrentes funcionan solos, y recuperamos los pagos fallidos antes de que se conviertan en bajas.',
   items:['<b>Planes a tu medida.</b> Mensuales o anuales, con pruebas gratis y cupones.','<b>Renovación automática.</b> Cambios de plan con prorrateo, sin cálculos manuales.','<b>Recuperación de pagos.</b> Reintentos y avisos cuando una tarjeta falla (dunning).','<b>Autogestión.</b> Tus clientes cambian o pausan su plan sin escribirte.']},
@@ -2554,7 +2554,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   document.getElementById('navHub').onclick=openDir;
 
   // arranque en Recepción
-  try{ if(renderer.capabilities.maxTextureSize>=8192&&!matchMedia('(pointer:coarse)').matches&&innerWidth>=1100&&(navigator.deviceMemory||8)>=4) ROOMS[0].pano='media/lab-pano-6k.jpg?v=n2'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); }catch(e){}
+  try{ if(renderer.capabilities.maxTextureSize>=8192&&!matchMedia('(pointer:coarse)').matches&&innerWidth>=1100&&(navigator.deviceMemory||8)>=4){ ROOMS[0].pano='media/lab-pano-6k.jpg?v=n2'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);
     // bienvenida (una vez por visita) o entrada directa a un piso desde el inicio (?capa=N)
     var capa=0; try{ capa=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){}

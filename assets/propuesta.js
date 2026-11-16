@@ -61,7 +61,7 @@
     seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, así que aunque roben la base no sirven. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
     pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con la pasarela local de tu país (en Ecuador: PayPhone, Kushki o Datafast). Stripe es una opción para cobros internacionales si tu empresa tiene una entidad en un país donde opera. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
     susc:'Planes y membresías que se cobran y renuevan solos con cobro recurrente de la pasarela (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible): prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
-    mkt:'Google Analytics 4 y PostHog para saber de donde vienen tus usuarios y que hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde si convierte.',
+    mkt:'Google Analytics 4 y PostHog para saber de dónde vienen tus usuarios y qué hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde sí convierte.',
     fidel:'Motor de recompensas y referidos para que tus usuarios traigan más usuarios, soporte por Intercom y WhatsApp API, y encuestas NPS para medir satisfacción. Retener cuesta mucho menos que captar.',
     dash:'Panel con tus métricas en vivo (Metabase + Recharts): ventas, usuarios activos, cohortes de retención y alertas cuando algo se sale de rango. Exportas a CSV/Excel. Decides con datos, no a ciegas.'
   };
@@ -278,8 +278,8 @@
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
         ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
         ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
-        ['Recuperas la inversión',(bz.recover?'en ~'+bz.recover+' meses':'requiere más clientes o mayor precio')],
-        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión en ~'+bz.recover2+' meses':'no cubre la operación mensual; hay que crecer primero')],
+        ['Recuperas la inversión',(bz.recover?'~'+bz.recover+' meses después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento)':'requiere más clientes o mayor precio')],
+        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión ~'+bz.recover2+' meses después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
     } else if(m.monet==='once'){
