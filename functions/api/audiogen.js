@@ -3,9 +3,36 @@
 // Protegida con env.AUDIO_ADMIN_TOKEN (header x-admin). La API key nunca sale del servidor.
 const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
 
+// Límite de uso por visitante (por IP), guardado en la caché del borde: sin servicios adicionales.
+async function limited(request, name, perMin, perDay) {
+  try {
+    const ip = request.headers.get('cf-connecting-ip') || 'x';
+    const cache = caches.default, now = Date.now();
+    const wins = [[60, perMin, Math.floor(now / 60000)], [86400, perDay, Math.floor(now / 86400000)]];
+    for (const [ttl, max, bucket] of wins) {
+      const key = new Request('https://limite.cruztrd.internal/' + name + '/' + encodeURIComponent(ip) + '/' + ttl + '/' + bucket);
+      const hit = await cache.match(key);
+      const n = hit ? (parseInt(await hit.text(), 10) || 0) : 0;
+      if (n >= max) return true;
+      await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
+    }
+  } catch (e) {}
+  return false;
+}
+
+// Comparación en tiempo constante (no revela cuántos caracteres del token coinciden).
+async function igual(a, b) {
+  const e = new TextEncoder();
+  const [x, y] = await Promise.all([crypto.subtle.digest('SHA-256', e.encode(String(a))), crypto.subtle.digest('SHA-256', e.encode(String(b)))]);
+  const u = new Uint8Array(x), v = new Uint8Array(y); let d = 0;
+  for (let k = 0; k < u.length; k++) d |= u[k] ^ v[k];
+  return d === 0;
+}
+
 export async function onRequestPost({ request, env }) {
   if (!env.ELEVENLABS_API_KEY) return J({ ok: false, error: 'falta ELEVENLABS_API_KEY' });
-  if (!env.AUDIO_ADMIN_TOKEN || request.headers.get('x-admin') !== env.AUDIO_ADMIN_TOKEN) return J({ ok: false, error: 'token_admin_invalido' }, 401);
+  if (await limited(request, 'audiogen', 6, 60)) return J({ ok: false, error: 'limite' }, 429);
+  if (!env.AUDIO_ADMIN_TOKEN || !(await igual(request.headers.get('x-admin') || '', env.AUDIO_ADMIN_TOKEN))) return J({ ok: false, error: 'token_admin_invalido' }, 401);
   let b = {}; try { b = await request.json(); } catch (e) {}
   const H = { 'content-type': 'application/json', 'xi-api-key': env.ELEVENLABS_API_KEY };
   let url, body;

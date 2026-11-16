@@ -187,7 +187,7 @@ section{padding:clamp(28px,4.5vw,60px) 0}
 
 /* páginas internas: la recepción nocturna a todo el ancho en la cabecera; enlaces sin verde */
 .phero{position:relative;isolation:isolate;min-height:clamp(300px,38vw,460px);display:flex;flex-direction:column;justify-content:flex-end}
-.phero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.6) 40%,rgba(7,9,12,0) 78%),linear-gradient(180deg,rgba(7,9,12,0) 62%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n5)) 100% 50%/cover no-repeat}
+.phero::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.6) 40%,rgba(7,9,12,0) 78%),linear-gradient(180deg,rgba(7,9,12,0) 62%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n6)) 100% 50%/cover no-repeat}
 .phero>*{max-width:min(640px,100%)}
 main a[href^="mailto:"],main a[href^="tel:"],main a[href^="https://wa.me"]{color:#fff;text-decoration:underline;text-decoration-color:rgba(255,255,255,.35);text-underline-offset:3px}
 main a[href^="mailto:"]:hover,main a[href^="tel:"]:hover,main a[href^="https://wa.me"]:hover{text-decoration-color:#fff}
@@ -195,5 +195,28 @@ main a[href^="mailto:"]:hover,main a[href^="tel:"]:hover,main a[href^="https://w
 .form input,.form textarea,form input,form textarea{scroll-margin-top:96px}
 .foot-links a,address.foot-legal a{display:inline-block;padding:10px 2px;margin:-6px 0}
 
-@media(max-width:700px){.phero::before{background-image:linear-gradient(180deg,rgba(7,9,12,.55) 0%,rgba(7,9,12,.82) 60%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n5));background-position:78% 50%}}
+@media(max-width:700px){.phero::before{background-image:linear-gradient(180deg,rgba(7,9,12,.55) 0%,rgba(7,9,12,.82) 60%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n6));background-position:78% 50%}}
 .phero>p{max-width:min(520px,100%)}
+
+/* ronda 8: un solo sitio — siempre oscuro, misma retícula que el inicio */
+:root,:root[data-theme="light"]{--accent:#2DD4A7;--accent-2:#2DD4A7;--accent-ink:#2DD4A7;--bg:#07090C;--bg-2:#0b0f14;--ink:#EDF3F1;--muted:#9AA6AD;--card:#0d1116;--line:rgba(255,255,255,.10);--line-soft:rgba(255,255,255,.06);--shadow:0 1px 2px rgba(0,0,0,.4),0 18px 40px rgba(0,0,0,.45);--focus:#2DD4A7;color-scheme:dark}
+.wrap{max-width:1360px;padding:0 clamp(20px,5vw,72px)}
+.wrap>section>.lead,.wrap>section>p,.wrap>section>h2{max-width:62ch}
+.phero{padding-top:clamp(130px,15vw,190px);min-height:clamp(360px,44vw,560px)}
+.phero h1{font-size:clamp(34px,5.2vw,76px);line-height:1;letter-spacing:-.03em;font-weight:600;max-width:16ch}
+.phero>*{max-width:min(760px,100%)}
+.center-stage{padding-top:clamp(120px,16vw,200px)}
+.phero::before{background:linear-gradient(180deg,rgba(7,9,12,.78) 0%,rgba(7,9,12,0) 24%),linear-gradient(90deg,rgba(7,9,12,.92) 0%,rgba(7,9,12,.55) 38%,rgba(7,9,12,0) 76%),linear-gradient(180deg,rgba(7,9,12,0) 62%,#07090C 100%),var(--foto,url(/media/home-estudio.webp?v=n6)) 100% 50%/cover no-repeat}
+@media(max-width:700px){
+  .phero{padding-top:min(62vw,300px);min-height:0}
+  .phero::before{background:linear-gradient(180deg,rgba(7,9,12,.7) 0%,rgba(7,9,12,0) 20%,rgba(7,9,12,0) 38%,#07090C 72%),var(--foto,url(/media/home-estudio.webp?v=n6)) var(--posm,80%) 0/auto 74% no-repeat,#07090C}
+}
+
+.galeria{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:22px}
+.galeria a{display:block;color:var(--ink);text-decoration:none}
+.galeria img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:8px;transition:transform .5s cubic-bezier(.2,.7,.1,1),filter .3s;filter:brightness(.9)}
+.galeria a:hover img,.galeria a:focus-visible img{transform:scale(1.02);filter:none}
+.galeria span{display:block;margin-top:10px;font-size:15px;color:var(--muted)}
+.galeria a:hover span{color:var(--ink)}
+@media(max-width:760px){.galeria{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.galeria img{transition:none}}

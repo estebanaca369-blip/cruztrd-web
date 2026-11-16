@@ -9,18 +9,25 @@
 <meta property="og:url" content="https://cruztrd.com/portal360">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307090C'/%3E%3Ctext%20x='50'%20y='71'%20font-family='Arial,sans-serif'%20font-size='62'%20font-weight='700'%20text-anchor='middle'%20fill='%232DD4A7'%3EC%3C/text%3E%3C/svg%3E">
-<meta name="description" content="Recorre en 360° el Estudio CruzTRD: siete capas para construir tu app D2C, guías virtuales que te explican cada una, una revista, juegos de demostración y un diagnóstico con IA para diseñar tu app.">
+<meta name="description" content="Recorre en 360° el Estudio CruzTRD: siete pisos, uno por cada capa de una app D2C, con guías virtuales, una revista y juegos de demostración.">
 <meta property="og:title" content="Estudio 360° CruzTRD">
 <meta property="og:description" content="Recorre las siete capas de tu app con sus guías virtuales y diagnostica tu idea con IA.">
 <meta property="og:image" content="https://cruztrd.com/media/og.jpg?v=3">
+<meta property="og:site_name" content="CruzTRD">
+<meta property="og:locale" content="es_EC">
+<meta name="twitter:image" content="https://cruztrd.com/media/og.jpg?v=3">
 <link rel="canonical" href="https://cruztrd.com/portal360">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/portal.css?v=9">
+<link rel="stylesheet" href="/assets/portal.css?v=10">
 </head>
 <body>
-<canvas id="c"></canvas>
+<a class="salto" href="#navHub">Saltar a los controles del recorrido</a>
+<main id="contenido" aria-label="Recorrido 360° del Estudio CruzTRD">
+<h1 class="sr">Estudio 360° CruzTRD: recepción y siete pisos, uno por cada capa de tu app</h1>
+<canvas id="c" aria-hidden="true"></canvas>
+</main>
 <div class="vig"></div>
 <a class="badge" href="/" aria-label="CruzTRD · volver al inicio" title="Volver al inicio">Cruz<b>TRD</b></a>
 
@@ -70,7 +77,7 @@
 <div class="bienv" id="bienv" hidden>
   <div class="bienv-c" role="dialog" aria-modal="true" aria-labelledby="bienvT">
     <div class="bienv-m">Cruz<b>TRD</b></div>
-    <h1 id="bienvT">Estudio 360°</h1>
+    <h2 id="bienvT">Estudio 360°</h2>
     <p>Siete pisos, uno por cada capa de tu app. Arrastra para mirar alrededor, toca al guía de cada piso y sube por el ascensor.</p>
     <button type="button" id="bienvGo">Entrar al estudio</button>
     <a href="/">Volver al inicio</a>
@@ -84,8 +91,8 @@
   </div>
 </div>
 
-<script defer src="vendor/three.min.js"></script>
-<script defer src="vendor/postproc.js"></script>
-<script defer src="/assets/portal.js?v=11"></script>
+<script defer src="/vendor/three.min.js?v=1"></script>
+<script defer src="/vendor/postproc.js?v=1"></script>
+<script defer src="/assets/portal.js?v=12"></script>
 </body>
 </html>

@@ -6,9 +6,9 @@
 <title>Política de Privacidad — CruzTRD</title>
 <meta name="description" content="Política de Privacidad y tratamiento de datos personales de CRUZTRD CT S.A.S. (cruztrd.com), conforme a la LOPDP del Ecuador.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://cruztrd.com/privacidad.html">
+<link rel="canonical" href="https://cruztrd.com/privacidad">
 <meta name="theme-color" content="#07090C">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307090C'/%3E%3Ctext%20x='50'%20y='71'%20font-family='Poppins,Arial,sans-serif'%20font-size='62'%20font-weight='700'%20text-anchor='middle'%20fill='%2319C37D'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307090C'/%3E%3Ctext%20x='50'%20y='71'%20font-family='Arial,sans-serif'%20font-size='62'%20font-weight='700'%20text-anchor='middle'%20fill='%232DD4A7'%3EC%3C/text%3E%3C/svg%3E">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
@@ -18,12 +18,7 @@
 body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
 a{color:var(--accent2);text-decoration:none}
 a:hover{text-decoration:underline}
-.top{position:sticky;top:0;z-index:5;background:rgba(7,9,12,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.07)}
-.top .in{max-width:860px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-family:'Inter Tight','Inter';font-weight:700;font-size:20px;color:var(--ink)}
-.logo b{color:var(--accent)}
-.back{font-size:14px;color:var(--muted)}
-.hero{max-width:860px;margin:0 auto;padding:54px 24px 10px}
+.hero{max-width:860px;margin:0 auto;padding:clamp(110px,14vw,150px) 24px 10px}
 .eyebrow{color:var(--accent2);font-family:'Inter Tight','Inter';font-weight:600;letter-spacing:2px;text-transform:uppercase;font-size:12px}
 h1{font-family:'Inter Tight','Inter';font-weight:700;font-size:clamp(30px,5vw,42px);letter-spacing:-.5px;margin:10px 0 8px}
 .updated{color:var(--muted);font-size:14px}
@@ -39,15 +34,22 @@ main{max-width:860px;margin:0 auto;padding:22px 24px 80px}
 .data dt{color:var(--muted)}
 .data dd{color:var(--ink)}
 .note{background:rgba(25,195,125,.06);border:1px solid rgba(25,195,125,.26);border-radius:12px;padding:14px 16px;margin-top:18px;color:#cfe9df;font-size:14px}
-footer{border-top:1px solid rgba(255,255,255,.08);max-width:860px;margin:0 auto;padding:26px 24px 50px;color:var(--muted);font-size:13px;text-align:center}
-footer a{color:var(--muted)}
 </style>
+<link rel="stylesheet" href="/assets/marco.css?v=1">
 </head>
 <body>
-<div class="top"><div class="in">
-  <a class="logo" href="/">Cruz<b>TRD</b></a>
-  <a class="back" href="/">← Volver al inicio</a>
-</div></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="barra">
+  <a class="marca" href="/" aria-label="CruzTRD, inicio">Cruz<b>TRD</b></a>
+  <button class="hamb" id="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks"></button>
+  <nav id="navlinks" aria-label="Principal">
+    <a href="/portal360">Estudio 360°</a>
+    <a href="/#diagnostico">Diagnóstico</a>
+    <a href="/productos">Productos</a>
+    <a href="/empresa">Empresa</a>
+    <a href="/contacto">Contacto</a>
+  </nav>
+</header>
 
 <div class="hero">
   <div class="eyebrow">Legal</div>
@@ -55,7 +57,7 @@ footer a{color:var(--muted)}
   <div class="updated">Última actualización: 30 de septiembre de 2026</div>
 </div>
 
-<main>
+<main id="contenido">
   <div class="card">
     <h2><span class="n">01</span> Responsable del tratamiento</h2>
     <p>El responsable del tratamiento de los datos personales recogidos a través de este Sitio es:</p>
@@ -134,11 +136,27 @@ footer a{color:var(--muted)}
   </div>
 </main>
 
-<footer>
-  CRUZTRD CT S.A.S. · RUC 1793237622001<br>
-  Calle OE1C S5-213, Santa María, Tumbaco · Quito, Pichincha 170184, Ecuador<br>
-  <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> · <a href="tel:+593988011913">+593 98 801 1913</a><br>
-  <a href="/">Inicio</a> · <a href="/empresa.html">La empresa</a> · <a href="/productos.html">Productos</a> · <a href="/portal360">Estudio 360°</a> · <a href="/contacto.html">Contacto</a> · <a href="/terminos.html">Términos y Condiciones</a> · <a href="/privacidad.html">Política de Privacidad</a>
-</footer>
+<footer class="pie-sitio"><div class="pie-in">
+  <div>
+    <a class="marca" href="/" aria-label="CruzTRD, inicio">Cruz<b>TRD</b></a>
+    <address>
+      CRUZTRD CT S.A.S. · RUC 1793237622001<br>
+      Calle OE1C S5-213, Santa María, Tumbaco<br>
+      Quito, Pichincha 170184, Ecuador<br>
+      <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> · <a href="tel:+593988011913">+593 98 801 1913</a>
+    </address>
+  </div>
+  <nav class="pie-nav" aria-label="Pie">
+    <a href="/portal360">Estudio 360°</a>
+    <a href="/#diagnostico">Diagnóstico</a>
+    <a href="/productos">Productos</a>
+    <a href="/empresa">Empresa</a>
+    <a href="/contacto">Contacto</a>
+    <a href="/terminos">Términos y Condiciones</a>
+    <a href="/privacidad">Política de Privacidad</a>
+  </nav>
+  <div class="pie-copy">© <span data-year>2026</span> CRUZTRD CT S.A.S. · Desarrollo de software, aplicaciones y páginas web (CIIU J620101)</div>
+</div></footer>
+<script src="/assets/marco.js?v=1" defer></script>
 </body>
 </html>

@@ -45,9 +45,13 @@ async function limited(request, name, perMin, perDay) {
 }
 
 export async function onRequestPost({ request, env }) {
+  // Solo desde el propio sitio.
+  const origin = request.headers.get('origin') || '';
+  if (origin && !/^https:\/\/([a-z0-9-]+\.)?(cruztrd\.com|cruztrd-web\.pages\.dev)$/i.test(origin) && !/^http:\/\/localhost(:\d+)?$/i.test(origin)) return json({ error: 'Origen no permitido' }, 403);
   if (await limited(request, 'contacto', 3, 15)) return new Response(JSON.stringify({ error: 'Demasiados envíos. Inténtalo más tarde o escríbenos a esteban@cruztrd.com.' }), { status: 429, headers: { 'content-type': 'application/json; charset=utf-8' } });
   let body;
-  try { body = await request.json(); } catch (e) { return json({ error: 'JSON inválido' }, 400); }
+  try { const raw = await request.text(); if (raw.length > 8000) return json({ error: 'Mensaje demasiado largo' }, 413); body = JSON.parse(raw); } catch (e) { return json({ error: 'JSON inválido' }, 400); }
+  if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ error: 'JSON inválido' }, 400);
 
   const nombre = clean(body.nombre, 80);
   const correo = clean(body.correo, 120);

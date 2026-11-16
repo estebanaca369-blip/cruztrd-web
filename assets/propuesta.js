@@ -45,12 +45,12 @@
     s3:{label:'10.000 a 50.000 usuarios', rows:[
       ['2 x Droplet 2 vCPU - 4 GB RAM','App con redundancia',48],
       ['Load Balancer','Reparte el tráfico, alta disponibilidad',12],
-      ['Managed PostgreSQL 1 GB - backups diarios','Base de datos (se escala según carga)',15],
+      ['Managed PostgreSQL 2 GB - backups diarios','Base de datos (se escala según carga)',30],
       ['Spaces 250 GB + 1 TB CDN','Imágenes y archivos',5]]},
     s4:{label:'más de 50.000 usuarios', rows:[
       ['2 x Droplet 4 vCPU - 8 GB RAM','App con redundancia',96],
       ['Load Balancer','Alta disponibilidad',12],
-      ['Managed PostgreSQL 1 GB+ - backups diarios','Base de datos (se escala con réplicas)',15],
+      ['Managed PostgreSQL 4 GB - backups diarios','Base de datos (se escala con réplicas)',61],
       ['Spaces 250 GB + 1 TB CDN','Imágenes y archivos',5]]}
   };
   function sum(arr){var t=0;arr.forEach(function(r){t+=r[2];});return t;}
@@ -134,7 +134,7 @@
     return new Promise(function(res,rej){
       if(window.jspdf&&window.jspdf.jsPDF) return res(window.jspdf.jsPDF);
       var s=document.createElement('script');
-      s.src='/vendor/jspdf.umd.min.js';
+      s.src='/vendor/jspdf.umd.min.js?v=1';
       s.onload=function(){ (window.jspdf&&window.jspdf.jsPDF)?res(window.jspdf.jsPDF):rej(new Error('nojspdf')); };
       s.onerror=function(){ rej(new Error('cdn')); };
       document.head.appendChild(s);
@@ -278,7 +278,7 @@
       ['Inversión inicial (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')],
       ['Costo mensual de operación','US$'+bz.monthlyCost+'/mes (infraestructura DigitalOcean)'],
       ['Comisión de pasarela',(esEc?'~3,5% + IVA':'~3,5% más impuestos')+' sobre cada venta (varía por pasarela)'],
-      ['Usuarios de referencia','~'+bz.users.toLocaleString('es-EC')+' (punto medio de la escala que elegiste)']
+      ['Usuarios de referencia','~'+bz.users.toLocaleString('es-EC')+' (supuesto de referencia para la escala que elegiste)']
     ],62);
     if(m.monet==='sub'){
       para('Escenario con suscripción (supuestos: precio US$'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
@@ -355,8 +355,6 @@
       var doc=makePDF(jsPDF, m);
       var name='Estimacion-CruzTRD.pdf';
       var blob=doc.output('blob');
-      var dl=(window.claude&&window.claude.use)?(await window.claude.use('downloads')):null;
-      if(dl){ try{ await dl.save({filename:name, data:blob}); }catch(se){ if(!(se&&se.code==='declined')){ try{ var u0=URL.createObjectURL(blob); var a0=document.createElement('a'); a0.href=u0; a0.download=name; document.body.appendChild(a0); a0.click(); a0.remove(); }catch(e0){} } restore(); return; } restore(); return; }
       try{ doc.save(name); }catch(e){ var url=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); }
       restore(); return;
     }catch(err){

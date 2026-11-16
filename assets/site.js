@@ -2,53 +2,6 @@
 (function () {
   'use strict';
 
-  // --- Tema (claro / oscuro) con preferencia guardada ---
-  var root = document.documentElement;
-  var KEY = 'cruztrd-theme';
-  function stored() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function apply(mode) {
-    if (mode === 'light' || mode === 'dark') root.setAttribute('data-theme', mode);
-    else root.removeAttribute('data-theme');
-  }
-  apply(stored() || 'dark'); // oscuro por defecto, como la home y el Estudio 360°
-  function currentIsDark() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t === 'dark';
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
-  function wireTheme() {
-    var btn = document.getElementById('themeBtn');
-    if (!btn) return;
-    function label() { btn.setAttribute('aria-label', currentIsDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'); }
-    label();
-    btn.addEventListener('click', function () {
-      var next = currentIsDark() ? 'light' : 'dark';
-      apply(next);
-      try { localStorage.setItem(KEY, next); } catch (e) {}
-      label();
-    });
-  }
-
-  // --- Menú móvil ---
-  function wireMenu() {
-    var burger = document.getElementById('burger');
-    var links = document.getElementById('navlinks');
-    if (!burger || !links) return;
-    function poner(open) { links.classList.toggle('open', open); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú'); }
-    burger.addEventListener('click', function (e) { e.stopPropagation(); poner(!links.classList.contains('open')); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && links.classList.contains('open')) { poner(false); burger.focus(); } });
-    document.addEventListener('click', function (e) { if (links.classList.contains('open') && !links.contains(e.target)) poner(false); });
-    links.addEventListener('click', function (e) {
-      if (e.target.tagName === 'A') poner(false);
-    });
-  }
-
-  // --- Año del pie ---
-  function wireYear() {
-    var els = document.querySelectorAll('[data-year]');
-    for (var i = 0; i < els.length; i++) els[i].textContent = new Date().getFullYear();
-  }
-
   // --- Formulario de contacto ---
   function wireContact() {
     var form = document.getElementById('contactForm');
@@ -109,5 +62,5 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
-  function init() { wireTheme(); wireMenu(); wireYear(); wireContact(); }
+  function init() { wireContact(); }
 })();

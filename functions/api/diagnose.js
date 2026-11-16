@@ -106,6 +106,7 @@ export async function onRequestPost({ request, env }) {
   if (origin && !/^https:\/\/([a-z0-9-]+\.)?(cruztrd\.com|cruztrd-web\.pages\.dev)$/i.test(origin) && !/^http:\/\/localhost(:\d+)?$/i.test(origin)) return J({ error: 'origen no permitido' }, 403);
   let body = {};
   try { const raw = await request.text(); if (raw.length > 6000) return J({ error: 'solicitud demasiado grande' }, 413); body = JSON.parse(raw); } catch (e) {}
+  if (!body || typeof body !== 'object' || Array.isArray(body)) body = {};
   if (await limited(request, 'diagnose', 5, 40)) return J({ status: 'error', error: 'limite' });
   const PAISES = ['Ecuador', 'Colombia', 'Perú', 'Peru', 'México', 'Mexico', 'Chile', 'Argentina', 'Otro'];
   const country = PAISES.indexOf(String(body.country || '')) >= 0 ? String(body.country) : 'Ecuador';
@@ -151,13 +152,19 @@ export async function onRequestPost({ request, env }) {
     // "incompleto": el frontend muestra al anfitrión pidiendo más datos.
     if (isIncomplete(parsed)) {
       MODEL_CACHE = model;
-      return J({ status: 'incompleto', reason: parsed.reason || parsed.summary || '', questions: Array.isArray(parsed.questions) ? parsed.questions : [], example: parsed.example || '' });
+      { const t = (v, n) => String(v == null ? '' : v).replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, n);
+      return J({ status: 'incompleto', reason: t(parsed.reason || parsed.summary, 300), questions: (Array.isArray(parsed.questions) ? parsed.questions : []).slice(0, 4).map(q => t(q, 200)), example: t(parsed.example, 300) }); }
     }
     if (!parsed.caps || !parsed.caps.length) return J({ status: 'error', error: 'sin_caps' });
 
     MODEL_CACHE = model;
-    parsed.status = 'ok';
-    return J(parsed);
+    // Solo sale lo que el sitio usa: capas conocidas y textos acotados, sin etiquetas.
+    const txt = (v, n) => String(v == null ? '' : v).replace(/[<>]/g, '').replace(/\s+/g, ' ').trim().slice(0, n);
+    const KEYS = ['infra', 'seg', 'pagos', 'susc', 'mkt', 'fidel', 'dash'];
+    const seen = {};
+    const caps = (Array.isArray(parsed.caps) ? parsed.caps : []).filter(c => c && KEYS.indexOf(c.k) >= 0 && !seen[c.k] && (seen[c.k] = 1)).map(c => ({ k: c.k, why: txt(c.why, 220) }));
+    if (!caps.length) return J({ status: 'error', error: 'sin_caps' });
+    return J({ status: 'ok', appType: txt(parsed.appType, 60), summary: txt(parsed.summary, 400), caps });
   } catch (e) {
     return J({ status: 'error', error: 'fetch_fail' });
   }
