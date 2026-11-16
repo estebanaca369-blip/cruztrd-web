@@ -1381,3 +1381,5 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .hs .lbl{pointer-events:auto;cursor:pointer}
 @media (max-height:780px){.chFoot{display:none}}
 .panel .x{background:rgba(7,9,12,.85)}
+
+.dcard .dav,.dlobby .dav,.edgeh .eav{display:none}

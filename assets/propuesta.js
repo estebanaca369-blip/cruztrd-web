@@ -11,9 +11,9 @@
     'Colombia':{stats:[['Población','~52,9 M'],['Usuarios de internet','~77% de la población'],['Conexiones móviles','>130% de la población']],
       fuente:'Banco Mundial 2023; DataReportal.'},
     'Peru':{stats:[['Población','34,4 M (ene 2025)'],['Usuarios de internet','27,3 M - 79,5%'],['Conexiones móviles','39,4 M - 115%']],
-      fuente:'DataReportal Digital 2025 Peru.'},
+      fuente:'DataReportal Digital 2025 Perú.'},
     'Mexico':{stats:[['Población','132 M (oct 2025)'],['Usuarios de internet','110 M - 83,5%'],['Conexiones móviles','145 M - 110%']],
-      fuente:'DataReportal Digital 2026 Mexico.'},
+      fuente:'DataReportal Digital 2026 México.'},
     'Chile':{stats:[['Población','19,8 M (ene 2025)'],['Usuarios de internet','18,6 M - 94,1%'],['Conexiones móviles','30,7 M - 155%']],
       fuente:'DataReportal Digital 2025 Chile.'},
     'Argentina':{stats:[['Población','45,8 M (ene 2025)'],['Usuarios de internet','41,2 M - 90,1%'],['Conexiones móviles','64,7 M - 141%']],
@@ -57,8 +57,8 @@
 
   /* ---- Como ayuda de verdad cada capa ---- */
   var LAYER={
-    infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y sus datos quedan respaldados.',
-    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, así que aunque roben la base no sirven. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
+    infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y tus datos quedan respaldados.',
+    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, de modo que, si alguien accediera a la base, no podría leerlas. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
     pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con la pasarela local de tu país (en Ecuador: PayPhone, Kushki o Datafast). Stripe es una opción para cobros internacionales si tu empresa tiene una entidad en un país donde opera. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
     susc:'Planes y membresías que se cobran y renuevan solos con cobro recurrente de la pasarela (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible): prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
     mkt:'Google Analytics 4 y PostHog para saber de dónde vienen tus usuarios y qué hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde sí convierte.',
@@ -143,7 +143,7 @@
 
   /* ---------- Layout ---------- */
   function makePDF(jsPDF, m){
-    var esEc=m.esEc;
+    var esEc=m.esEc, sinPais=/^otro$/i.test(m.loc||'')||!m.loc, pais=sinPais?'por definir':m.loc;
     function capaTxt(k){ var t=LAYER[k]||''; if(esEc) return t;
       return t.replace(' Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',' Sienta la base para cumplir la ley de protección de datos de tu país.')
               .replace(' -el 90% del volumen de e-commerce en Ecuador-','')
@@ -213,7 +213,7 @@
     doc.setFontSize(10.5);
     function meta(lbl,val,yy){ doc.setFont('helvetica','normal'); doc.setTextColor(174,184,190); doc.text(lbl, M, yy); doc.setTextColor(237,243,241); doc.text(String(val||''), M+48, yy); }
     meta('Tipo de producto:', m.appType, my);
-    meta('País:', m.loc, my+8);
+    meta('País:', pais, my+8);
     meta('Usuarios al lanzar:', (m.tier&&m.tier.label)||'', my+16);
     meta('Monetización:', m.monetLbl, my+24);
     meta('Fecha:', m.fecha, my+32);
@@ -232,7 +232,7 @@
     para('Llevar tu idea a una aplicación lista para el mercado bajo un modelo D2C (directo a las personas, sin intermediarios). CruzTRD arma y despliega cada capa; tú te quedas con el código y el control. Este documento resume qué construimos, con qué tecnología real, cuánto cuesta y cómo puedes construirla tú mismo si lo prefieres.',{});
     if(m.desc){ para('Tu idea, en tus palabras: "'+m.desc+'"',{style:'italic',col:MUT,size:10}); }
 
-    h2('02','Contexto de mercado  ·  '+m.loc);
+    h2('02',sinPais?'Contexto de mercado':'Contexto de mercado  ·  '+m.loc);
     if(m.market){
       para('Panorama digital de '+m.loc+':',{style:'bold',size:10.5,gap:1});
       kvTable(m.market.stats,60);
@@ -240,8 +240,8 @@
       para('Medios de pago que integramos en '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.6});
       para('Fuente: '+m.market.fuente,{size:8.2,col:MUT,lh:4});
     } else {
-      para('Lanzarás en '+m.loc+'. Definimos el panorama digital y los medios de pago locales al inicio del proyecto.',{});
-      para('Medios de pago sugeridos para '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.6});
+      para(sinPais?'Aún no definiste el país de lanzamiento. El panorama digital y los medios de pago locales se definen al inicio del proyecto.':'Lanzarás en '+m.loc+'. Definimos el panorama digital y los medios de pago locales al inicio del proyecto.',{});
+      para((sinPais?'Pasarelas sugeridas: ':'Medios de pago sugeridos para '+m.loc+': ')+m.rails+'.',{size:9,col:INK,lh:4.6});
     }
 
     h2('03','Tu arquitectura  ·  qué incluye y cómo ayuda');
@@ -249,7 +249,7 @@
     keys.forEach(function(k){
       para(nmeOf(k),{style:'bold',size:11,gap:0.5});
       para(capaTxt(k),{size:10,lh:4.8});
-      if(k==='pagos'){ para('Pasarelas para '+m.loc+': '+m.rails+'.',{size:9,col:INK,lh:4.4}); }
+      if(k==='pagos'){ para((sinPais?'Pasarelas sugeridas: ':'Pasarelas para '+m.loc+': ')+m.rails+'.',{size:9,col:INK,lh:4.4}); }
       var st=[]; try{ st=(window.LIBS||{})[k]||[]; }catch(e){}
       if(st.length){ para('Stack: '+st.join('  ·  '),{size:8.6,col:GREEN,lh:4,gap:4}); }
     });
@@ -262,8 +262,8 @@
     h2('05','Inversión y tiempo estimados');
     kvTable([
       ['Alcance','Aplicación web adaptable (se instala desde el navegador). Las apps nativas para App Store y Google Play se estiman aparte'],
-      ['Puesta en marcha (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD  ·  diseño, desarrollo y despliegue'],
-      ['Infraestructura mensual','$'+m.tierTotal+' USD/mes en DigitalOcean (escala: '+m.tier.label+')'],
+      ['Puesta en marcha (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')+'  ·  diseño, desarrollo y despliegue'],
+      ['Infraestructura mensual','US$'+m.tierTotal+'/mes en DigitalOcean (escala: '+m.tier.label+')'],
       ['Modelo de monetización',m.monetLbl],
       ['Tiempo hasta el lanzamiento','~'+m.wl+' a '+m.wh+' semanas']
     ],62);
@@ -273,32 +273,32 @@
     var bz=m.biz;
     para('Cifras de referencia para dimensionar la operación. Son supuestos ajustables (precio, conversión, usuarios) que afinamos con tus datos reales.',{});
     kvTable([
-      ['Inversión inicial (una vez)','$'+m.sl.toLocaleString('es-EC')+' - $'+m.sh.toLocaleString('es-EC')+' USD'],
-      ['Costo mensual de operación','$'+bz.monthlyCost+' USD/mes (infraestructura DigitalOcean)'],
+      ['Inversión inicial (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')],
+      ['Costo mensual de operación','US$'+bz.monthlyCost+'/mes (infraestructura DigitalOcean)'],
       ['Comisión de pasarela',(esEc?'~3,5% + IVA':'~3,5% más impuestos')+' sobre cada venta (varía por pasarela)'],
       ['Usuarios al cierre del primer año','~'+bz.users.toLocaleString('es-EC')+' (supuesto según tu escala)']
     ],62);
     if(m.monet==='sub'){
-      para('Escenario con suscripción (supuestos: precio $'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
+      para('Escenario con suscripción (supuestos: precio US$'+bz.price+'/mes; 4% de tus usuarios pagan):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
-        ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = $'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
-        ['Utilidad mensual estimada',(bz.net>0?'~$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
+        ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = US$'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
+        ['Utilidad mensual estimada',(bz.net>0?'~US$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
         ['Recuperas la inversión',(bz.recover?'~'+bz.recover+' meses después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento)':'requiere más clientes o mayor precio')],
         ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión ~'+bz.recover2+' meses después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
     } else if(m.monet==='once'){
-      para('Escenario con pago único (supuestos: ticket $'+bz.price+'; 6% de tus usuarios compran):',{style:'bold',size:10,gap:1});
+      para('Escenario con pago único (supuestos: ticket US$'+bz.price+'; 6% de tus usuarios compran):',{style:'bold',size:10,gap:1});
       kvTable([
         ['Punto de equilibrio','~'+bz.breakEven+' ventas al mes cubren la operación'],
-        ['Escenario favorable','~'+bz.buyers.toLocaleString('es-EC')+' compradores = $'+bz.rev.toLocaleString('es-EC')+' de ingreso']
+        ['Escenario favorable','~'+bz.buyers.toLocaleString('es-EC')+' compradores = US$'+bz.rev.toLocaleString('es-EC')+' de ingreso']
       ],62);
     } else if(m.monet==='fee'){
-      para('Escenario con comisiones (supuestos: ticket $'+bz.order+'; 5% de comisión; 10% de usuarios transaccionan al mes):',{style:'bold',size:10,gap:1});
+      para('Escenario con comisiones (supuestos: ticket US$'+bz.order+'; 5% de comisión; 10% de usuarios transaccionan al mes):',{style:'bold',size:10,gap:1});
       kvTable([
-        ['Volumen transado (GMV)','~$'+bz.gmv.toLocaleString('es-EC')+'/mes'],
-        ['Tu ingreso por comisión','~$'+bz.rev.toLocaleString('es-EC')+'/mes'],
+        ['Volumen transado (GMV)','~US$'+bz.gmv.toLocaleString('es-EC')+'/mes'],
+        ['Tu ingreso por comisión','~US$'+bz.rev.toLocaleString('es-EC')+'/mes'],
         ['Punto de equilibrio','~'+bz.breakEven+' transacciones/mes cubren la operación']
       ],62);
     } else if(m.monet==='ads'){
@@ -325,8 +325,11 @@
     if(m.keys.indexOf('pagos')>=0||m.keys.indexOf('susc')>=0) need.push('Cuenta en la pasarela de pago de tu país'+(esEc?' (PayPhone o Kushki).':'.'));
     if(m.keys.indexOf('mkt')>=0) need.push('Accesos a tus redes y analítica.');
     bullets(need);
-    h2('09','Siguiente paso');
-    para('Escríbenos y revisamos este plan contigo, sin compromiso: esteban@cruztrd.com  ·  WhatsApp +593 98 801 1913  ·  cruztrd.com',{size:10.5,gap:2});
+    ensure(40); h2('09','Siguiente paso');
+    para('Escríbenos y revisamos este plan contigo, sin compromiso.',{size:10.5,gap:1});
+    para('esteban@cruztrd.com',{size:10.5,style:'bold',gap:0.5});
+    para('WhatsApp +593 98 801 1913',{size:10.5,style:'bold',gap:0.5});
+    para('cruztrd.com',{size:10.5,gap:2});
 
     /* Footer en todas las paginas interiores */
     var pages=doc.getNumberOfPages();
