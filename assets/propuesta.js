@@ -57,8 +57,8 @@
 
   /* ---- Como ayuda de verdad cada capa ---- */
   var LAYER={
-    infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, aguanta los picos de tráfico y tus datos quedan respaldados.',
-    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, de modo que, si alguien accediera a la base, no podría leerlas. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
+    infra:'Tu app corre en servidores virtuales de DigitalOcean con Docker, base de datos PostgreSQL gestionada (con respaldos automáticos), caché Redis en el mismo servidor y Nginx como puerta de entrada. Cloudflare aporta CDN, DNS y certificado SSL. Resultado: responde rápido, queda preparada para picos de tráfico y tus datos tienen respaldo diario.',
+    seg:'Inicio de sesión con OAuth 2.0 (Google/Apple/email): no manejamos contraseñas frágiles. Las que existen se guardan con hash bcrypt, de modo que, si alguien accediera a la base, no las vería en texto claro. Sesiones con JWT, cifrado TLS en tránsito, cabeceras Helmet contra XSS y clickjacking, rate-limiting contra fuerza bruta y bots, y 2FA (TOTP) para cuentas sensibles. Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',
     pagos:'Cobros con tarjeta de crédito y débito -el 90% del volumen de e-commerce en Ecuador- dentro de la app, con la pasarela local de tu país (en Ecuador: PayPhone, Kushki o Datafast). Stripe es una opción para cobros internacionales si tu empresa tiene una entidad en un país donde opera. Los webhooks confirman cada pago en tiempo real, sin sacar al usuario de tu marca.',
     susc:'Planes y membresías que se cobran y renuevan solos con cobro recurrente de la pasarela (PayPhone o Kushki en Ecuador; Stripe Billing donde esté disponible): prorrateo al cambiar de plan, cupones y dunning (reintentos automáticos) cuando una tarjeta falla, para no perder ingresos por descuido.',
     mkt:'Google Analytics 4 y PostHog para saber de dónde vienen tus usuarios y qué hacen; SEO técnico para que te encuentren en Google; integración con Meta Ads y correo (Mailchimp) para campañas medibles. Inviertes donde sí convierte.',
@@ -277,7 +277,7 @@
     kvTable([
       ['Inversión inicial (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')],
       ['Costo mensual de operación','US$'+bz.monthlyCost+'/mes (infraestructura DigitalOcean)'],
-      ['Comisión de pasarela',(esEc?'~3,5% + IVA':'~3,5% más impuestos')+' sobre cada venta (varía por pasarela)'],
+      ['Comisión de pasarela','~3,5% sobre cada venta, más el impuesto que grave esa comisión (varía por pasarela); el cálculo de abajo usa el 3,5%'],
       ['Usuarios de referencia','~'+bz.users.toLocaleString('es-EC')+' (supuesto de referencia para la escala que elegiste)']
     ],62);
     if(m.monet==='sub'){
@@ -286,7 +286,7 @@
         ['Punto de equilibrio','~'+bz.breakEven+' clientes de pago cubren la operación mensual'],
         ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = US$'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
         ['Utilidad mensual estimada',(bz.net>0?'~US$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
-        ['Recuperas la inversión',(bz.recover?(bz.recover===1?'~1 mes':'~'+bz.recover+' meses')+' después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento)':'requiere más clientes o mayor precio')],
+        ['Recuperas la inversión',(bz.recover?(bz.recover===1?'~1 mes':'~'+bz.recover+' meses')+' después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento; sobre el punto medio del rango de construcción)':'requiere más clientes o mayor precio')],
         ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión '+(bz.recover2===1?'~1 mes':'~'+bz.recover2+' meses')+' después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
@@ -317,7 +317,8 @@
     var stepN=1;
     keys.forEach(function(k){ if(!GUIDE[k])return;
       para('Paso '+stepN+' - '+nmeOf(k)+':',{style:'bold',size:10,gap:1});
-      para('"'+(esEc?GUIDE[k]:GUIDE[k].replace(' (PayPhone o Kushki en Ecuador)','').replace(/m[eé]xico/i.test(m.loc||'')?' y deja preparada la integración con Stripe para cuando haya una entidad en un país donde opera':'\u0000',''))+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
+      var __g=GUIDE[k]; if(k==='infra') __g=__g.replace('un Droplet de DigitalOcean (2 vCPU / 4 GB)',{s1:'un Droplet de DigitalOcean (1 vCPU / 2 GB)',s3:'dos Droplets de DigitalOcean (2 vCPU / 4 GB) detrás de un balanceador',s4:'dos Droplets de DigitalOcean (4 vCPU / 8 GB) detrás de un balanceador'}[m.scale]||'un Droplet de DigitalOcean (2 vCPU / 4 GB)');
+      para('"'+(esEc?__g:__g.replace(' (PayPhone o Kushki en Ecuador)','').replace(/m[eé]xico/i.test(m.loc||'')?' y deja preparada la integración con Stripe para cuando haya una entidad en un país donde opera':'\u0000',''))+'"',{size:9.4,col:INK,lh:4.6,style:'italic'});
       stepN++;
     });
     para('Consejo: pídele a la IA que trabaje capa por capa, que escriba pruebas y que te explique cada archivo. Si en algún punto quieres que lo tomemos nosotros, este documento ya deja el plan y el stack listos.',{size:8.8,col:MUT,lh:4.4});

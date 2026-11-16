@@ -1438,3 +1438,30 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .ctp{font:600 26px/1 'Inter Tight',Inter,sans-serif;color:#fff;letter-spacing:-.02em}
 .ctp small{font:500 13px Inter,sans-serif;color:#9AA5A2}
 @media (max-width:820px){#roomtag{letter-spacing:1.1px;max-width:58vw;padding:4px 10px}}
+/* ronda 9 */
+.hs.act .lbl{opacity:1;transform:translateX(-50%) translateY(0)}
+.hs.act .ic,.hs.act svg{color:#fff}
+.edgeh{top:auto;bottom:104px;visibility:hidden}
+.edgeh.on{visibility:visible}
+.ply:not(.v-game) .hX{visibility:hidden}
+.hint .hk{display:none;font-style:normal}.hint .ht{font-style:normal}
+@media (hover:hover) and (pointer:fine){.hint .hk{display:inline}.hint .ht{display:none}}
+.fbsl input{min-height:28px}
+.fbsl input:focus-visible{outline:2px solid #2DD4A7;outline-offset:4px;border-radius:6px}
+@media (max-height:480px) and (orientation:landscape){.navhub{left:auto;right:16px;transform:none}}
+/* tarjeta del Club: fila de cierre propia y tarjeta con cuerpo */
+.clubcard{padding-top:10px}
+.cbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 -6px 2px 0}
+.clubcard .cx{position:static;flex:none}
+.ctj{grid-template-columns:1fr auto;min-height:156px;padding:16px 18px 14px;background:linear-gradient(135deg,#1b1f1c 0%,#0c0f10 46%,#15130d 100%);border-color:color-mix(in srgb,var(--niv,#2DD4A7) 45%,transparent)}
+.ctj::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);pointer-events:none}
+.ctm{grid-column:1;font-size:16px}
+.ctk{grid-column:2;grid-row:1;align-self:start;justify-self:end;font:500 10px 'Share Tech Mono',monospace;letter-spacing:.22em;text-transform:uppercase;color:#9AA5A2}
+.ctc{grid-column:1/-1;margin-top:6px}
+.ctd{grid-column:1/-1;font:500 14px 'Share Tech Mono',monospace;letter-spacing:.16em;color:#d5dedb}
+.ctn{align-self:end;font:600 15px 'Inter Tight',Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--niv,#2DD4A7)}
+.ctp{align-self:end;justify-self:end}
+.ctv{grid-column:1/-1;font:11px 'Share Tech Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:#7f8a87}
+.pyDays i b{font-size:11px;color:rgba(243,241,236,.82)}
+.pyFoot{font-size:12px;color:rgba(243,241,236,.7)}
+.pyNote{color:rgba(243,241,236,.72)}

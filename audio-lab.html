@@ -22,8 +22,8 @@ a.dl{font:600 12px Inter;color:#1b1208;background:var(--g);padding:8px 12px;bord
 .note{margin-top:28px;padding:14px;border-radius:12px;border:1px dashed var(--line);color:var(--mut);font-size:12.5px;max-width:80ch}
 </style></head><body>
 <h1>Cruz<b>TRD</b> · Audio Lab</h1>
-<p class="sub">Genera la banda sonora y los efectos de CruzTRD Play con ElevenLabs. Cada archivo se descarga con el nombre exacto que usa el juego. Esta página es privada: necesita el token de administrador guardado en Cloudflare.</p>
+<p class="sub">Genera la banda sonora y los efectos de CruzTRD Play con ElevenLabs. Cada archivo se descarga con el nombre exacto que usa el juego. Solo funciona con el token de administrador; sin él, no genera nada.</p>
 <div class="bar"><input id="tok" type="password" placeholder="Token de administrador (AUDIO_ADMIN_TOKEN)" autocomplete="off"><button class="pri" id="all">Generar todo lo pendiente</button><span class="st" id="gst"></span></div>
 <div id="lists"></div>
-<p class="note">Cuando termines, deja los archivos .mp3 en tu carpeta Descargas y avísale a Claude: los integra en <code>media/audio/</code> y los juegos pasan de los sonidos sintetizados a estos.</p>
+<p class="note">Cuando termines, deja los archivos .mp3 en tu carpeta Descargas para integrarlos en <code>media/audio/</code>: los juegos pasan de los sonidos sintetizados a estos.</p>
 <script src="/assets/audio-lab.js?v=1" defer></script></body></html>

@@ -20,7 +20,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/portal.css?v=10">
+<link rel="stylesheet" href="/assets/portal.css?v=11">
 </head>
 <body>
 <a class="salto" href="#navHub">Saltar a los controles del recorrido</a>
@@ -31,8 +31,8 @@
 <div class="vig"></div>
 <a class="badge" href="/" aria-label="CruzTRD · volver al inicio" title="Volver al inicio">Cruz<b>TRD</b></a>
 
-<div class="hint" id="hint"><span>↔ arrastra para mirar el estudio · toca los puntos · sube por el ascensor</span></div>
-<div id="roomtag"></div>
+<div class="hint" id="hint"><span><i class="ht">↔ arrastra para mirar el estudio · toca los puntos · sube por el ascensor</i><i class="hk">Arrastra o usa las flechas ← → para mirar · Tab recorre los puntos · sube por el ascensor</i></span></div>
+<div id="roomtag" role="status" aria-live="polite"></div>
 <div class="fadeov" id="fadeov"></div>
 
 <div class="elev" id="elev">
@@ -83,6 +83,7 @@
     <a href="/">Volver al inicio</a>
   </div>
 </div>
+<noscript><div style="position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:#07090C;color:#EDF3F1;font:17px/1.6 system-ui,sans-serif;text-align:center;padding:24px"><p>El recorrido 360° necesita JavaScript.<br><a href="/#capas" style="color:#2DD4A7">Ver las siete capas en la página de inicio</a></p></div></noscript>
 <div class="load" id="loader">
   <div class="loadwrap">
     <div class="loadmark">Cruz<b>TRD</b></div>
@@ -93,6 +94,6 @@
 
 <script defer src="/vendor/three.min.js?v=1"></script>
 <script defer src="/vendor/postproc.js?v=1"></script>
-<script defer src="/assets/portal.js?v=12"></script>
+<script defer src="/assets/portal.js?v=13"></script>
 </body>
 </html>

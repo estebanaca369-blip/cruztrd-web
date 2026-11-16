@@ -107,7 +107,6 @@ export async function onRequestPost({ request, env }) {
   let body = {};
   try { const raw = await request.text(); if (raw.length > 6000) return J({ error: 'solicitud demasiado grande' }, 413); body = JSON.parse(raw); } catch (e) {}
   if (!body || typeof body !== 'object' || Array.isArray(body)) body = {};
-  if (await limited(request, 'diagnose', 5, 40)) return J({ status: 'error', error: 'limite' });
   const PAISES = ['Ecuador', 'Colombia', 'Perú', 'Peru', 'México', 'Mexico', 'Chile', 'Argentina', 'Otro'];
   const country = PAISES.indexOf(String(body.country || '')) >= 0 ? String(body.country) : 'Ecuador';
   const scale = SCLBL[body.scale] ? body.scale : 's2';
@@ -116,7 +115,8 @@ export async function onRequestPost({ request, env }) {
   const idea = String(body.idea || '').replace(/[\u0000-\u001f"`\\]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 800);
 
   if (!idea || !String(idea).trim()) return J({ error: 'idea requerida' }, 400);
-  if (!env.ANTHROPIC_API_KEY) return J({ error: 'falta ANTHROPIC_API_KEY' }, 500);
+  if (!env.ANTHROPIC_API_KEY) return J({ status: 'error', error: 'sin_configurar' });
+  if (await limited(request, 'diagnose', 5, 40)) return J({ status: 'error', error: 'limite' });
 
   const key = env.ANTHROPIC_API_KEY;
   const prompt = buildPrompt(idea, country, scale, monet, hasBase);

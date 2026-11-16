@@ -4,7 +4,7 @@
 const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' } });
 
 // Límite de uso por visitante (por IP), guardado en la caché del borde: sin servicios adicionales.
-async function limited(request, name, perMin, perDay) {
+async function limited(request, name, perMin, perDay, soloLeer) {
   try {
     const ip = request.headers.get('cf-connecting-ip') || 'x';
     const cache = caches.default, now = Date.now();
@@ -14,7 +14,7 @@ async function limited(request, name, perMin, perDay) {
       const hit = await cache.match(key);
       const n = hit ? (parseInt(await hit.text(), 10) || 0) : 0;
       if (n >= max) return true;
-      await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
+      if (!soloLeer) await cache.put(key, new Response(String(n + 1), { headers: { 'cache-control': 'max-age=' + ttl } }));
     }
   } catch (e) {}
   return false;
@@ -31,8 +31,9 @@ async function igual(a, b) {
 
 export async function onRequestPost({ request, env }) {
   if (!env.ELEVENLABS_API_KEY) return J({ ok: false, error: 'falta ELEVENLABS_API_KEY' });
-  if (await limited(request, 'audiogen', 6, 60)) return J({ ok: false, error: 'limite' }, 429);
-  if (!env.AUDIO_ADMIN_TOKEN || !(await igual(request.headers.get('x-admin') || '', env.AUDIO_ADMIN_TOKEN))) return J({ ok: false, error: 'token_admin_invalido' }, 401);
+  // El límite cuenta solo los intentos con token inválido; quien se pasa queda bloqueado aunque luego acierte.
+  if (await limited(request, 'audiogen', 6, 60, true)) return J({ ok: false, error: 'limite' }, 429);
+  if (!env.AUDIO_ADMIN_TOKEN || !(await igual(request.headers.get('x-admin') || '', env.AUDIO_ADMIN_TOKEN))) { await limited(request, 'audiogen', 6, 60); return J({ ok: false, error: 'token_admin_invalido' }, 401); }
   let b = {}; try { b = await request.json(); } catch (e) {}
   const H = { 'content-type': 'application/json', 'xi-api-key': env.ELEVENLABS_API_KEY };
   let url, body;

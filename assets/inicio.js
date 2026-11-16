@@ -11,7 +11,7 @@
     var caja=document.querySelector('.portada'), tira=document.querySelector('.giro'), pista=document.getElementById('pista'); if(!caja||!tira) return;
     var quieto=false; try{ quieto=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
     var x=0, v=quieto?0:-0.012, base=v, ancho=0, arr=false, px=0, ult=0, t0=0;
-    var puesto=false; function medir(){ var w=tira.scrollWidth/2; if(w<200){ setTimeout(medir,120); return; } ancho=w; if(!puesto){ puesto=true; x=-(ancho*0.5-innerWidth*(innerWidth<900?0.4:0.72)); } }
+    var puesto=false; function medir(){ var w=tira.scrollWidth/2; if(w<200){ setTimeout(medir,120); return; } ancho=w; if(!puesto){ puesto=true; x=-(ancho*0.5-innerWidth*(innerWidth<900?0.09:0.72)); } }
     function pinta(){ if(ancho){ while(x<=-ancho) x+=ancho; while(x>0) x-=ancho; } tira.style.transform='translate3d('+x.toFixed(1)+'px,0,0)'; }
     function paso(t){ var dt=Math.min(50,t-(t0||t)); t0=t; if(!arr&&puesto){ x+=v*dt; v+=(base-v)*0.035; } pinta(); requestAnimationFrame(paso); }
     caja.addEventListener('pointerdown',function(e){ if(e.target.closest('a,button')) return; arr=true; px=e.clientX; ult=0; caja.classList.add('arr'); if(pista) pista.classList.add('fuera'); });
@@ -34,7 +34,7 @@
   var ta=document.getElementById('aiText'), go=document.getElementById('aiGo'), nota=document.getElementById('aiNote'), plan=document.getElementById('plan');
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function val(id){ var r=document.querySelector('#'+id+' input:checked'); return r?r.value:''; }
-  function avisar(html,campo){ nota.innerHTML=html||''; ta.setAttribute('aria-invalid',html&&campo?'true':'false'); if(html){ try{ nota.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} } }
+  function avisar(html,campo){ nota.innerHTML=html||''; ta.setAttribute('aria-invalid',html&&campo?'true':'false'); if(html){ try{ nota.scrollIntoView({behavior:'smooth',block:'center'}); if(campo) ta.focus({preventScroll:true}); else { nota.setAttribute('tabindex','-1'); nota.focus({preventScroll:true}); } }catch(e){} } }
   function pocaInfo(t){ var w=t.split(/\s+/).filter(function(x){return x.length>1;}); return t.length<15||w.length<3; }
 
   go.addEventListener('click', async function(){
@@ -72,7 +72,7 @@
   /* Propuesta en PDF: el generador se carga solo cuando se pide */
   var cargando=null;
   function generador(){ if(window.__cruzGenPDF) return Promise.resolve(); if(cargando) return cargando;
-    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js?v=7'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
+    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js?v=8'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
   document.getElementById('fcta').addEventListener('click',function(e){ e.preventDefault();
     generador().then(function(){ return window.__cruzGenPDF(); }).catch(function(){ avisar('No pudimos generar el PDF. Escríbenos por WhatsApp y te lo enviamos.'); });
   });
