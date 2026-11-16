@@ -1168,11 +1168,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // tocar la sala (sin arrastrar) cierra el panel abierto; al abrir, el foco va al botón de cierre
   (function(){ var dx=0,dy=0, cz=document.getElementById('c'); cz.addEventListener('pointerdown',function(e){ dx=e.clientX; dy=e.clientY; }); cz.addEventListener('pointerup',function(e){ if(panel.classList.contains('open')&&Math.abs(e.clientX-dx)+Math.abs(e.clientY-dy)<8) panel.classList.remove('open'); }); })();
   // Atrás del navegador cierra lo que esté a pantalla completa (revista, Play, Chakra)
-  (function(){ var ov=null, t=0, cierra={mag:function(){ closeMag(); }, ply:function(){ closePlay(); }, chakra:function(){ CHAKRA.close(); }, panel:function(){ panel.classList.remove('open'); }, dirPanel:function(){ closeDir(); }};
+  (function(){ var ov=null, cierra={mag:function(){ closeMag(); }, ply:function(){ closePlay(); }, chakra:function(){ CHAKRA.close(); }};
     addEventListener('popstate',function(){ if(ov){ var id=ov; ov=null; try{ cierra[id](); }catch(e){} } },true);
-    ['mag','ply','chakra','panel','dirPanel'].forEach(function(id){ var el=document.getElementById(id); if(!el) return; try{ new MutationObserver(function(){ var on=el.classList.contains('open');
-      if(on&&ov!==id){ ov=id; clearTimeout(t); try{ if(history.state&&history.state.ov) history.replaceState({ov:id},''); else history.pushState({ov:id},''); }catch(e){} }
-      else if(!on&&ov===id){ ov=null; clearTimeout(t); t=setTimeout(function(){ try{ if(!ov&&history.state&&history.state.ov) history.back(); }catch(e){} },140); } }).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){} }); })();
+    ['mag','ply','chakra'].forEach(function(id){ var el=document.getElementById(id); if(!el) return; try{ new MutationObserver(function(){ var on=el.classList.contains('open');
+      if(on&&ov!==id){ ov=id; try{ history.pushState({ov:id},''); }catch(e){} }
+      else if(!on&&ov===id){ ov=null; try{ if(history.state&&history.state.ov===id) history.back(); }catch(e){} } }).observe(el,{attributes:true,attributeFilter:['class']}); }catch(e){} }); })();
   // diálogos: cerrados no reciben foco; al abrir, el foco entra y al cerrar vuelve a donde estaba
   (function(){ [['panel','Capa del estudio'],['dirPanel','Directorio de pisos'],['mag','Revista CruzTRD'],['ply','CruzTRD Play, demo'],['chakra','Chakra, demo']].forEach(function(d){ var el=document.getElementById(d[0]); if(!el) return; var prev=null;
     if(!el.getAttribute('role')) el.setAttribute('role','dialog'); if(!el.getAttribute('aria-label')) el.setAttribute('aria-label',d[1]);
