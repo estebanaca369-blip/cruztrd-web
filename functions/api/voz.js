@@ -34,7 +34,8 @@ export async function onRequestGet({ request, env }) {
   if (!url.searchParams.get('t')) return J({ ok: true, voice: ready });
   if (!ready) return J({ ok: false, error: 'voz_no_configurada' });
   const origin = request.headers.get('origin') || request.headers.get('referer') || '';
-  const o = origin.replace(/\/[^/]*$/, '').replace(/(https?:\/\/[^/]+).*/, '$1');
+  let o = '';
+  try { o = new URL(origin).origin; } catch (e) {}
   if (!ALLOW.some(rx => rx.test(o))) return J({ ok: false, error: 'origen' }, 403);
   if (await limited(request, 'voz', 3, 12)) return J({ ok: false, error: 'limite' }, 429);
   try {
