@@ -2374,9 +2374,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       var w=c&&c.dx?(c.dx.caps.filter(function(x){ return x.k===hk; })[0]||{}).why:''; return 'Hola, soy '+T.nm+', de '+T.role+'. '+(w?'Para tu app, '+w.charAt(0).toLowerCase()+w.slice(1)+' ':'')+'¿Qué te gustaría saber?'; }
     function ui(){ if(dock) return dock; dock=document.createElement('div'); dock.className='vzDock'; dock.innerHTML='<div class="vzAv"><img alt=""><i></i></div><div class="vzTx"><b class="vzNm"></b><span class="vzSt">Conectando…</span><p class="vzCap"></p></div><div class="vzBt"><button class="vzMic" aria-label="Silenciar micrófono"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3"/></svg></button><button class="vzEnd" aria-label="Terminar">Terminar</button></div>';
       document.body.appendChild(dock); dock.querySelector('.vzEnd').onclick=function(){ stop(); }; dock.querySelector('.vzMic').onclick=function(){ if(!conv) return; var m=!dock.classList.contains('muted'); dock.classList.toggle('muted',m); try{ conv.setMicMuted(m); }catch(e){} }; return dock; }
-    function setWho(hk){ var d=ui(), T=TEAM[hk]; d.querySelector('img').src=tAv(hk); d.querySelector('.vzNm').textContent=T.nm+' · guía virtual de '+T.role; }
+    function setWho(hk){ var d=ui(), T=TEAM[hk]; d.querySelector('img').src=tAv(hk); d.querySelector('.vzNm').textContent=hk==='intro'?'Tu anfitrión · guía virtual del estudio':T.nm+' · guía virtual de '+T.role; }
     function status(t,cls){ var d=ui(); d.querySelector('.vzSt').textContent=t; d.className='vzDock on '+(cls||'')+(d.classList.contains('muted')?' muted':''); }
-    function cap(t){ ui().querySelector('.vzCap').textContent=t; }
+    function cap(t){ ui().querySelector('.vzCap').textContent=String(t||'').replace(/\[[^\]]{1,24}\]\s*/g,'').trim(); }
     async function start(hk,c){ if(conv) await stop(true); who=hk; ctx=c||ctx||{}; ending=false; setWho(hk); status('Conectando…','con'); cap('');
       try{ await navigator.mediaDevices.getUserMedia({audio:true}); }catch(e){ status('Necesito permiso para usar tu micrófono','err'); return false; }
       try{
