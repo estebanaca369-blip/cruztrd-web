@@ -123,7 +123,7 @@
       biz.breakEven=Math.ceil(monthlyCost/(t*(1-COMM))); }
     else if(monet==='fee'){ var order=20, om=0.10, take=0.05; var orders=Math.round(USERS*om); var gmv=orders*order;
       biz.order=order; biz.orders=orders; biz.gmv=gmv; biz.take=take; biz.rev=Math.round(gmv*take);
-      biz.breakEven=Math.ceil(monthlyCost/(order*take*(1-COMM))); }
+      biz.breakEven=Math.ceil(monthlyCost/(order*Math.max(0.005,take-COMM))); }
     return {keys:keys,desc:desc,loc:loc,esEc:esEc,appType:appType,fecha:fecha,sl:sl,sh:sh,wl:wl,wh:wh,
             scale:scale,tier:tier,tierTotal:monthlyCost,monet:monet,monetLbl:MONET[monet]||'Por definir',
             market:mkFor(loc),rails:railsFor(loc),biz:biz};
@@ -144,7 +144,7 @@
   /* ---------- Layout ---------- */
   function makePDF(jsPDF, m){
     var esEc=m.esEc, sinPais=/^otro$/i.test(m.loc||'')||!m.loc, pais=sinPais?'por definir':m.loc;
-    function capaTxt(k){ var t=LAYER[k]||''; if(esEc) return t;
+    function capaTxt(k){ var t=LAYER[k]||''; if(k==='infra'&&(m.scale==='s3'||m.scale==='s4')) t=t.replace('caché Redis en el mismo servidor','caché Redis compartida entre los servidores'); if(esEc) return t;
       return t.replace(' Sienta la base para cumplir la Ley Orgánica de Protección de Datos Personales (LOPDP) del Ecuador.',' Sienta la base para cumplir la ley de protección de datos de tu país.')
               .replace(' -el 90% del volumen de e-commerce en Ecuador-','')
               .replace(' (en Ecuador: PayPhone, Kushki o Datafast)','')
@@ -277,7 +277,7 @@
     kvTable([
       ['Inversión inicial (una vez)','US$'+m.sl.toLocaleString('es-EC')+' - US$'+m.sh.toLocaleString('es-EC')],
       ['Costo mensual de operación','US$'+bz.monthlyCost+'/mes (infraestructura DigitalOcean)'],
-      ['Comisión de pasarela','~3,5% sobre cada venta, más el impuesto que grave esa comisión (varía por pasarela); el cálculo de abajo usa el 3,5%'],
+      ['Comisión de pasarela','~3,5% sobre cada venta, más el impuesto que grave esa comisión (varía por pasarela)'+(m.monet==='sub'?'; el cálculo de abajo usa el 3,5%':'')],
       ['Usuarios de referencia','~'+bz.users.toLocaleString('es-EC')+' (supuesto de referencia para la escala que elegiste)']
     ],62);
     if(m.monet==='sub'){
@@ -287,7 +287,7 @@
         ['Escenario favorable','~'+bz.paying.toLocaleString('es-EC')+' clientes de pago = US$'+bz.mrr.toLocaleString('es-EC')+'/mes de ingreso'],
         ['Utilidad mensual estimada',(bz.net>0?'~US$'+bz.net.toLocaleString('es-EC')+'/mes tras costos y comisión, antes de publicidad y mantenimiento':'aún por debajo del costo en este escenario')],
         ['Recuperas la inversión',(bz.recover?(bz.recover===1?'~1 mes':'~'+bz.recover+' meses')+' después de alcanzar esos '+bz.paying.toLocaleString('es-EC')+' clientes de pago (no desde el lanzamiento; sobre el punto medio del rango de construcción)':'requiere más clientes o mayor precio')],
-        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?'recuperas la inversión '+(bz.recover2===1?'~1 mes':'~'+bz.recover2+' meses')+' después de alcanzarlos':'no cubre la operación mensual; hay que crecer primero')],
+        ['Escenario conservador','Si solo paga el 1,5% (~'+bz.paying2.toLocaleString('es-EC')+' clientes): '+(bz.recover2?(bz.recover2>36?'a esta escala la suscripción sola no recupera la inversión en un plazo razonable; hay que crecer o subir el precio':'recuperas la inversión '+(bz.recover2===1?'~1 mes':'~'+bz.recover2+' meses')+' después de alcanzarlos'):'no cubre la operación mensual; hay que crecer primero')],
         ['Qué no incluye','Publicidad para captar usuarios ni mantenimiento evolutivo de la app']
       ],62);
     } else if(m.monet==='once'){

@@ -9,6 +9,7 @@
     var tragar=false;
     document.addEventListener('pointerdown',function(e){ tragar=n.classList.contains('open')&&!n.contains(e.target)&&!b.contains(e.target); },true);
     document.addEventListener('click',function(e){ if(tragar||(n.classList.contains('open')&&!n.contains(e.target)&&!b.contains(e.target))){ tragar=false; e.preventDefault(); e.stopPropagation(); poner(false); } },true);
+    addEventListener('scroll',function(){ if(n.classList.contains('open')&&scrollY>40) poner(false); },{passive:true});
     n.addEventListener('click',function(e){ if(e.target.tagName==='A') poner(false); });
     n.addEventListener('focusout',function(e){ if(n.classList.contains('open')&&e.relatedTarget&&!n.contains(e.relatedTarget)&&e.relatedTarget!==b) poner(false); });
   }
