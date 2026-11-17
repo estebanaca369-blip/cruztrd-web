@@ -1016,14 +1016,14 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     if(!caps.length){ rutaEl.classList.remove('on'); return; }
     var i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
     var nx=caps[i+1], h;
-    if(i<0){ var c0=caps[0]; h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>'+caps.length+' pisos</button><button type="button" class="rN" data-go="'+HKI[c0.k]+'">Empezar en <span class="rL">el piso&nbsp;</span>'+pad2(HKI[c0.k])+' · '+esc(TEAM[c0.k].role)+'</button>'; }
+    if(i<0){ var c0=caps[0]; h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>'+caps.length+(caps.length===1?' piso':' pisos')+'</button><button type="button" class="rN" data-go="'+HKI[c0.k]+'">Empezar en <span class="rL">el piso&nbsp;</span>'+pad2(HKI[c0.k])+' · '+esc(TEAM[c0.k].role)+'</button>'; }
     else if(nx){ h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>paso '+(i+1)+' de '+caps.length+'</button><button type="button" class="rN" data-go="'+HKI[nx.k]+'">Siguiente: <span class="rL">piso&nbsp;</span>'+pad2(HKI[nx.k])+' · '+esc(TEAM[nx.k].role)+'</button>'; }
     else { h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>último paso</button><button type="button" class="rN" data-fin="1">Cerrar mi plan</button>'; }
     rutaEl.innerHTML=h; rutaEl.classList.add('on');
   }
   function planHs(){ var caps=planCaps(), i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
     [].forEach.call(document.querySelectorAll('.hs.char'),function(el){ var t=el.querySelector('.pst'); if(i<0){ el.classList.remove('enplan'); if(t) t.remove(); return; } el.classList.add('enplan'); if(!t){ t=document.createElement('span'); t.className='pst'; el.querySelector('.lbl').appendChild(t); } t.textContent='Paso '+(i+1)+' de tu plan'; });
-    try{ roomtag.textContent=ROOMS[cur].name+(i>-1?' · Paso '+(i+1)+' de '+caps.length:''); }catch(e){} }
+    try{ roomtag.textContent=ROOMS[cur].name+(i>-1&&innerWidth>820?' · Paso '+(i+1)+' de '+caps.length:''); }catch(e){} }
   window.__planHs=planHs;
   window.__rutaUI=rutaUI;
   function panelBody(s){

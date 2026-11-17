@@ -347,3 +347,8 @@ main .card h3,.pasos h3{font-size:20px}
 .asc-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .asc-b{min-width:0}.asc-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:860px){.asc{box-sizing:border-box}}
+
+.asc{grid-template-columns:minmax(0,1fr) minmax(0,480px)}
+.asc-b span{white-space:normal;overflow:visible;font-size:14.5px;line-height:1.2}
+@media(max-width:860px){.asc{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:420px){.asc-b{flex-direction:column;align-items:flex-start;gap:6px;padding:12px}}
