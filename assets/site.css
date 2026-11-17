@@ -401,3 +401,4 @@ main .card h3,.pasos h3{font-size:20px}
 #contenido .card p,#contenido .card li{font-size:17px;line-height:1.65}
 
 @media(max-width:860px){.demo::before{display:none}}
+#contenido{overflow-x:clip}
