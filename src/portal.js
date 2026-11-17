@@ -2506,7 +2506,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   document.getElementById('navHub').onclick=openDir;
 
   // arranque en Recepción
-  try{ if(renderer.capabilities.maxTextureSize>=8192&&!matchMedia('(pointer:coarse)').matches&&innerWidth>=1100&&(navigator.deviceMemory||8)>=4){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w4'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
+  try{ var tactil=matchMedia('(pointer:coarse)').matches, red=navigator.connection||{}, mem=navigator.deviceMemory||8;
+    // 6K en escritorio; en móviles solo en equipos recientes, con buena red y guardando menos salas en memoria
+    var movil6=tactil&&devicePixelRatio>=2&&Math.max(screen.width,screen.height)>=800&&mem>=6&&!red.saveData&&(!red.effectiveType||red.effectiveType==='4g');
+    if(movil6) MAXTEX=2;
+    if(renderer.capabilities.maxTextureSize>=8192&&((!tactil&&innerWidth>=1100&&mem>=4)||movil6)){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w4'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);
     // bienvenida (una vez por visita) o entrada directa a un piso desde el inicio (?capa=N)
     var capa=0; try{ capa=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){}
