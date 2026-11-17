@@ -20,7 +20,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=15">
+<link rel="stylesheet" href="/assets/site.css?v=16">
 <link rel="stylesheet" href="/assets/marco.css?v=1">
 </head>
 <body>
@@ -60,6 +60,13 @@
             <input id="correo" name="correo" type="email" autocomplete="email" required maxlength="120" placeholder="tucorreo@ejemplo.com">
             <span class="err" data-err="correo"></span>
           </div>
+          <fieldset class="motivos">
+            <legend>¿Qué necesitas?</legend>
+            <label><input type="radio" name="motivo" value="Quiero construir una app nueva"><span>Una app nueva</span></label>
+            <label><input type="radio" name="motivo" value="Tengo una app y quiero mejorarla"><span>Mejorar mi app</span></label>
+            <label><input type="radio" name="motivo" value="Quiero integrar IA en mi negocio"><span>Integrar IA</span></label>
+            <label><input type="radio" name="motivo" value="Tengo otra consulta"><span>Otra consulta</span></label>
+          </fieldset>
           <div class="field">
             <label for="mensaje">Mensaje</label>
             <textarea id="mensaje" name="mensaje" required maxlength="2000" placeholder="Cuéntanos tu idea o tu consulta"></textarea>
@@ -108,7 +115,7 @@
   <div class="pie-copy">© <span data-year>2026</span> CRUZTRD CT S.A.S. · Desarrollo de software, aplicaciones y páginas web (CIIU J620101)</div>
 </div></footer>
 
-<script src="/assets/site.js?v=5" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
 <script src="/assets/marco.js?v=4" defer></script>
 </body>
 </html>

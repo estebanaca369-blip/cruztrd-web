@@ -20,7 +20,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=15">
+<link rel="stylesheet" href="/assets/site.css?v=16">
 <link rel="stylesheet" href="/assets/marco.css?v=1">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CruzTRD","legalName":"CRUZTRD CT S.A.S.","url":"https://cruztrd.com","email":"esteban@cruztrd.com","telephone":"+593988011913","taxID":"1793237622001","description":"Empresa ecuatoriana que integra plataformas con inteligencia artificial y desarrolla aplicaciones móviles y páginas web enfocadas en el modelo D2C.","areaServed":"Ecuador","knowsAbout":["Integración de plataformas","Inteligencia artificial","Aplicaciones D2C","Aplicaciones móviles","Pagos y suscripciones"],"address":{"@type":"PostalAddress","streetAddress":"Calle OE1C S5-213, Santa María, Tumbaco","addressLocality":"Quito","addressRegion":"Pichincha","postalCode":"170184","addressCountry":"EC"},"contactPoint":{"@type":"ContactPoint","contactType":"customer support","email":"esteban@cruztrd.com","telephone":"+593988011913"}}</script>
 </head>
@@ -66,24 +66,59 @@
       </div>
     </section>
 
-    <section>
-      <h2>Cómo trabajamos</h2>
-      <p class="lead">Construimos por capas: cada parte del producto se diseña, se prueba y se pone en marcha de forma ordenada, para que la aplicación crezca sin rehacerse.</p>
-      <div class="grid two" style="margin-top:18px">
-        <div class="card"><div class="step-n">01 · Entender</div><h3>Entendemos la idea</h3><p>Definimos qué resuelve el producto, para quién es y qué necesita para funcionar.</p></div>
-        <div class="card"><div class="step-n">02 · Diseñar</div><h3>Diseñamos y planificamos</h3><p>Acordamos el alcance, la arquitectura y las capas necesarias antes de escribir código.</p></div>
-        <div class="card"><div class="step-n">03 · Construir</div><h3>Construimos por capas</h3><p>Infraestructura, seguridad, datos y funciones se desarrollan y se integran paso a paso.</p></div>
-        <div class="card"><div class="step-n">04 · Desplegar</div><h3>Desplegamos y mantenemos</h3><p>Publicamos la aplicación, la monitoreamos y la mejoramos con cada nueva versión.</p></div>
+    <section class="obra">
+      <div class="obra-txt">
+        <h2>Cómo trabajamos</h2>
+        <p class="lead">Construimos por capas: cada parte del producto se diseña, se prueba y se pone en marcha de forma ordenada, para que la aplicación crezca sin rehacerse.</p>
+        <ol class="pasos">
+          <li><h3>Entendemos la idea</h3><p>Definimos qué resuelve el producto, para quién es y qué necesita para funcionar.</p></li>
+          <li><h3>Diseñamos y planificamos</h3><p>Acordamos el alcance, la arquitectura y las capas necesarias antes de escribir código.</p></li>
+          <li><h3>Construimos por capas</h3><p>Infraestructura, seguridad, datos y funciones se desarrollan y se integran paso a paso.</p></li>
+          <li><h3>Desplegamos y mantenemos</h3><p>Publicamos la aplicación, la monitoreamos y la mejoramos con cada nueva versión.</p></li>
+        </ol>
       </div>
-    </section>
-
-    <section>
-      <h2>El estudio, por dentro</h2>
-      <p class="lead">Cada capa de una app tiene su piso en nuestro estudio virtual. Entra y recórrelo a tu ritmo.</p>
-      <div class="galeria">
-        <a href="/portal360?capa=1"><img src="/media/home-capa-01.webp?v=n8" alt="Piso de Infraestructura: servidores y vista de Quito" width="1100" height="682" loading="lazy"><span>Piso 1 · Infraestructura</span></a>
-        <a href="/portal360?capa=3"><img src="/media/home-capa-03.webp?v=n8" alt="Piso de Pagos: mostrador con pantalla de cobro" width="1100" height="682" loading="lazy"><span>Piso 3 · Pagos</span></a>
-        <a href="/portal360?capa=7"><img src="/media/home-capa-07.webp?v=n8" alt="Piso de Dashboards: pantalla con mapa de Ecuador" width="1100" height="682" loading="lazy"><span>Piso 7 · Dashboards</span></a>
+      <div class="edificio" id="edificio">
+        <p class="edif-nota">Nuestro estudio virtual es ese método hecho edificio: un piso por capa. Abre uno y entra.</p>
+        <div class="piso">
+          <img src="/media/home-capa-07.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 38%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso7"><span class="pn">07</span><span class="pt">Dashboards</span></button></h3>
+          <div class="pd" id="piso7"><p>Todo tu negocio en una sola pantalla: métricas en vivo y alertas para decidir a tiempo.</p><a href="/portal360?capa=7">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-capa-06.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 45%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso6"><span class="pn">06</span><span class="pt">Fidelización</span></button></h3>
+          <div class="pd" id="piso6"><p>Clientes que vuelven y recomiendan: puntos, niveles y recompensas dentro de tu app.</p><a href="/portal360?capa=6">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-capa-05.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 40%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso5"><span class="pn">05</span><span class="pt">Marketing</span></button></h3>
+          <div class="pd" id="piso5"><p>Analítica, SEO, campañas y automatizaciones que traen a las personas correctas.</p><a href="/portal360?capa=5">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-capa-04.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 40%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso4"><span class="pn">04</span><span class="pt">Suscripciones</span></button></h3>
+          <div class="pd" id="piso4"><p>Ingresos que se repiten mes a mes: planes, cobros recurrentes y renovaciones.</p><a href="/portal360?capa=4">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-capa-03.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 42%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso3"><span class="pn">03</span><span class="pt">Pagos</span></button></h3>
+          <div class="pd" id="piso3"><p>Cobros directos a tu cuenta, sin fricción para quien compra.</p><a href="/portal360?capa=3">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-capa-02.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 45%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso2"><span class="pn">02</span><span class="pt">Seguridad</span></button></h3>
+          <div class="pd" id="piso2"><p>Tus datos y los de tus usuarios, protegidos por defecto.</p><a href="/portal360?capa=2">Entrar a este piso</a></div>
+        </div>
+        <div class="piso abierto">
+          <img src="/media/home-capa-01.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 48%">
+          <h3><button type="button" aria-expanded="true" aria-controls="piso1"><span class="pn">01</span><span class="pt">Infraestructura</span></button></h3>
+          <div class="pd" id="piso1"><p>La base lista para crecer sin rehacerla: servidores, datos y despliegue.</p><a href="/portal360?capa=1">Entrar a este piso</a></div>
+        </div>
+        <div class="piso">
+          <img src="/media/home-recepcion.webp?v=n8" alt="" width="1100" height="682" loading="lazy" style="object-position:50% 40%">
+          <h3><button type="button" aria-expanded="false" aria-controls="piso0"><span class="pn">00</span><span class="pt">Recepción</span></button></h3>
+          <div class="pd" id="piso0"><p>Aquí empieza el recorrido: el anfitrión escucha tu idea y te dice qué capas necesita.</p><a href="/portal360">Entrar a este piso</a></div>
+        </div>
       </div>
     </section>
 
@@ -128,7 +163,8 @@
   <div class="pie-copy">© <span data-year>2026</span> CRUZTRD CT S.A.S. · Desarrollo de software, aplicaciones y páginas web (CIIU J620101)</div>
 </div></footer>
 
-<script src="/assets/site.js?v=5" defer></script>
+<script src="/assets/site.js?v=6" defer></script>
 <script src="/assets/marco.js?v=4" defer></script>
+<script defer src="/assets/edificio.js?v=1"></script>
 </body>
 </html>

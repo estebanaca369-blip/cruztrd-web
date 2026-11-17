@@ -16,6 +16,12 @@
       if (f && f.setAttribute) { if (msg) { f.setAttribute('aria-invalid', 'true'); if (e) f.setAttribute('aria-describedby', e.id); } else { f.removeAttribute('aria-invalid'); } }
     }
     function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    // El motivo elegido encabeza el mensaje y ajusta la pista del campo
+    var pistas = { 'Quiero construir una app nueva': 'Qué hace tu app, para quién es y cómo gana dinero', 'Tengo una app y quiero mejorarla': 'Qué app tienes hoy y qué te gustaría cambiar', 'Quiero integrar IA en mi negocio': 'A qué se dedica tu negocio y qué tarea quieres resolver con IA', 'Tengo otra consulta': 'Cuéntanos tu consulta' };
+    [].forEach.call(form.querySelectorAll('input[name="motivo"]'), function (r) {
+      r.addEventListener('change', function () { form.mensaje.placeholder = pistas[r.value] || form.mensaje.placeholder; });
+    });
+
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
@@ -28,6 +34,8 @@
       if (nombre.length < 2) { setErr('nombre', 'Escribe tu nombre.'); ok = false; }
       if (!emailOk(correo)) { setErr('correo', 'Escribe un correo válido.'); ok = false; }
       if (mensaje.length < 10) { setErr('mensaje', 'Cuéntanos un poco más (mínimo 10 caracteres).'); ok = false; }
+      var mot = form.querySelector('input[name="motivo"]:checked');
+      if (mot) mensaje = '[' + mot.value + ']\n' + mensaje;
       if (!ok) { var mal = form.querySelector('[aria-invalid="true"]'); if (mal) { mal.focus({ preventScroll: true }); requestAnimationFrame(function () { mal.scrollIntoView({ block: 'center' }); }); } return; }
 
       btn.disabled = true; var orig = btn.textContent; btn.textContent = 'Enviando…';
