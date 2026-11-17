@@ -61,7 +61,7 @@ p{margin:0}
 .toca:hover span,.toca:focus-visible span{opacity:1;transform:translate(-50%,0)}
 .portada::after{pointer-events:none}
 @media(min-width:900px){.giro{top:-24%;height:124%}}
-.pista{position:absolute;z-index:2;right:var(--pad);top:104px;font-size:14px;color:#fff;background:rgba(7,9,12,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;transition:opacity .5s;pointer-events:none}
+.pista{position:absolute;z-index:2;right:var(--pad);bottom:clamp(36px,7vh,84px);font-size:14px;color:#fff;background:rgba(7,9,12,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;transition:opacity .5s;pointer-events:none}
 .pista.fuera{opacity:0}
 .velo{position:fixed;inset:0;z-index:50;background:var(--negro);opacity:0;pointer-events:none;transition:opacity .28s ease}
 .velo.on{opacity:1}
@@ -69,7 +69,7 @@ p{margin:0}
   linear-gradient(180deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.86) 7%,rgba(7,9,12,.3) 14%,rgba(7,9,12,0) 21%,rgba(7,9,12,0) 38%,rgba(7,9,12,.78) 78%,var(--negro) 100%),
   linear-gradient(90deg,rgba(7,9,12,.5) 0%,rgba(7,9,12,0) 62%)}
 .portada-txt{position:absolute;z-index:2;left:0;right:0;bottom:0;padding-bottom:clamp(36px,7vh,84px)}
-.portada h1{font-size:clamp(40px,6.3vw,98px);line-height:.97;max-width:15ch;color:#fff}
+.portada h1{font-size:min(clamp(40px,6.3vw,98px),9.6vh);line-height:.97;max-width:15ch;color:#fff}
 .portada h1 span{display:block;overflow:hidden}
 .portada h1 span i{display:block;font-style:normal;animation:sube .9s cubic-bezier(.2,.7,.1,1) both}
 .portada h1 span:nth-child(2) i{animation-delay:.08s}
@@ -189,7 +189,7 @@ p{margin:0}
   body{font-size:16px}
   .portada h1{max-width:none;font-size:clamp(30px,8.7vw,40px)}
   .portada::after{background:linear-gradient(180deg,rgba(7,9,12,.86) 0%,rgba(7,9,12,.2) 15%,rgba(7,9,12,.15) 40%,rgba(7,9,12,.9) 51%,var(--negro) 100%)}
-  .pista{top:84px;right:auto;left:var(--pad)}
+  .pista{top:84px;bottom:auto;right:auto;left:var(--pad)}
   .portada-pie{flex-direction:column;align-items:stretch}
   .acciones .btn{flex:1 1 100%}
   .capas-cab,.pisos,.diag-g,.cierre-g{grid-template-columns:minmax(0,1fr)}
