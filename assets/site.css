@@ -306,3 +306,9 @@ main{padding-top:0}
   .demo-tabs button[aria-selected="true"]{background:#7c5cf0;border-color:#7c5cf0!important;color:#fff}
 }
 @media(prefers-reduced-motion:reduce){.demo-fig img,.demo-tabs span{transition:none}}
+
+/* ---------- piso tipográfico de las páginas interiores ---------- */
+main .card p,main .card li,main .list li,main dl.data dd,main .contact-data dd,main .contact-data .v,.pasos p,.piso .pd p,.demo-tabs span,.banda p,.consent{font-size:16px;line-height:1.55}
+main dl.data dt,main .contact-data dt,main .contact-data .k,.edif-nota,.demo-guia,.demo-fig figcaption,.piso .pn{font-size:14px}
+main .card h3,.pasos h3{font-size:20px}
+@media(min-width:1800px){.wrap{max-width:1480px}main .card p,main .card li,main .list li,.pasos p,.lead{font-size:18px}}
