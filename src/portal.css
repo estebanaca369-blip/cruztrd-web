@@ -1535,3 +1535,14 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .dst.plan{background:transparent;color:#7fe9cb;border:1px solid rgba(45,212,167,.6)}
 .dcard.plan{box-shadow:none}
 .eqActs{gap:10px}
+
+/* ---- ronda 15: cierre del plan ---- */
+.eqEdif li.en{background:rgba(243,241,236,.06);color:#e9f7f2;box-shadow:inset 3px 0 0 #2DD4A7}
+.eqEdif li.en i{color:#ffd27a}
+.eqEdif li.en.ok i{color:#03110b}
+.eqEdif li:not(.en){opacity:.55}
+.eqFin .eqMain1{background:#2DD4A7!important;color:#03110b!important;border-color:#2DD4A7!important}
+.eqFin .eqMain1:hover{background:#5fe3c0!important}
+.eqFin{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
+.eqEdif li{height:52px;font-size:15.5px}
+@media (max-width:900px){.eqopen .eqTeam{order:3}}

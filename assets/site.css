@@ -402,3 +402,11 @@ main .card h3,.pasos h3{font-size:20px}
 
 @media(max-width:860px){.demo::before{display:none}}
 #contenido{overflow-x:clip}
+
+/* ---------- ronda 15 ---------- */
+@media(min-width:900px){.phero h1{font-size:clamp(56px,6.4vw,96px);line-height:.96;letter-spacing:-.035em;max-width:15ch}}
+.contact-data h2{font-size:clamp(24px,2.2vw,30px)!important;margin-bottom:16px}
+.contact-cols{align-items:start}
+main .wrap>section:has(.contact-cols){padding-bottom:clamp(40px,5vw,72px)}
+.grid.three>.card::before{font-size:clamp(44px,4.6vw,72px);font-weight:600;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:22px;opacity:.9}
+.grid.three>.card p{color:rgba(237,243,241,.82)}
