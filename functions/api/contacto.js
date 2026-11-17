@@ -87,8 +87,9 @@ export async function onRequestPost({ request, env }) {
                 '</p><p><b>Mensaje:</b></p><p>' + esc(mensaje).replace(/\n/g, '<br>') + '</p>'
         })
       });
-      if (!r.ok) return json({ error: 'No se pudo enviar el correo' }, 502);
-      return json({ ok: true });
+      // Si el proveedor falla, el visitante recibe el respaldo (correo o WhatsApp ya escritos).
+      if (!r.ok) return json({ ok: true, delivered: false });
+      return json({ ok: true, delivered: true });
     }
 
     if (env.CONTACT_WEBHOOK) {

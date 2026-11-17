@@ -21,3 +21,6 @@
 
 /audio-lab.html
   X-Robots-Tag: noindex, nofollow
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8

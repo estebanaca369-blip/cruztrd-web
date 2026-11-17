@@ -69,8 +69,9 @@
             throw new Error((res.d && res.d.error) || 'error');
           }
         })
-        .catch(function () {
-          status.innerHTML = 'No pudimos enviar el formulario. Escríbenos directamente a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a>.';
+        .catch(function (err) {
+          var dic = err && err.message && err.message !== 'error' && !/fetch|network|load/i.test(err.message) ? err.message.replace(/[<>&]/g, '') + ' ' : 'No pudimos enviar el formulario. ';
+          status.innerHTML = dic + 'También puedes escribirnos directamente a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a>.';
           status.className = 'form-status bad'; try { status.setAttribute('tabindex','-1'); status.scrollIntoView({block:'center'}); status.focus({preventScroll:true}); } catch (e) {}
         })
         .then(function () { btn.disabled = false; btn.textContent = orig; });

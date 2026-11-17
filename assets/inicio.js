@@ -79,7 +79,7 @@
   /* Propuesta en PDF: el generador se carga solo cuando se pide */
   var cargando=null;
   function generador(){ if(window.__cruzGenPDF) return Promise.resolve(); if(cargando) return cargando;
-    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js?v=9'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
+    cargando=new Promise(function(ok,mal){ var s=document.createElement('script'); s.src='/assets/propuesta.js?v=10'; s.onload=ok; s.onerror=mal; document.head.appendChild(s); }); return cargando; }
   document.getElementById('fcta').addEventListener('click',function(e){ e.preventDefault();
     generador().then(function(){ return window.__cruzGenPDF(); }).catch(function(){ avisar('No pudimos generar el PDF. Escríbenos por WhatsApp y te lo enviamos.'); });
   });

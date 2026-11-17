@@ -251,7 +251,7 @@
     keys.forEach(function(k){
       para(nmeOf(k),{style:'bold',size:11,gap:0.5});
       para(capaTxt(k),{size:10,lh:4.8});
-      if(k==='pagos'){ para((sinPais?'Pasarelas sugeridas: ':'Pasarelas para '+m.loc+': ')+m.rails+'.',{size:9,col:INK,lh:4.4}); }
+      if(k==='pagos'&&sinPais){ para((sinPais?'Pasarelas sugeridas: ':'Pasarelas para '+m.loc+': ')+m.rails+'.',{size:9,col:INK,lh:4.4}); }
       var st=[]; try{ st=(window.LIBS||{})[k]||[]; }catch(e){}
       if(st.length){ para('Stack: '+st.join('  ·  '),{size:8.6,col:GREEN,lh:4,gap:4}); }
     });

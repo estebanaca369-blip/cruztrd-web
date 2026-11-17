@@ -1,0 +1,31 @@
+# CruzTRD
+
+> CruzTRD (CRUZTRD CT S.A.S., RUC 1793237622001) es un estudio de software de Quito, Ecuador, que integra plataformas con inteligencia artificial y construye aplicaciones D2C (directo al consumidor): apps móviles para iOS y Android y apps web instalables, de la idea al lanzamiento.
+
+CruzTRD organiza cada app en siete capas y las construye en este orden: infraestructura, seguridad, pagos, suscripciones, marketing, fidelización y dashboards. El sitio presenta ese método como un edificio virtual de siete pisos que se recorre en 360°.
+
+Datos clave:
+- Razón social: CRUZTRD CT S.A.S. · Marca: CruzTRD
+- Actividad registrada: desarrollo de software, aplicaciones y páginas web (CIIU J620101)
+- Domicilio: Calle OE1C S5-213, Santa María, Tumbaco, Quito, Pichincha 170184, Ecuador
+- Contacto: esteban@cruztrd.com · +593 98 801 1913 (también WhatsApp)
+- Servicios: consultoría, diseño, desarrollo, integración con IA, despliegue y mantenimiento de apps a la medida
+- Producto propio: Declárame, app de autogestión tributaria para personas naturales en Ecuador (próximamente en App Store y Google Play)
+
+## Páginas
+
+- [Inicio](https://cruztrd.com/): qué hace el estudio, las siete capas y el diagnóstico de ideas con IA
+- [Estudio 360°](https://cruztrd.com/portal360): recorrido interactivo por la recepción y los siete pisos, con guías virtuales, conversación por voz, revista y juegos de demostración
+- [La empresa](https://cruztrd.com/empresa): qué hacemos, cómo trabajamos e identidad legal
+- [Productos](https://cruztrd.com/productos): Declárame y sus pantallas
+- [Contacto](https://cruztrd.com/contacto): formulario y datos de contacto
+
+## Herramientas para visitantes
+
+- Diagnóstico con IA (en el inicio): la persona describe su idea y recibe el tipo de app, las capas que necesita y una estimación preliminar en PDF con arquitectura, costos de operación, tiempos y una guía para construirla con una IA de código. Es orientativo y no es una cotización.
+- Anfitrión por voz (en el Estudio 360°): conversación de hasta cuatro minutos con el guía virtual del estudio.
+
+## Legal
+
+- [Política de Privacidad](https://cruztrd.com/privacidad)
+- [Términos y Condiciones](https://cruztrd.com/terminos)
