@@ -20,7 +20,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=16">
+<link rel="stylesheet" href="/assets/site.css?v=17">
 <link rel="stylesheet" href="/assets/marco.css?v=1">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Declárame","applicationCategory":"FinanceApplication","operatingSystem":"iOS, Android","inLanguage":"es-EC","description":"Aplicación móvil de autogestión tributaria para personas naturales en Ecuador.","url":"https://cruztrd.com/productos","publisher":{"@type":"Organization","name":"CruzTRD","legalName":"CRUZTRD CT S.A.S.","url":"https://cruztrd.com"}}</script>
 </head>
@@ -48,22 +48,28 @@
 
   <div class="wrap">
     <section>
-      <div class="grid two">
-        <div class="card prod">
+      <div class="demo">
+        <div class="demo-txt">
           <span class="tag">App móvil · Ecuador</span>
           <h2>Declárame</h2>
           <p>Aplicación móvil de <strong>autogestión tributaria</strong> para personas en Ecuador. Te dice si estás al día con el SRI y prepara el borrador de tu IVA del mes. Tú revisas, presentas y pagas.</p>
-          <ul class="list">
-            <li>Pensada para personas naturales que quieren llevar su información al día.</li>
-            <li>Interfaz simple, en español, para entender qué toca y cuándo.</li>
-            <li>Desarrollada y mantenida por CRUZTRD CT S.A.S.</li>
-          </ul>
-          <p style="margin-top:4px"><a class="btn btn-primary" href="https://declarame.com" target="_blank" rel="noopener">Visitar declarame.com →</a></p>
-          <p style="font-size:13.5px;color:var(--muted);margin-top:2px">Declárame es una herramienta privada de organización. No está afiliada ni respaldada por ninguna entidad del Estado ecuatoriano, y no reemplaza la asesoría de un profesional.</p>
+          <p class="demo-guia" id="demoGuia">Recorre la app: elige una pantalla.</p>
+          <div class="demo-tabs" role="tablist" aria-labelledby="demoGuia" id="demoTabs">
+            <button type="button" role="tab" id="dt0" aria-controls="dp" aria-selected="true" tabindex="0" data-src="/media/declarame-01.webp?v=2" data-alt="Pantalla Tu situación: estás al día con el SRI, sin deudas pendientes, y el IVA que vence después"><b>Tu situación</b><span>Te dice si estás al día con el SRI y qué vence después.</span></button>
+            <button type="button" role="tab" id="dt1" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-02.webp?v=2" data-alt="Pantalla IVA del mes: valor a pagar y los pasos para revisar la declaración"><b>IVA del mes</b><span>Tu declaración de IVA lista para revisar, paso a paso.</span></button>
+            <button type="button" role="tab" id="dt2" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-03.webp?v=2" data-alt="Pantalla Tus libros contra el SRI: casilleros del formulario 104 comparados uno a uno"><b>Formulario 104</b><span>Cada casillero, cruzado con lo que el SRI tiene registrado.</span></button>
+            <button type="button" role="tab" id="dt3" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-04.webp?v=2" data-alt="Pantalla que pregunta si una compra es del negocio, con una sugerencia"><b>Tus compras</b><span>Te sugiere qué compras son de tu negocio. Tú decides.</span></button>
+            <button type="button" role="tab" id="dt4" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-05.webp?v=2" data-alt="Pantalla que muestra una factura en papel fotografiada y los datos leídos"><b>Facturas en papel</b><span>Les tomas una foto y la app lee los datos por ti.</span></button>
+            <button type="button" role="tab" id="dt5" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-06.webp?v=2" data-alt="Pantalla Devolución: valores presentados, acreditados y por acreditar, por mes"><b>Devolución</b><span>Sigue tu devolución de IVA mes a mes.</span></button>
+            <button type="button" role="tab" id="dt6" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-07.webp?v=2" data-alt="Pantalla de confirmación con la clave de Declárame antes de guardar el borrador"><b>Tú tienes el control</b><span>Tú das el último clic: nada se presenta sin ti.</span></button>
+            <button type="button" role="tab" id="dt7" aria-controls="dp" aria-selected="false" tabindex="-1" data-src="/media/declarame-08.webp?v=2" data-alt="Pantalla Conecta un RUC: explica cómo se guarda la clave y cómo desconectarse"><b>Seguridad</b><span>Tu clave se guarda cifrada y te desconectas cuando quieras.</span></button>
+          </div>
+          <p class="demo-fin" style="margin-top:22px"><a class="btn btn-primary" href="https://declarame.com" target="_blank" rel="noopener">Visitar declarame.com</a></p>
+          <p class="demo-fin" style="font-size:13.5px;color:var(--muted);margin-top:10px">Desarrollada y mantenida por CRUZTRD CT S.A.S. Las pantallas usan datos de ejemplo. Declárame es una herramienta privada de organización. No está afiliada ni respaldada por ninguna entidad del Estado ecuatoriano, y no reemplaza la asesoría de un profesional.</p>
         </div>
-
-        <figure style="margin:0;display:flex;align-items:center;justify-content:center">
-          <img src="/media/declarame-01.webp" alt="Pantalla de Declárame: te dice si estás al día con el SRI y qué vence después" width="720" height="1564" loading="lazy" style="width:min(340px,100%);height:auto;border-radius:22px;border:1px solid var(--line)">
+        <figure class="demo-fig" id="dp" role="tabpanel" aria-labelledby="dt0">
+          <img id="demoImg" src="/media/declarame-01.webp?v=2" alt="Pantalla Tu situación: estás al día con el SRI, sin deudas pendientes, y el IVA que vence después" width="720" height="1564">
+          <figcaption id="demoN">1 de 8</figcaption>
         </figure>
       </div>
       <div class="banda">
@@ -102,5 +108,6 @@
 
 <script src="/assets/site.js?v=6" defer></script>
 <script src="/assets/marco.js?v=4" defer></script>
+<script defer src="/assets/demo.js?v=1"></script>
 </body>
 </html>

@@ -272,3 +272,37 @@ main{padding-top:0}
 .motivos label:hover span{border-color:var(--muted)}
 .motivos input:checked+span{background:#2DD4A7;border-color:#2DD4A7;color:#07090C;font-weight:600}
 .motivos input:focus-visible+span{outline:2px solid #2DD4A7;outline-offset:3px}
+
+/* ---------- Productos: recorrido por Declárame ---------- */
+.demo{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:start}
+.demo-txt h2{margin-top:10px}
+.demo-guia{margin:26px 0 8px;font-size:14px;color:var(--muted)}
+.demo-tabs{display:flex;flex-direction:column}
+.demo-tabs button{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr);padding:13px 0 13px 18px;border-top:1px solid var(--line);position:relative;color:var(--muted);transition:color .2s}
+.demo-tabs button:last-child{border-bottom:1px solid var(--line)}
+.demo-tabs b{font-size:17px;font-weight:600;color:inherit}
+.demo-tabs span{font-size:15px;line-height:1.45;max-height:0;overflow:hidden;opacity:0;transition:max-height .35s,opacity .3s}
+.demo-tabs button::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px;background:transparent;transition:background .2s}
+.demo-tabs button:hover{color:var(--ink)}
+.demo-tabs button[aria-selected="true"]{color:var(--ink)}
+.demo-tabs button[aria-selected="true"]::before{background:#7c5cf0}
+.demo-tabs button[aria-selected="true"] span{max-height:60px;opacity:.8;margin-top:3px}
+.demo-tabs button:focus-visible{outline:2px solid #2DD4A7;outline-offset:2px;border-radius:4px}
+.demo-fig{margin:0;position:sticky;top:92px;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.demo-fig img{width:min(360px,100%);height:auto;border-radius:24px;border:1px solid var(--line);transition:opacity .16s,transform .3s cubic-bezier(.2,.7,.1,1)}
+.demo-fig img.cambia{opacity:0;transform:translateY(8px)}
+.demo-fig figcaption{margin-top:12px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+@media(max-width:860px){
+  .demo{display:flex;flex-direction:column;gap:0}
+  .demo-txt{display:contents}
+  .demo-fig{position:static;order:2;margin-top:18px}
+  .demo-fin{order:3}
+  .demo-tabs{flex-direction:row;overflow-x:auto;gap:8px;padding:0 0 4px;scrollbar-width:none;scroll-snap-type:x proximity;max-width:100%}
+  .demo-tabs::-webkit-scrollbar{display:none}
+  .demo-tabs button{flex:none;display:block;white-space:nowrap;padding:9px 15px;border:1px solid var(--line)!important;border-radius:999px;scroll-snap-align:center}
+  .demo-tabs button::before{display:none}
+  .demo-tabs button span{display:none}
+  .demo-tabs b{font-size:15px}
+  .demo-tabs button[aria-selected="true"]{background:#7c5cf0;border-color:#7c5cf0!important;color:#fff}
+}
+@media(prefers-reduced-motion:reduce){.demo-fig img,.demo-tabs span{transition:none}}
