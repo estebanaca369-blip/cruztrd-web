@@ -1597,3 +1597,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   #equipo.modoFin .eqCorte{max-width:300px}
   #equipo.modoFin .eqFinT h2{font-size:32px}
 }
+
+/* ---- ronda 19 ---- */
+.eqFin .eqCorteW{order:-1}
+@media (max-width:900px){.eqFin .eqCorteW{order:-1}}

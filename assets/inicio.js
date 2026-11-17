@@ -4,7 +4,7 @@
   /* Pisos: la foto sigue a la fila */
   var filas=[].slice.call(document.querySelectorAll('#lista a')), fotos=[].slice.call(document.querySelectorAll('#visor img')), txt=document.getElementById('visorTxt');
   var losas=[].slice.call(document.querySelectorAll('#torre i')), alto=0;
-  function torre(i){ alto=Math.max(alto,i); losas.forEach(function(l,k){ l.className=k===i?'on':(k<=alto?'ya':''); }); }
+  function torre(i){ losas.forEach(function(l,k){ l.className=k===i?'on':(k<i?'ya':''); }); }
   function ver(a){ var i=+a.getAttribute('data-i'); filas.forEach(function(f){f.classList.toggle('on',f===a);}); fotos.forEach(function(f,k){f.classList.toggle('on',k===i);}); txt.textContent=a.getAttribute('data-n'); torre(i); }
   filas.forEach(function(a){ a.addEventListener('mouseenter',function(){ver(a);}); a.addEventListener('focus',function(){ver(a);}); });
   /* al bajar por la lista, el piso que cruza el centro de la pantalla se enciende en la torre */
