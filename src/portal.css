@@ -1546,3 +1546,10 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .eqFin{grid-template-columns:minmax(0,340px) minmax(0,1fr)}
 .eqEdif li{height:52px;font-size:15.5px}
 @media (max-width:900px){.eqopen .eqTeam{order:3}}
+
+/* ---- ronda 15: corte del edificio ---- */
+.eqCorteW{position:relative}
+.eqCorte{display:block;width:100%;height:auto;max-width:400px;filter:drop-shadow(0 24px 40px rgba(0,0,0,.5))}
+.eqEdif.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.eqFin{grid-template-columns:minmax(0,400px) minmax(0,1fr)}
+@media (max-width:900px){.eqCorte{max-width:340px;margin:0 auto}}

@@ -410,3 +410,15 @@ main .card h3,.pasos h3{font-size:20px}
 main .wrap>section:has(.contact-cols){padding-bottom:clamp(40px,5vw,72px)}
 .grid.three>.card::before{font-size:clamp(44px,4.6vw,72px);font-weight:600;letter-spacing:-.04em;line-height:1;color:#fff;margin-bottom:22px;opacity:.9}
 .grid.three>.card p{color:rgba(237,243,241,.82)}
+
+/* ---------- Contacto: la recepción ---------- */
+.lado{display:flex;flex-direction:column;gap:22px}
+.recep{position:relative;display:grid;grid-template-columns:150px minmax(0,1fr);align-items:end;gap:18px;padding:22px 24px 0;border-radius:14px;overflow:hidden;background:radial-gradient(120% 90% at 0% 100%,rgba(45,212,167,.16),rgba(45,212,167,0) 60%),linear-gradient(180deg,#11161b,#0b0e12);border:1px solid var(--line)}
+.recep img{width:150px;height:auto;align-self:end;display:block;filter:drop-shadow(0 10px 22px rgba(0,0,0,.6))}
+.recep-t{padding-bottom:22px}
+.recep-k{margin:0 0 6px;font-size:14px;color:var(--muted)}
+.recep-h{margin:0 0 8px;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.2;color:#fff}
+.recep-t p:not(.recep-k):not(.recep-h){margin:0 0 14px;font-size:16px;line-height:1.5;color:rgba(237,243,241,.78)}
+.recep-a{display:inline-block;color:#07090C;background:#2DD4A7;text-decoration:none;font-weight:600;font-size:15px;padding:10px 18px;border-radius:999px}
+.recep-a:hover{background:#5fe3bf}
+@media(max-width:520px){.recep{grid-template-columns:96px minmax(0,1fr);padding:18px 18px 0;gap:14px}.recep img{width:96px}.recep-h{font-size:19px}}
