@@ -352,3 +352,52 @@ main .card h3,.pasos h3{font-size:20px}
 .asc-b span{white-space:normal;overflow:visible;font-size:14.5px;line-height:1.2}
 @media(max-width:860px){.asc{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:420px){.asc-b{flex-direction:column;align-items:flex-start;gap:6px;padding:12px}}
+
+/* ================= ronda 14: escala editorial ================= */
+@media(min-width:900px){
+  h1{font-size:clamp(56px,6.4vw,96px);line-height:.96;letter-spacing:-.035em;max-width:15ch}
+  h2{font-size:clamp(36px,3.9vw,56px);line-height:1.02;letter-spacing:-.03em;margin-bottom:18px}
+  .lead{font-size:clamp(19px,1.5vw,22px);line-height:1.5}
+  .phero{min-height:clamp(420px,46vw,620px);padding-bottom:clamp(36px,4vw,64px)}
+  .phero>p{max-width:min(600px,100%)}
+  main .wrap>section{padding:clamp(72px,9vw,150px) 0}
+  main .wrap>section+section{border-top:1px solid var(--line)}
+  main .card p,main .card li,main .list li,.pasos p{font-size:17px;line-height:1.6}
+}
+/* Qué hacemos: tres columnas con número */
+.grid.three{counter-reset:col}
+.grid.three>.card{counter-increment:col;padding:26px 0 30px}
+.grid.three>.card::before{content:"0" counter(col);display:block;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:38px}
+.grid.three>.card h3{font-size:clamp(22px,2.1vw,30px);letter-spacing:-.02em;line-height:1.1;margin:0 0 12px}
+/* Edificio protagonista */
+@media(min-width:900px){
+  .obra{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .edificio.js .piso{height:72px}
+  .piso button{height:72px;padding:24px 26px 0;gap:20px}
+  .piso .pt{font-size:24px}
+  .piso .pd{padding:10px 26px 0 66px;max-width:44ch}
+  .piso .pd p{font-size:17px}
+  .edificio.js .piso.abierto{height:clamp(300px,27vw,400px)}
+  .edif-nota{font-size:16px;max-width:52ch;margin-bottom:20px}
+  .pasos h3{font-size:22px}
+}
+/* Productos: el teléfono manda y la sección toma el tinte de Declárame */
+@media(min-width:861px){
+  .demo{grid-template-columns:minmax(0,5fr) minmax(0,6fr);position:relative}
+  .demo-fig img{width:min(440px,100%)}
+  .demo-tabs b{font-size:19px}
+  .demo-tabs span{font-size:16px}
+  .demo-tabs button{padding:16px 0 16px 20px}
+}
+.demo{isolation:isolate}
+.demo::before{content:"";position:absolute;z-index:-1;right:-6%;top:-4%;width:62%;height:108%;background:radial-gradient(closest-side,rgba(124,92,240,.22),rgba(124,92,240,0));pointer-events:none}
+/* Contacto */
+.field input,.field textarea{min-height:56px;font-size:17px;padding:15px 16px}
+.field textarea{min-height:170px;field-sizing:content;max-height:520px}
+.field label{font-size:15px}
+@media(min-width:900px){.contact-data{padding:26px 28px;border:1px solid var(--line);border-radius:14px;align-self:start}}
+/* Legales: columna de lectura */
+#contenido>.card{max-width:72ch}
+#contenido .card p,#contenido .card li{font-size:17px;line-height:1.65}
+
+@media(max-width:860px){.demo::before{display:none}}

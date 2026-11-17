@@ -148,9 +148,25 @@ p{margin:0}
 @media (hover:hover){.plan-acc .btn.sec:hover{background:var(--tinta);color:#fff}}
 
 /* ---------- producto y contacto ---------- */
+#aiGo{background:#2DD4A7;color:#04130E;border-color:#2DD4A7;font-weight:600}#aiGo:hover{background:#5fe3c0}
+.diag-pts{list-style:none;margin:14px 0 18px;padding:0}.diag-pts li{position:relative;padding:9px 0 9px 22px;border-top:1px solid rgba(11,14,20,.14);font-size:16px;line-height:1.45}.diag-pts li::before{content:"";position:absolute;left:2px;top:17px;width:7px;height:7px;border-radius:50%;background:#0B0E14}
 .cierre{padding:clamp(72px,10vw,130px) 0 clamp(56px,7vw,90px)}
 .cierre-g{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(36px,6vw,96px)}
 .cierre h2{font-size:clamp(28px,3.2vw,46px);line-height:1.05;max-width:18ch}
+.prod-banda{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,6vw,96px);align-items:center;padding-bottom:clamp(64px,9vw,130px);border-bottom:1px solid rgba(255,255,255,.12)}
+.prod-t p{font-size:clamp(17px,1.4vw,20px);line-height:1.55;color:rgba(255,255,255,.72);max-width:52ch;margin:18px 0 0}
+.prod-t p strong{color:#fff;font-weight:600}
+.prod-acc{display:flex;gap:26px;flex-wrap:wrap}
+.prod-tel{display:block;justify-self:center;height:clamp(320px,34vw,460px);overflow:hidden;border-radius:26px;box-shadow:0 30px 90px -30px rgba(124,92,240,.6)}
+.prod-tel img{display:block;height:130%;width:auto;transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.prod-tel:hover img,.prod-tel:focus-visible img{transform:translateY(-22%)}
+.habla{padding-top:clamp(64px,9vw,130px)}
+.habla h2{font-size:clamp(56px,10vw,150px);line-height:.9;letter-spacing:-.045em;max-width:none;margin:0 0 clamp(18px,2.4vw,34px)}
+.habla-correo{display:inline-block;font-size:clamp(24px,4.2vw,64px);font-weight:500;letter-spacing:-.03em;line-height:1.05;color:#fff;text-decoration:underline;text-decoration-color:#2DD4A7;text-decoration-thickness:3px;text-underline-offset:.14em;overflow-wrap:anywhere}
+.habla-correo:hover{color:#2DD4A7}
+.habla .datos{margin-top:clamp(28px,4vw,56px);max-width:760px}
+@media(max-width:860px){.prod-banda{grid-template-columns:minmax(0,1fr)}.prod-tel{justify-self:start;height:300px}}
+@media(prefers-reduced-motion:reduce){.prod-tel img{transition:none}}
 .prod{display:flex;gap:20px;align-items:flex-start;margin-top:28px}
 .prod img{width:64px;height:64px;border-radius:15px;flex:none}
 .prod p{color:var(--gris);max-width:48ch}
@@ -258,7 +274,12 @@ p{margin:0}
   <div class="ancho diag-g">
     <div class="diag-izq">
       <h2>Cuéntanos tu idea. La IA te dice qué capas necesita.</h2>
-      <p>Escribe qué hace tu app, para quién es y cómo cobra. En menos de un minuto tienes el plan y una estimación preliminar en PDF con arquitectura, costos de operación y tiempos. Incluye una guía paso a paso lista para una IA de código: si prefieres construirla por tu cuenta, te llevas el plano. La estimación cubre una app web instalable; las versiones para App Store y Google Play se estiman aparte.</p>
+      <p>Escribe qué hace tu app, para quién es y cómo cobra. En menos de un minuto tienes tu plan.</p>
+      <ul class="diag-pts">
+        <li>Estimación preliminar en PDF: arquitectura, costos de operación y tiempos.</li>
+        <li>Guía paso a paso lista para una IA de código, por si prefieres construirla tú.</li>
+        <li>Cubre una app web instalable; App Store y Google Play se estiman aparte.</li>
+      </ul>
       <p class="nota">No pedimos correo ni registro. Al armar tu plan, el texto de tu idea se envía a un proveedor de inteligencia artificial fuera del Ecuador para generar el diagnóstico. <a href="/privacidad">Política de Privacidad</a></p>
     </div>
     <div class="ficha">
@@ -303,28 +324,27 @@ p{margin:0}
 </section>
 
 <section class="cierre">
-  <div class="ancho cierre-g">
-    <div>
-      <h2>También lanzamos productos propios.</h2>
-      <div class="prod">
-        <img src="/media/declarame-icono.svg" alt="Ícono de Declárame" width="64" height="64">
-        <div>
-          <p><strong style="color:#fff;font-weight:600">Declárame.</strong> App para personas naturales en Ecuador: te dice si estás al día con el SRI y prepara el borrador de tu IVA del mes. Tú revisas, presentas y pagas. Muy pronto en iPhone y Android.</p>
-          <a class="enlace" href="https://declarame.com">declarame.com</a>
-        </div>
+  <div class="ancho">
+    <div class="prod-banda">
+      <div class="prod-t">
+        <h2>También lanzamos productos propios.</h2>
+        <p><strong>Declárame.</strong> App para personas naturales en Ecuador: te dice si estás al día con el SRI y prepara el borrador de tu IVA del mes. Tú revisas, presentas y pagas. Muy pronto en iPhone y Android.</p>
+        <p class="prod-acc"><a class="enlace" href="/productos">Ver sus pantallas</a><a class="enlace" href="https://declarame.com">declarame.com</a></p>
       </div>
+      <a class="prod-tel" href="/productos" aria-label="Ver las pantallas de Declárame"><img src="/media/declarame-01.webp?v=2" alt="" width="720" height="1564" loading="lazy"></a>
     </div>
-    <div>
+    <div class="habla">
       <h2>Hablemos.</h2>
+      <a class="habla-correo" href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a>
       <ul class="datos">
-        <li><span>Correo</span><a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a></li>
         <li><span>WhatsApp</span><a href="https://wa.me/593988011913" target="_blank" rel="noopener">+593 98 801 1913</a></li>
-        <li><span>Dirección</span><div>Calle OE1C S5-213, Santa María, Tumbaco<br>Quito 170184, Ecuador</div></li>
+        <li><span>Dirección</span><div>Calle OE1C S5-213, Santa María, Tumbaco · Quito 170184, Ecuador</div></li>
+        <li><span>Formulario</span><a href="/contacto">Escribir desde la página de contacto</a></li>
       </ul>
-      <a class="enlace" href="/contacto">Escribir por el formulario</a>
     </div>
   </div>
 </section>
+
 </main>
 
 <footer class="pie-sitio"><div class="pie-in">

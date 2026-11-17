@@ -1520,3 +1520,18 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .ruta button,.ruta a{display:block;line-height:18px;white-space:pre}
 @media (max-width:820px){.ruta .rN{text-align:center}}
 .dirmodal.open ~ .clubtoast,.dirback.open ~ .clubtoast{opacity:0!important}
+
+/* ---- ronda 14: cierre del plan con el corte del edificio; verde con disciplina ---- */
+.eqFin{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;margin:0 0 34px;padding:0 0 34px;border-bottom:1px solid rgba(243,241,236,.12)}
+.eqEdif{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.eqEdif li{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;height:44px;padding:0 14px;background:rgba(243,241,236,.04);color:rgba(243,241,236,.4);font:500 14.5px Inter,system-ui,sans-serif}
+.eqEdif li:first-child{border-radius:10px 10px 0 0}.eqEdif li:last-child{border-radius:0 0 10px 10px}
+.eqEdif li b{font-weight:600;font-variant-numeric:tabular-nums;font-size:13px}
+.eqEdif li i{font-style:normal;font-size:12.5px}
+.eqEdif li.en{background:rgba(45,212,167,.12);color:#e9f7f2;box-shadow:inset 3px 0 0 rgba(45,212,167,.6)}
+.eqEdif li.en.ok{background:#2DD4A7;color:#03110b;box-shadow:none}
+.eqFinT h2{font-size:clamp(28px,3.4vw,46px);line-height:1.02;letter-spacing:-.03em;margin:8px 0 12px}
+@media (max-width:900px){.eqFin{grid-template-columns:minmax(0,1fr)}.eqEdif li{height:38px}}
+.dst.plan{background:transparent;color:#7fe9cb;border:1px solid rgba(45,212,167,.6)}
+.dcard.plan{box-shadow:none}
+.eqActs{gap:10px}

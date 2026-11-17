@@ -1012,7 +1012,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function rutaUI(){
     var caps=planCaps();
     if(!rutaEl){ if(!caps.length) return; rutaEl=document.createElement('div'); rutaEl.className='ruta'; rutaEl.setAttribute('role','status'); document.body.appendChild(rutaEl);
-      rutaEl.addEventListener('click',function(e){ var b=e.target.closest('[data-go]'); if(b) goRoom(+b.getAttribute('data-go')); else if(e.target.closest('[data-fin]')){ try{ EQUIPO.open(); }catch(er){} } else if(e.target.closest('[data-ver]')){ try{ openDir(); }catch(er){} } }); }
+      rutaEl.addEventListener('click',function(e){ var b=e.target.closest('[data-go]'); if(b) goRoom(+b.getAttribute('data-go')); else if(e.target.closest('[data-fin]')){ try{ EQUIPO.fin(); }catch(er){} } else if(e.target.closest('[data-ver]')){ try{ openDir(); }catch(er){} } }); }
     if(!caps.length){ rutaEl.classList.remove('on'); return; }
     var i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
     var nx=caps[i+1], h;
@@ -2439,6 +2439,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   /* ---------- EQUIPO: diagnóstico con IA (usa /api/diagnose, el mismo del laboratorio) ---------- */
   var EQUIPO=(function(){
     var root=null, last=null, F={idea:'',country:'Ecuador',scale:'s1',monet:'',hasBase:false}, voiceOn=false;
+    var finMode=false;
     var PK='cruztrd_plan_v1', ORD=['infra','seg','pagos','susc','mkt','fidel','dash'];
     var WHY={infra:'La base estable sobre la que corre toda tu app.',seg:'Cuentas y datos personales protegidos desde el inicio.',pagos:'Cobros dentro de la app con los medios de tu mercado.',susc:'Ingresos recurrentes y renovaciones.',mkt:'Atraer a las personas correctas y medir qué vende.',fidel:'Que tus clientes vuelvan y te recomienden.',dash:'Decidir con datos en vivo.'};
     function orden(d){ d.caps=d.caps.filter(function(c){ return ORD.indexOf(c.k)>-1; }).sort(function(a,b){ return ORD.indexOf(a.k)-ORD.indexOf(b.k); }); return d; }
@@ -2461,8 +2462,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       '<div class="eqActs"><button class="pyGo" data-eq="go"><span>Diseñar mi app</span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg></button><button class="pyGhost eqVoice" data-eq="voice"'+(voiceOn?'':' hidden')+'>Contárselo por voz</button></div>'; }
     function loading(){ return '<span class="pyEye"><i></i>Diagnóstico con IA</span><h2>El equipo está diseñando tu app…</h2><div class="eqLoad"><i></i><i></i><i></i></div><p class="eqMuted">Leemos tu idea, elegimos las capas y le asignamos a cada una su guía.</p>'; }
     function incomplete(d){ return form('<b>'+esc2(d.reason||'Nos falta un poco de detalle.')+'</b>'+(d.questions&&d.questions.length?'<ul>'+d.questions.map(function(q){ return '<li>'+esc2(q)+'</li>'; }).join('')+'</ul>':'')+(d.example?'<p class="eqEx">Ejemplo: '+esc2(d.example)+'</p>':'')); }
+    function finHtml(d){ var vis=[]; try{ vis=CLUB.st.rooms||[]; }catch(e){} var ks=d.caps.map(function(c){ return c.k; }), hechos=ks.filter(function(k){ return vis.indexOf(ORD.indexOf(k)+1)>-1; }).length;
+      var pisos=''; for(var i=6;i>=0;i--){ var k=ORD[i], en=ks.indexOf(k)>-1, ok=vis.indexOf(i+1)>-1; pisos+='<li class="'+(en?'en':'')+(en&&ok?' ok':'')+'"><b>'+String(i+1).padStart(2,'0')+'</b><span>'+esc2(TEAM[k].role)+'</span>'+(en?'<i>'+(ok?'Recorrido':'Pendiente')+'</i>':'')+'</li>'; }
+      return '<div class="eqFin"><ol class="eqEdif" aria-label="Los pisos de tu plan en el edificio">'+pisos+'</ol><div class="eqFinT"><span class="pyEye"><i></i>Tu recorrido</span><h2>Recorriste '+hechos+' de '+ks.length+' pisos de tu plan</h2><p class="eqSum">'+(hechos>=ks.length?'Ya viste todas las capas que tu idea necesita. El siguiente paso es conversarlo con nosotros: tu plan y tu idea llegan escritos al formulario.':'Te faltan '+(ks.length-hechos)+'. Puedes seguir el recorrido o conversar tu plan con nosotros desde ya.')+'</p><div class="eqActs"><a class="pyGo eqA" href="/contacto" data-eq="quiero"><span>Quiero construirla</span></a><button class="pyGhost" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><button class="pyGhost" data-eq="link">Copiar enlace de mi plan</button></div></div></div>'; }
     function result(d){ var n=d.caps.length;
-      return '<span class="pyEye"><i></i>Tu app ideal'+(d.__local?' · diagnóstico rápido':'')+'</span><h2>'+esc2(d.appType)+'</h2><p class="eqSum">'+esc2(d.summary)+'</p>'+
+      return (finMode?finHtml(d):'')+'<span class="pyEye"><i></i>Tu app ideal'+(d.__local?' · diagnóstico rápido':'')+'</span><h2>'+esc2(d.appType)+'</h2><p class="eqSum">'+esc2(d.summary)+'</p>'+
         '<div class="eqCaps">'+d.caps.map(function(c,i){ var T=TEAM[c.k]||{nm:c.k,role:c.k}; return '<div class="eqCap"><img src="'+tAv(c.k)+'" alt=""><div class="eqCt"><em>Paso '+(i+1)+' · Piso '+String(ORD.indexOf(c.k)+1).padStart(2,'0')+' · '+esc2(T.role)+'</em><b>'+esc2(T.nm)+'</b><p>'+esc2(c.why)+'</p></div><div class="eqCb">'+(voiceOn?'<button class="pyGhost" data-eq="talk" data-k="'+c.k+'">Hablar con '+esc2(T.nm)+'</button>':'')+'<button class="pyGhost" data-eq="room" data-k="'+c.k+'">Ver su capa</button></div></div>'; }).join('')+'</div>'+
         '<div class="eqActs"><button class="pyGo" data-eq="ruta"><span>Ver mi ruta en el edificio</span></button><button class="pyGhost" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><a class="pyGhost eqA" href="/contacto" data-eq="quiero">Quiero construirla</a><button class="pyGhost" data-eq="link">Copiar enlace de mi plan</button><button class="pyGhost" data-eq="edit">Ajustar la idea</button><button class="pyGhost" data-eq="borrar">Borrar plan</button></div>'+
         '<p class="eqMuted">'+n+' capas · '+(d.__local?'Diagnóstico rápido por palabras clave: la IA no respondió en este momento.':'Diagnóstico generado con IA a partir de tu descripción.')+'</p>'; }
@@ -2530,8 +2534,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       if(!root._b){ root._b=1; root.innerHTML=shell(); root.addEventListener('click',click); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
       if(!keep) last?paint('res',last):paint('form');
       VOZ.avail().then(function(v){ voiceOn=v; root.querySelector('.eqVz').hidden=!v; [].forEach.call(root.querySelectorAll('.eqVoice'),function(x){ x.hidden=!v; }); if(v&&last&&!keep) paint('res',last); }); }
-    function close(){ if(root) root.classList.remove('open'); document.body.classList.remove('magopen','eqopen'); }
-    return {open:open,close:close,run:run,llevaIdea:llevaIdea,get last(){ return last; }};
+    function close(){ if(root) root.classList.remove('open'); document.body.classList.remove('magopen','eqopen'); finMode=false; }
+    return {open:open,close:close,run:run,llevaIdea:llevaIdea,fin:function(){ finMode=true; open(); },get last(){ return last; }};
   })();
   function irDiagnostico(){ try{ document.body.style.transition='opacity .25s'; document.body.style.opacity='0'; }catch(e){} setTimeout(function(){ location.href='/#diagnostico'; },240); }
   addEventListener('pageshow',function(){ try{ document.body.style.opacity=''; }catch(e){} });
