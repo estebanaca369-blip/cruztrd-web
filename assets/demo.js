@@ -33,4 +33,9 @@
   fig.addEventListener('touchend',function(e){ if(x0===null) return; var dx=e.changedTouches[0].clientX-x0; x0=null; if(Math.abs(dx)>40) ver(cur+(dx<0?1:-1)); },{passive:true});
   fig.addEventListener('click',function(){ ver(cur+1); });
   carga(1);
+  // profundidad: el teléfono sigue al cursor (solo con ratón y sin movimiento reducido)
+  if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
+    fig.addEventListener('pointermove',function(e){ var r=img.getBoundingClientRect(), px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5; img.style.transform='perspective(1100px) rotateY('+(px*9).toFixed(2)+'deg) rotateX('+(-py*6).toFixed(2)+'deg)'; });
+    fig.addEventListener('pointerleave',function(){ img.style.transform=''; });
+  }
 })();

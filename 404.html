@@ -12,7 +12,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
 <link rel="stylesheet" href="/assets/fuentes.css?v=1">
-<link rel="stylesheet" href="/assets/site.css?v=19">
+<link rel="stylesheet" href="/assets/site.css?v=21">
 <link rel="stylesheet" href="/assets/marco.css?v=1">
 </head>
 <body>
@@ -31,14 +31,20 @@
 </header>
 
 <main id="contenido">
-  <div class="center-stage">
-    <div class="code">ERROR 404</div>
-    <h1>Esta página no existe</h1>
-    <p class="lead" style="max-width:46ch">La dirección que abriste no corresponde a ninguna página de cruztrd.com. Puede que el enlace esté roto o que la página se haya movido.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px">
-      <a class="btn btn-primary" href="/">Ir al inicio</a>
-      <a class="btn btn-ghost" href="/contacto">Contacto</a>
+  <div class="asc">
+    <div class="asc-txt">
+      <p class="code">Error 404</p>
+      <h1>Este piso no existe</h1>
+      <p class="lead">El ascensor no encontró la dirección que abriste: puede que el enlace esté roto o que la página se haya movido. Elige un piso del estudio o vuelve al inicio.</p>
+      <div class="asc-acc">
+        <a class="btn btn-primary" href="/">Ir al inicio</a>
+        <a class="btn btn-ghost" href="/contacto">Contacto</a>
+      </div>
     </div>
+    <nav class="asc-panel" aria-label="Pisos del estudio">
+      <div class="asc-vis" aria-hidden="true"><span>▲</span><b>?</b></div>
+      <div class="asc-grid"><a class="asc-b" href="/portal360?capa=7"><b>07</b><span>Dashboards</span></a><a class="asc-b" href="/portal360?capa=6"><b>06</b><span>Fidelización</span></a><a class="asc-b" href="/portal360?capa=5"><b>05</b><span>Marketing</span></a><a class="asc-b" href="/portal360?capa=4"><b>04</b><span>Suscripciones</span></a><a class="asc-b" href="/portal360?capa=3"><b>03</b><span>Pagos</span></a><a class="asc-b" href="/portal360?capa=2"><b>02</b><span>Seguridad</span></a><a class="asc-b" href="/portal360?capa=1"><b>01</b><span>Infraestructura</span></a><a class="asc-b" href="/portal360"><b>00</b><span>Recepción</span></a></div>
+    </nav>
   </div>
 </main>
 
@@ -64,7 +70,7 @@
   <div class="pie-copy">© <span data-year>2026</span> CRUZTRD CT S.A.S. · Desarrollo de software, aplicaciones y páginas web (CIIU J620101)</div>
 </div></footer>
 
-<script src="/assets/site.js?v=6" defer></script>
+<script src="/assets/site.js?v=7" defer></script>
 <script src="/assets/marco.js?v=4" defer></script>
 </body>
 </html>

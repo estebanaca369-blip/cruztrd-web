@@ -1007,19 +1007,24 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   // ---- ruta del diagnóstico: acompaña piso a piso ----
   var HKI={infra:1,seg:2,pagos:3,susc:4,mkt:5,fidel:6,dash:7}, rutaEl=null;
+  function pad2(n){ return String(n).padStart(2,'0'); }
   function planCaps(){ try{ return (EQUIPO.last&&EQUIPO.last.caps)||[]; }catch(e){ return []; } }
   function rutaUI(){
     var caps=planCaps();
     if(!rutaEl){ if(!caps.length) return; rutaEl=document.createElement('div'); rutaEl.className='ruta'; rutaEl.setAttribute('role','status'); document.body.appendChild(rutaEl);
-      rutaEl.addEventListener('click',function(e){ var b=e.target.closest('[data-go]'); if(b) goRoom(+b.getAttribute('data-go')); else if(e.target.closest('[data-ver]')){ try{ openDir(); }catch(er){} } }); }
+      rutaEl.addEventListener('click',function(e){ var b=e.target.closest('[data-go]'); if(b) goRoom(+b.getAttribute('data-go')); else if(e.target.closest('[data-fin]')){ try{ EQUIPO.open(); }catch(er){} } else if(e.target.closest('[data-ver]')){ try{ openDir(); }catch(er){} } }); }
     if(!caps.length){ rutaEl.classList.remove('on'); return; }
     var i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
     var nx=caps[i+1], h;
-    if(i<0){ var c0=caps[0]; h='<button type="button" class="rT" data-ver="1">Tu plan · '+caps.length+' pisos</button><button type="button" class="rN" data-go="'+HKI[c0.k]+'">Empezar en '+esc(TEAM[c0.k].role)+'</button>'; }
-    else if(nx){ h='<button type="button" class="rT" data-ver="1">Tu plan · paso '+(i+1)+' de '+caps.length+'</button><button type="button" class="rN" data-go="'+HKI[nx.k]+'">Siguiente: '+esc(TEAM[nx.k].role)+'</button>'; }
-    else { h='<button type="button" class="rT" data-ver="1">Tu plan · último paso</button><a class="rN" href="/contacto">Quiero construirla</a>'; }
+    if(i<0){ var c0=caps[0]; h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>'+caps.length+' pisos</button><button type="button" class="rN" data-go="'+HKI[c0.k]+'">Empezar en <span class="rL">el piso&nbsp;</span>'+pad2(HKI[c0.k])+' · '+esc(TEAM[c0.k].role)+'</button>'; }
+    else if(nx){ h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>paso '+(i+1)+' de '+caps.length+'</button><button type="button" class="rN" data-go="'+HKI[nx.k]+'">Siguiente: <span class="rL">piso&nbsp;</span>'+pad2(HKI[nx.k])+' · '+esc(TEAM[nx.k].role)+'</button>'; }
+    else { h='<button type="button" class="rT" data-ver="1"><span class="rL">Tu plan · </span>último paso</button><button type="button" class="rN" data-fin="1">Cerrar mi plan</button>'; }
     rutaEl.innerHTML=h; rutaEl.classList.add('on');
   }
+  function planHs(){ var caps=planCaps(), i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
+    [].forEach.call(document.querySelectorAll('.hs.char'),function(el){ var t=el.querySelector('.pst'); if(i<0){ el.classList.remove('enplan'); if(t) t.remove(); return; } el.classList.add('enplan'); if(!t){ t=document.createElement('span'); t.className='pst'; el.querySelector('.lbl').appendChild(t); } t.textContent='Paso '+(i+1)+' de tu plan'; });
+    try{ roomtag.textContent=ROOMS[cur].name+(i>-1?' · Paso '+(i+1)+' de '+caps.length:''); }catch(e){} }
+  window.__planHs=planHs;
   window.__rutaUI=rutaUI;
   function panelBody(s){
     var D=SPEC[s.hk], I=INFO[s.hk]||{lead:s.text,items:[]}, h='';
@@ -1173,7 +1178,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     // 2 · con las puertas cerradas se carga el piso destino y corre el indicador
     elev.classList.add('riding');
     var __okP=true, __pEnd=Promise.resolve(); setFlat(ROOMS[to]); if(!ROOMS[to].flat) __pEnd=new Promise(function(res){ setPano(ROOMS[to].pano,function(ok){ __okP=ok!==false; res(); }); });
-    window.__ES=ROOMS[to].es||1; buildHotspots(ROOMS[to]); buildWall(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name; window.__clubArr=to; try{ rutaUI(); }catch(e){}
+    window.__ES=ROOMS[to].es||1; buildHotspots(ROOMS[to]); buildWall(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name; window.__clubArr=to; try{ rutaUI(); planHs(); }catch(e){}
     var __empujo=false; try{ if(!window.__czPop){ var __u=to?('?capa='+to):location.pathname; if(history.state&&history.state.ov) history.replaceState({r:to},'',__u); else { history.pushState({r:to},'',__u); __empujo=true; } } }catch(e){} window.__czPop=false;
     var seq=[];
     if(up){for(f=from;f<=to;f++)seq.push(f);} else {for(f=from;f>=to;f--)seq.push(f);}
@@ -1188,7 +1193,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       setFlat(ROOMS[from]); if(!ROOMS[from].flat) setPano(ROOMS[from].pano); window.__ES=ROOMS[from].es||1; buildHotspots(ROOMS[from]); buildWall(ROOMS[from]); cur=from; roomtag.textContent=ROOMS[from].name; window.__clubArr=from;
       try{ if(__empujo) history.back(); else history.replaceState({r:from},'',from?('?capa='+from):location.pathname); }catch(e){}
       var __dest=floorName(to); to=from; setTimeout(function(){ try{ CLUB.toast('No pudimos cargar '+__dest,'Revisa tu conexión y vuelve a llamar al ascensor'); }catch(e){} },900); }
-    elevName.textContent=floorName(to); elevFill.style.width='100%';
+    elevName.textContent=floorName(to)+(function(){ var c=planCaps(), k=-1; c.forEach(function(x,j){ if(HKI[x.k]===to) k=j; }); return k>-1?' · paso '+(k+1)+' de '+c.length+' de tu plan':''; })(); elevFill.style.width='100%';
     if(!RM&&__okP) ding();
     await wait(RM?120:380);
     elev.classList.remove('riding');
@@ -1239,7 +1244,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       var R=ROOMS[i], ch=null; R.spots.forEach(function(sp){ if(sp.type==='char')ch=sp; });
       var hk=ch?ch.hk:'', nm=R.name.replace(/^Capa \d+ · /,''), here=i===cur, seen=vis.indexOf(i)>-1; if(seen)n++;
       var pl=plan.indexOf(hk), enPlan=pl>-1;
-      var st=here?'<span class="dst here">Estás aquí</span>':(enPlan?'<span class="dst plan">En tu plan · paso '+(pl+1)+'</span>':(seen?'<span class="dst ok">Visitada ✓</span>':''));
+      var st=here?'<span class="dst here">Estás aquí'+(enPlan?' · paso '+(pl+1):'')+'</span>':(enPlan?'<span class="dst plan">En tu plan · paso '+(pl+1)+'</span>':(seen?'<span class="dst ok">Visitada ✓</span>':''));
       html+='<button class="dcard'+(here?' cur':'')+(seen?' seen':'')+(enPlan?' plan':'')+(plan.length&&!enPlan?' fuera':'')+'" data-go="'+i+'" style="--d:'+(i*45)+'ms">'+
         '<span class="dbig">'+(i<10?'0'+i:i)+'</span>'+
         '<span class="dav" style="background-image:url(media/av-'+hk+'.webp)"></span>'+
@@ -2434,6 +2439,16 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   /* ---------- EQUIPO: diagnóstico con IA (usa /api/diagnose, el mismo del laboratorio) ---------- */
   var EQUIPO=(function(){
     var root=null, last=null, F={idea:'',country:'Ecuador',scale:'s1',monet:'',hasBase:false}, voiceOn=false;
+    var PK='cruztrd_plan_v1', ORD=['infra','seg','pagos','susc','mkt','fidel','dash'];
+    var WHY={infra:'La base estable sobre la que corre toda tu app.',seg:'Cuentas y datos personales protegidos desde el inicio.',pagos:'Cobros dentro de la app con los medios de tu mercado.',susc:'Ingresos recurrentes y renovaciones.',mkt:'Atraer a las personas correctas y medir qué vende.',fidel:'Que tus clientes vuelvan y te recomienden.',dash:'Decidir con datos en vivo.'};
+    function orden(d){ d.caps=d.caps.filter(function(c){ return ORD.indexOf(c.k)>-1; }).sort(function(a,b){ return ORD.indexOf(a.k)-ORD.indexOf(b.k); }); return d; }
+    function guarda(){ try{ if(last) localStorage.setItem(PK,JSON.stringify({appType:last.appType,summary:last.summary,caps:last.caps,__local:!!last.__local,idea:F.idea})); else localStorage.removeItem(PK); }catch(e){} }
+    function borra(){ last=null; guarda(); try{ window.__rutaUI(); window.__planHs&&window.__planHs(); }catch(e){} }
+    (function(){ try{
+      var q=new URLSearchParams(location.search).get('plan');
+      if(q){ var ks=q.split(',').filter(function(k,i,a){ return ORD.indexOf(k)>-1&&a.indexOf(k)===i; }); if(ks.length){ last=orden({status:'ok',appType:'Tu plan',summary:'Plan compartido: '+ks.length+' de las 7 capas del estudio.',caps:ks.map(function(k){ return {k:k,why:WHY[k]}; }),__local:true,__link:true}); guarda(); return; } }
+      var d=JSON.parse(localStorage.getItem(PK)||'null'); if(d&&d.caps&&d.caps.length){ F.idea=String(d.idea||'').slice(0,1200); last=orden({status:'ok',appType:String(d.appType||'Tu plan'),summary:String(d.summary||''),caps:d.caps.map(function(c){ return {k:c.k,why:String(c.why||WHY[c.k]||'')}; }),__local:!!d.__local}); }
+    }catch(e){} })();
     var PAIS=['Ecuador','Colombia','Perú','México','Chile','Otro'], ESC=[['s1','Menos de 1.000'],['s2','1.000 a 10.000'],['s3','10.000 a 50.000'],['s4','Más de 50.000']], MON=[['sub','Suscripción'],['once','Pago único'],['fee','Comisión'],['ads','Publicidad'],['none','Aún no cobra']];
     function esc2(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
     function chips(name,list,val){ return '<div class="eqChips" data-n="'+name+'">'+list.map(function(x){ var k=Array.isArray(x)?x[0]:x, l=Array.isArray(x)?x[1]:x; return '<button type="button" class="'+(k===val?'on':'')+'" data-v="'+esc2(k)+'">'+esc2(l)+'</button>'; }).join('')+'</div>'; }
@@ -2448,8 +2463,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function incomplete(d){ return form('<b>'+esc2(d.reason||'Nos falta un poco de detalle.')+'</b>'+(d.questions&&d.questions.length?'<ul>'+d.questions.map(function(q){ return '<li>'+esc2(q)+'</li>'; }).join('')+'</ul>':'')+(d.example?'<p class="eqEx">Ejemplo: '+esc2(d.example)+'</p>':'')); }
     function result(d){ var n=d.caps.length;
       return '<span class="pyEye"><i></i>Tu app ideal'+(d.__local?' · diagnóstico rápido':'')+'</span><h2>'+esc2(d.appType)+'</h2><p class="eqSum">'+esc2(d.summary)+'</p>'+
-        '<div class="eqCaps">'+d.caps.map(function(c,i){ var T=TEAM[c.k]||{nm:c.k,role:c.k}; return '<div class="eqCap"><img src="'+tAv(c.k)+'" alt=""><div class="eqCt"><em>'+String(i+1).padStart(2,'0')+' · '+esc2(T.role)+'</em><b>'+esc2(T.nm)+'</b><p>'+esc2(c.why)+'</p></div><div class="eqCb">'+(voiceOn?'<button class="pyGhost" data-eq="talk" data-k="'+c.k+'">Hablar con '+esc2(T.nm)+'</button>':'')+'<button class="pyGhost" data-eq="room" data-k="'+c.k+'">Ver su capa</button></div></div>'; }).join('')+'</div>'+
-        '<div class="eqActs"><button class="pyGo" data-eq="ruta"><span>Ver mi ruta en el edificio</span></button><button class="pyGhost" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><a class="pyGhost eqA" href="/#diagnostico">Quiero construirla</a><button class="pyGhost" data-eq="edit">Ajustar la idea</button></div>'+
+        '<div class="eqCaps">'+d.caps.map(function(c,i){ var T=TEAM[c.k]||{nm:c.k,role:c.k}; return '<div class="eqCap"><img src="'+tAv(c.k)+'" alt=""><div class="eqCt"><em>Paso '+(i+1)+' · Piso '+String(ORD.indexOf(c.k)+1).padStart(2,'0')+' · '+esc2(T.role)+'</em><b>'+esc2(T.nm)+'</b><p>'+esc2(c.why)+'</p></div><div class="eqCb">'+(voiceOn?'<button class="pyGhost" data-eq="talk" data-k="'+c.k+'">Hablar con '+esc2(T.nm)+'</button>':'')+'<button class="pyGhost" data-eq="room" data-k="'+c.k+'">Ver su capa</button></div></div>'; }).join('')+'</div>'+
+        '<div class="eqActs"><button class="pyGo" data-eq="ruta"><span>Ver mi ruta en el edificio</span></button><button class="pyGhost" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><a class="pyGhost eqA" href="/contacto" data-eq="quiero">Quiero construirla</a><button class="pyGhost" data-eq="link">Copiar enlace de mi plan</button><button class="pyGhost" data-eq="edit">Ajustar la idea</button><button class="pyGhost" data-eq="borrar">Borrar plan</button></div>'+
         '<p class="eqMuted">'+n+' capas · '+(d.__local?'Diagnóstico rápido por palabras clave: la IA no respondió en este momento.':'Diagnóstico generado con IA a partir de tu descripción.')+'</p>'; }
     function paint(view,d){ var L=root.querySelector('#eqL'), R=root.querySelector('#eqR');
       L.innerHTML=view==='load'?loading():(view==='res'?result(d):(view==='inc'?incomplete(d):form()));
@@ -2472,7 +2487,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         d=await fetch('/api/diagnose',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({idea:F.idea,country:F.country,scale:F.scale,monet:F.monet,hasBase:F.hasBase}),signal:ctl.signal}).then(function(r){ return r.json(); }); clearTimeout(to); }catch(e){ d=null; }
       if(d&&d.status==='incompleto'){ paint('inc',d); return d; }
       if(!d||d.status!=='ok'||!d.caps||!d.caps.length) d=local(F);
-      d.caps=d.caps.filter(function(c){ return TEAM[c.k]&&c.k!=='intro'; }); last=d; paint('res',d); try{ window.__rutaUI(); }catch(e){} try{ CLUB.spec&&CLUB.spec('intro'); }catch(e){} return d; }
+      d.caps=d.caps.filter(function(c){ return TEAM[c.k]&&c.k!=='intro'; }); orden(d); last=d; guarda(); paint('res',d); try{ window.__rutaUI(); window.__planHs&&window.__planHs(); }catch(e){} try{ CLUB.spec&&CLUB.spec('intro'); }catch(e){} return d; }
+    function llevaIdea(){ try{ if(last) sessionStorage.setItem('cz_plan',JSON.stringify({t:last.appType,c:last.caps.map(function(c){ return TEAM[c.k].role; }),i:F.idea})); }catch(e){} }
+    function prompt2(u,bt){ var i=document.createElement('input'); i.value=u; i.readOnly=true; i.className='eqLink'; i.setAttribute('aria-label','Enlace de tu plan'); bt.parentNode.insertBefore(i,bt.nextSibling); i.focus(); i.select(); }
     async function pdf(){ var d=last; if(!d) return; var btn=root.querySelector('[data-eq="pdf"] span'); if(btn) btn.textContent='Preparando PDF…';
       try{ if(!window.jspdf){ await new Promise(function(res,rej){ var s=document.createElement('script'); s.src='/vendor/jspdf.umd.min.js?v=1'; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
         var J=new window.jspdf.jsPDF({unit:'mm',format:'a4'}), W=210, H=297, M=18, y;
@@ -2505,13 +2522,16 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       var a=b.getAttribute('data-eq'), k=b.getAttribute('data-k');
       if(a==='close') close(); else if(a==='go'){ readForm(); if(F.idea.length<8){ var t=root.querySelector('#eqIdea'); t.focus(); t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); },500); var er=root.querySelector('#eqErr'); if(!er){ er=document.createElement('p'); er.id='eqErr'; er.className='eqErr'; er.setAttribute('role','alert'); t.parentNode.insertBefore(er,t.nextSibling); } er.textContent='Cuéntanos tu idea en una o dos frases para armar tu plan.'; t.setAttribute('aria-invalid','true'); t.setAttribute('aria-describedby','eqErr'); return; } run({}); }
       else if(a==='voice'){ readForm(); VOZ.start('intro',{idea:F.idea}); } else if(a==='talk'){ VOZ.start(k,{idea:F.idea,dx:last}); }
-      else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='ruta'){ close(); try{ openDir(); }catch(er){} } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
+      else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='ruta'){ close(); try{ openDir(); }catch(er){} }
+      else if(a==='borrar'){ borra(); paint('form'); }
+      else if(a==='quiero'){ llevaIdea(); }
+      else if(a==='link'){ var u=location.origin+'/portal360?plan='+last.caps.map(function(c){ return c.k; }).join(','); var bt=b; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ bt.textContent='Enlace copiado'; },function(){ prompt2(u,bt); }); } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
     function open(keep){ root=$i('equipo'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','eqopen'); root.classList.add('open');
       if(!root._b){ root._b=1; root.innerHTML=shell(); root.addEventListener('click',click); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
       if(!keep) last?paint('res',last):paint('form');
       VOZ.avail().then(function(v){ voiceOn=v; root.querySelector('.eqVz').hidden=!v; [].forEach.call(root.querySelectorAll('.eqVoice'),function(x){ x.hidden=!v; }); if(v&&last&&!keep) paint('res',last); }); }
     function close(){ if(root) root.classList.remove('open'); document.body.classList.remove('magopen','eqopen'); }
-    return {open:open,close:close,run:run,get last(){ return last; }};
+    return {open:open,close:close,run:run,llevaIdea:llevaIdea,get last(){ return last; }};
   })();
   function irDiagnostico(){ try{ document.body.style.transition='opacity .25s'; document.body.style.opacity='0'; }catch(e){} setTimeout(function(){ location.href='/#diagnostico'; },240); }
   addEventListener('pageshow',function(){ try{ document.body.style.opacity=''; }catch(e){} });
@@ -2547,7 +2567,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     else if(bv&&!visto){ bv.hidden=false; var cerrar=function(){ bv.classList.add('fuera'); try{ sessionStorage.setItem('cz_bienv','1'); }catch(e){} setTimeout(function(){ bv.hidden=true; },520); };
       document.getElementById('bienvGo').onclick=cerrar; bv.addEventListener('keydown',function(e){ if(e.key==='Tab'){ var fs=bv.querySelectorAll('button,a[href]'), i=[].indexOf.call(fs,document.activeElement); e.preventDefault(); try{ fs[(i+(e.shiftKey?-1:1)+fs.length)%fs.length].focus(); }catch(_){} } else if(e.key==='Escape'){ cerrar(); } }); setTimeout(function(){ try{ document.getElementById('bienvGo').focus(); }catch(e){} },950); }
   });
-  buildHotspots(ROOMS[0]); buildWall(ROOMS[0]); roomtag.textContent=ROOMS[0].name; CLUB.ui(); if((CLUB.st.v||1)>1) setTimeout(function(){CLUB.toast('Bienvenido de vuelta','+200 pts por regresar · visita nº '+CLUB.st.v);},1600);
+  buildHotspots(ROOMS[0]); buildWall(ROOMS[0]); roomtag.textContent=ROOMS[0].name; CLUB.ui(); try{ rutaUI(); planHs(); }catch(e){} setTimeout(function(){ try{ rutaUI(); planHs(); }catch(e){} },1800); if((CLUB.st.v||1)>1) setTimeout(function(){CLUB.toast('Bienvenido de vuelta','+200 pts por regresar · visita nº '+CLUB.st.v);},1600);
   var noDrift=false; try{ noDrift=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
   if(/[?&]calibrar=1/.test(location.search)||/^localhost$|^127\./.test(location.hostname)) window.__T={ROOMS:ROOMS, go:goRoom, curRoom:function(){return cur;},
     yaw:function(v){tyaw=yaw=v;},

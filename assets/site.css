@@ -316,3 +316,34 @@ main .card h3,.pasos h3{font-size:20px}
 /* ---------- ronda 12 ---------- */
 #contenido .card p,#contenido .card li{font-size:16px;line-height:1.65}
 @media(max-width:900px){.piso::after{background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.86) 60%,rgba(7,9,12,.55) 100%)}.piso .pd{padding-left:20px;max-width:none}}
+
+/* ronda 13: el texto del piso abierto nunca pisa la foto */
+.edificio.js .piso.abierto::after{background:linear-gradient(90deg,rgba(7,9,12,.95) 0%,rgba(7,9,12,.88) 44%,rgba(7,9,12,.25) 70%,rgba(7,9,12,0) 100%)}
+@media(max-width:900px){.edificio.js .piso.abierto::after{background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.86) 60%,rgba(7,9,12,.55) 100%)}}
+.piso .pd{max-width:38ch}
+
+/* ---------- 404: el ascensor ---------- */
+.asc{min-height:78vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:clamp(28px,6vw,96px);align-items:center;padding:clamp(120px,14vw,180px) 0 60px}
+.asc .code{margin:0 0 14px;color:var(--muted);font-size:15px}
+.asc-acc{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.asc-panel{border:1px solid var(--line);border-radius:22px;padding:22px;background:linear-gradient(180deg,#12161b,#0b0e12)}
+.asc-vis{display:flex;align-items:center;justify-content:center;gap:14px;height:92px;border-radius:14px;background:#05070a;border:1px solid var(--line);margin-bottom:18px;color:#2DD4A7;font-variant-numeric:tabular-nums}
+.asc-vis span{font-size:20px;animation:ascSube 1.6s ease-in-out infinite}
+.asc-vis b{font-size:54px;font-weight:600;letter-spacing:-.02em;animation:ascDuda 2.4s steps(1) infinite}
+@keyframes ascSube{50%{transform:translateY(-6px);opacity:.5}}
+@keyframes ascDuda{0%,70%{opacity:1}80%{opacity:.25}90%{opacity:1}}
+.asc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.asc-b{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 14px;border-radius:14px;border:1px solid var(--line);color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s}
+.asc-b b{flex:none;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;transition:background .2s,color .2s,border-color .2s}
+.asc-b span{font-size:15px}
+.asc-b:hover,.asc-b:focus-visible{border-color:#2DD4A7;background:rgba(45,212,167,.07)}
+.asc-b:hover b,.asc-b:focus-visible b{background:#2DD4A7;border-color:#2DD4A7;color:#04130E}
+@media(max-width:860px){.asc{grid-template-columns:minmax(0,1fr);padding-top:110px}}
+@media(prefers-reduced-motion:reduce){.asc-vis span,.asc-vis b{animation:none}}
+
+.demo-fig img{box-shadow:0 30px 80px -30px rgba(124,92,240,.55),0 18px 40px -20px rgba(0,0,0,.8);will-change:transform}
+
+.asc{max-width:1216px;margin:0 auto;padding-left:24px;padding-right:24px;box-sizing:content-box}
+.asc-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.asc-b{min-width:0}.asc-b span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:860px){.asc{box-sizing:border-box}}

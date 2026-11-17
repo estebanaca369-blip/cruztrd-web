@@ -16,6 +16,15 @@
       if (f && f.setAttribute) { if (msg) { f.setAttribute('aria-invalid', 'true'); if (e) f.setAttribute('aria-describedby', e.id); } else { f.removeAttribute('aria-invalid'); } }
     }
     function emailOk(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    // Si vienes del recorrido con un plan, el mensaje llega con tu idea ya escrita
+    try {
+      var pl = JSON.parse(sessionStorage.getItem('cz_plan') || 'null');
+      if (pl && !form.mensaje.value) {
+        form.mensaje.value = 'Quiero construir mi app. Plan del Estudio 360°: ' + String(pl.t || '').slice(0, 80) + ' · capas: ' + (pl.c || []).join(', ').slice(0, 200) + '.' + (pl.i ? '\nMi idea: ' + String(pl.i).slice(0, 1200) : '');
+        var r0 = form.querySelector('input[name="motivo"]'); if (r0) r0.checked = true;
+        sessionStorage.removeItem('cz_plan');
+      }
+    } catch (e) {}
     // El motivo elegido encabeza el mensaje y ajusta la pista del campo
     var pistas = { 'Quiero construir una app nueva': 'Qué hace tu app, para quién es y cómo gana dinero', 'Tengo una app y quiero mejorarla': 'Qué app tienes hoy y qué te gustaría cambiar', 'Quiero integrar IA en mi negocio': 'A qué se dedica tu negocio y qué tarea quieres resolver con IA', 'Tengo otra consulta': 'Cuéntanos tu consulta' };
     [].forEach.call(form.querySelectorAll('input[name="motivo"]'), function (r) {
