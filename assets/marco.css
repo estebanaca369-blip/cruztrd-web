@@ -36,3 +36,5 @@
 .pie-nav a,.pie-sitio address a{display:inline-block;padding:11px 0}
 .pie-copy{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.07);padding-top:18px;font-size:13px}
 @media (max-width:700px){.pie-in{grid-template-columns:minmax(0,1fr)}}
+
+.pie-sitio a{display:inline-flex;align-items:center;min-height:44px}

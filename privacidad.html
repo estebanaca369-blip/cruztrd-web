@@ -23,6 +23,14 @@ a:hover{text-decoration:underline}
 h1{font-family:'Inter Tight','Inter';font-weight:600;font-size:clamp(44px,6.4vw,96px);line-height:.96;letter-spacing:-.035em;margin:14px 0 18px;max-width:14ch}
 .updated{color:var(--muted);font-size:16px}
 main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
+main.legal{display:grid;grid-template-columns:minmax(0,240px) minmax(0,72ch);gap:clamp(32px,6vw,96px);align-items:start}
+.indice{position:sticky;top:96px;display:flex;flex-direction:column;padding-top:clamp(28px,3.4vw,44px)}
+.indice a{display:flex;gap:12px;padding:8px 0;color:var(--muted);font-size:15px;line-height:1.35;text-decoration:none;border-top:1px solid rgba(255,255,255,.07)}
+.indice a span{font-variant-numeric:tabular-nums;color:rgba(154,166,173,.7);min-width:20px}
+.indice a:hover,.indice a:focus-visible{color:#fff}
+.card{scroll-margin-top:90px}
+h1{text-wrap:balance}
+@media(max-width:900px){main.legal{grid-template-columns:minmax(0,1fr)}.indice{display:none}}
 .card{max-width:72ch;background:none;border:0;border-top:1px solid rgba(255,255,255,.12);border-radius:0;padding:clamp(28px,3.4vw,44px) 0 6px;margin-top:0}
 .card h2{font-family:'Inter Tight','Inter';font-weight:600;font-size:clamp(24px,2.4vw,32px);letter-spacing:-.02em;line-height:1.15;color:#fff;margin-bottom:12px;display:flex;gap:14px;align-items:baseline}
 .card h2 .n{color:var(--muted);font-size:15px;font-weight:500;flex:0 0 auto;font-variant-numeric:tabular-nums}
@@ -35,7 +43,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
 .data dd{color:var(--ink)}
 .note{background:rgba(25,195,125,.06);border:1px solid rgba(25,195,125,.26);border-radius:12px;padding:14px 16px;margin-top:18px;color:#cfe9df;font-size:14px}
 </style>
-<link rel="stylesheet" href="/assets/marco.css?v=1">
+<link rel="stylesheet" href="/assets/marco.css?v=2">
 </head>
 <body>
 <a class="salto" href="#contenido">Saltar al contenido</a>
@@ -57,8 +65,10 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
   <div class="updated">Última actualización: 16 de noviembre de 2026</div>
 </div>
 
-<main id="contenido">
-  <div class="card">
+<main id="contenido" class="legal">
+<nav class="indice" aria-label="Secciones"><a href="#s01"><span>01</span>Responsable del tratamiento</a><a href="#s02"><span>02</span>Datos que tratamos</a><a href="#s03"><span>03</span>Para qué los usamos</a><a href="#s04"><span>04</span>Base legal</a><a href="#s05"><span>05</span>Inteligencia artificial</a><a href="#s06"><span>06</span>Proveedores y transferencias</a><a href="#s07"><span>07</span>Conservación</a><a href="#s08"><span>08</span>Cookies y almacenamiento local</a><a href="#s09"><span>09</span>Tus derechos</a><a href="#s10"><span>10</span>Seguridad</a><a href="#s11"><span>11</span>Cambios en esta política</a><a href="#s12"><span>12</span>Contacto</a></nav>
+<div class="lectura">
+  <div class="card" id="s01">
     <h2><span class="n">01</span> Responsable del tratamiento</h2>
     <p>El responsable del tratamiento de los datos personales recogidos a través de cruztrd.com (el «Sitio») es:</p>
     <dl class="data">
@@ -73,7 +83,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>Para cualquier asunto de datos personales, incluido el ejercicio de tus derechos, escríbenos a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> con el asunto «Datos personales».</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s02">
     <h2><span class="n">02</span> Datos que tratamos</h2>
     <ul>
       <li><strong>Diagnóstico de tu idea:</strong> el texto con que describes tu idea y las opciones que eliges (país, escala de usuarios y forma de cobro).</li>
@@ -85,7 +95,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>El Sitio está dirigido a personas adultas, emprendedores y empresas. No recogemos a sabiendas datos de niñas, niños o adolescentes; quien tenga menos de 15 años necesita que su representante legal actúe por él.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s03">
     <h2><span class="n">03</span> Para qué los usamos</h2>
     <ul>
       <li>Generar el diagnóstico y la estimación orientativa de tu proyecto.</li>
@@ -95,7 +105,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>No usamos tus datos para publicidad, no elaboramos perfiles y no los vendemos ni los cedemos para fines distintos de los anteriores. Si en el futuro quisiéramos darles otro uso, te lo informaremos antes y, cuando corresponda, pediremos tu consentimiento.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s04">
     <h2><span class="n">04</span> Base legal</h2>
     <p>Tratamos tus datos conforme a la Ley Orgánica de Protección de Datos Personales del Ecuador (LOPDP) y su Reglamento General, sobre estas bases:</p>
     <ul>
@@ -106,13 +116,13 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>Entregar tus datos es voluntario. Si no los entregas, o si son inexactos, no podremos generar el diagnóstico o responderte, o el resultado no reflejará tu caso; no tiene otra consecuencia.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s05">
     <h2><span class="n">05</span> Inteligencia artificial</h2>
     <p>Para generar el diagnóstico, el texto de tu idea y las opciones elegidas se envían a un proveedor de modelos de inteligencia artificial, que devuelve una sugerencia de tipo de aplicación y de capas. El resultado es orientativo: no produce efectos jurídicos sobre ti ni decide nada por ti, y cualquier propuesta real la revisa y emite una persona de nuestro equipo.</p>
     <p>Si usas la conversación por voz con un guía del Estudio 360°, el audio de tu micrófono y lo que digas se envían a un proveedor de voz con inteligencia artificial únicamente durante esa conversación, y solo después de que tú la inicies y autorices el micrófono en tu navegador. Puedes terminarla cuando quieras; cada conversación dura como máximo cuatro minutos. No digas en ella datos sensibles.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s06">
     <h2><span class="n">06</span> Proveedores y transferencias</h2>
     <p>Para prestar el servicio nos apoyamos en proveedores que tratan datos por encargo nuestro:</p>
     <ul>
@@ -124,7 +134,7 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>Estos proveedores operan fuera del Ecuador, principalmente en Estados Unidos, por lo que usar el diagnóstico o el formulario implica una transferencia internacional de esos datos. La hacemos porque es necesaria para darte lo que pides (el diagnóstico o una respuesta) y con tu consentimiento, que das al enviarlos después de este aviso. Ten en cuenta que esos países pueden no contar con una declaración de nivel adecuado de protección por parte de la autoridad ecuatoriana; por eso te pedimos no incluir datos sensibles. Cada proveedor los trata bajo sus propias condiciones y medidas de seguridad. Las tipografías y los demás recursos del Sitio se sirven desde nuestro propio dominio, sin terceros. No vendemos tus datos personales.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s07">
     <h2><span class="n">07</span> Conservación</h2>
     <ul>
       <li><strong>Diagnóstico:</strong> no guardamos en nuestros servidores el texto de tu idea ni el resultado; se procesan para responderte y el PDF de estimación se genera en tu propio navegador.</li>
@@ -135,32 +145,33 @@ main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
     <p>Cuando los datos dejan de ser necesarios, los eliminamos.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s08">
     <h2><span class="n">08</span> Cookies y almacenamiento local</h2>
     <p>El Sitio no usa cookies de publicidad ni de analítica de terceros. Utiliza únicamente el almacenamiento local de tu navegador para recordar el progreso del recorrido, los puntos del Club CruzTRD, las partidas de los juegos de demostración y el plan de tu diagnóstico con el texto de tu idea, que puedes eliminar con «Borrar plan». Esa información no sale de tu dispositivo y puedes borrarla cuando quieras desde la configuración de tu navegador.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s09">
     <h2><span class="n">09</span> Tus derechos</h2>
     <p>Como titular de tus datos puedes ejercer, conforme a la LOPDP, los derechos de acceso, rectificación y actualización, eliminación, oposición, portabilidad y suspensión del tratamiento, así como el de no ser objeto de decisiones basadas únicamente en valoraciones automatizadas, y puedes retirar tu consentimiento.</p>
     <p>Para ejercerlos, escríbenos a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> indicando qué derecho quieres ejercer y un medio para responderte. No tiene costo. Te responderemos dentro de los 15 días que fija la ley; si necesitamos que aclares tu solicitud, te lo pediremos una sola vez.</p>
     <p>Si consideras que no atendimos tu solicitud o que vulneramos tus derechos, puedes presentar un reclamo ante la Superintendencia de Protección de Datos Personales del Ecuador.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s10">
     <h2><span class="n">10</span> Seguridad</h2>
     <p>Aplicamos medidas técnicas y organizativas proporcionales a los datos que tratamos: conexión cifrada, cabeceras de seguridad estrictas, límites de uso en los formularios y acceso restringido a nuestro correo. Ningún sistema es infalible; si ocurriera un incidente que afecte tus datos, actuaremos y lo comunicaremos como la ley dispone.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s11">
     <h2><span class="n">11</span> Cambios en esta política</h2>
     <p>Podemos actualizar esta política, por ejemplo al incorporar un proveedor. La versión vigente es siempre la publicada en esta página, con su fecha de actualización.</p>
   </div>
 
-  <div class="card">
+  <div class="card" id="s12">
     <h2><span class="n">12</span> Contacto</h2>
     <p>CRUZTRD CT S.A.S. · <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> · <a href="tel:+593988011913">+593 98 801 1913</a> · Calle OE1C S5-213, Santa María, Tumbaco, Quito, Ecuador.</p>
   </div>
+</div>
 </main>
 
 <footer class="pie-sitio"><div class="pie-in">

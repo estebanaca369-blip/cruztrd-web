@@ -2447,7 +2447,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function borra(){ last=null; guarda(); try{ window.__rutaUI(); window.__planHs&&window.__planHs(); }catch(e){} }
     (function(){ try{
       var q=new URLSearchParams(location.search).get('plan');
-      if(q){ var ks=q.split(',').filter(function(k,i,a){ return ORD.indexOf(k)>-1&&a.indexOf(k)===i; }); if(ks.length){ last=orden({status:'ok',appType:'Tu plan',summary:'Plan compartido: '+ks.length+' de las 7 capas del estudio.',caps:ks.map(function(k){ return {k:k,why:WHY[k]}; }),__local:true,__link:true}); guarda(); return; } }
+      if(q){ var ks=q.split(',').filter(function(k,i,a){ return ORD.indexOf(k)>-1&&a.indexOf(k)===i; }); if(ks.length){ var __ap=String(new URLSearchParams(location.search).get('app')||'').replace(/[<>]/g,'').slice(0,60); last=orden({status:'ok',appType:__ap||'Tu plan',summary:'Plan compartido: '+ks.length+' de las 7 capas del estudio.',caps:ks.map(function(k){ return {k:k,why:WHY[k]}; }),__local:true,__link:true}); guarda(); return; } }
       var d=JSON.parse(localStorage.getItem(PK)||'null'); if(d&&d.caps&&d.caps.length){ F.idea=String(d.idea||'').slice(0,1200); last=orden({status:'ok',appType:String(d.appType||'Tu plan'),summary:String(d.summary||''),caps:d.caps.map(function(c){ return {k:c.k,why:String(c.why||WHY[c.k]||'')}; }),__local:!!d.__local}); }
     }catch(e){} })();
     var PAIS=['Ecuador','Colombia','Perú','México','Chile','Otro'], ESC=[['s1','Menos de 1.000'],['s2','1.000 a 10.000'],['s3','10.000 a 50.000'],['s4','Más de 50.000']], MON=[['sub','Suscripción'],['once','Pago único'],['fee','Comisión'],['ads','Publicidad'],['none','Aún no cobra']];
@@ -2469,8 +2469,8 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       for(var f=7;f>=0;f--){ var y=y0+(7-f)*fh, k=f?ORD[f-1]:null, en=k&&ks.indexOf(k)>-1, ok=en&&vis.indexOf(f)>-1, fr=ok?'url(#eqG)':en?'#16201f':'#0f1317', sd=ok?'#11866a':en?'#0d1514':'#0a0d10', st=en&&!ok?'#ffd27a':'rgba(243,241,236,.14)', tx=ok?'#03110b':en?'#f3f1ec':'rgba(243,241,236,.38)';
         if(f===7) svg+='<path d="M'+x0+' '+y+' L'+(x0+dx)+' '+(y-dy)+' L'+(x0+W+dx)+' '+(y-dy)+' L'+(x0+W)+' '+y+' Z" fill="#1b2226" stroke="rgba(243,241,236,.14)"/>';
         svg+='<path d="M'+(x0+W)+' '+y+' L'+(x0+W+dx)+' '+(y-dy)+' L'+(x0+W+dx)+' '+(y-dy+fh)+' L'+(x0+W)+' '+(y+fh)+' Z" fill="'+sd+'" stroke="rgba(243,241,236,.1)"/>';
-        svg+='<rect x="'+x0+'" y="'+y+'" width="'+W+'" height="'+fh+'" fill="'+fr+'" stroke="'+st+'"'+(en&&!ok?' stroke-dasharray="4 3"':'')+'/>';
-        svg+='<text x="'+(x0+14)+'" y="'+(y+25)+'" fill="'+tx+'" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="600">'+String(f).padStart(2,'0')+'</text><text x="'+(x0+48)+'" y="'+(y+25)+'" fill="'+tx+'" font-family="Inter,system-ui,sans-serif" font-size="14">'+esc2(f?TEAM[k].role:'Recepción')+'</text>'+(en?'<text x="'+(x0+W-12)+'" y="'+(y+25)+'" text-anchor="end" fill="'+(ok?'#03110b':'#ffd27a')+'" font-family="Inter,system-ui,sans-serif" font-size="12.5" font-weight="600">'+(ok?'Recorrido':'Pendiente')+'</text>':'')+'';
+        svg+='<g class="eqPiso" data-eq="room" data-k="'+(k||'intro')+'" tabindex="0" role="button" aria-label="Ir al piso '+String(f).padStart(2,'0')+'"><rect x="'+x0+'" y="'+y+'" width="'+W+'" height="'+fh+'" fill="'+fr+'" stroke="'+st+'"'+(en&&!ok?' stroke-dasharray="4 3"':'')+'/>';
+        svg+='<text x="'+(x0+14)+'" y="'+(y+25)+'" fill="'+tx+'" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="600">'+String(f).padStart(2,'0')+'</text><text x="'+(x0+48)+'" y="'+(y+25)+'" fill="'+tx+'" font-family="Inter,system-ui,sans-serif" font-size="14">'+esc2(f?TEAM[k].role:'Recepción')+'</text>'+(en?'<text x="'+(x0+W-12)+'" y="'+(y+25)+'" text-anchor="end" fill="'+(ok?'#03110b':'#ffd27a')+'" font-family="Inter,system-ui,sans-serif" font-size="12.5" font-weight="600">'+(ok?'Recorrido':'Pendiente')+'</text>':'')+'</g>';
         for(var w=0;w<3;w++) svg+='<rect x="'+(x0+W+12+w*15)+'" y="'+(y-dy+fh*0.5+ (w*-dy/dx*15) -dy*0.25+dy)+'" width="7" height="12" fill="'+(ok?'#c9fbe9':en?'#ffd27a':'#1a2228')+'" opacity="'+(en?'.85':'.6')+'" transform="skewY('+(-Math.atan(dy/dx)*180/Math.PI)+')" transform-origin="'+(x0+W)+' '+y+'"/>';
       }
       svg+='<rect x="'+(x0-6)+'" y="'+(y0+fh*8)+'" width="'+(W+dx+12)+'" height="3" fill="rgba(243,241,236,.18)"/></svg>';
@@ -2493,10 +2493,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       if(sub||pay||has(/usuari|cuenta|registr|login|datos|perfil|salud|clientes|comunidad|socio|alumno|paciente/)) caps.push({k:'seg',why:sub||pay?'Vas a cobrar y guardar cuentas: los datos y los pagos se protegen desde el primer día.':'Manejas cuentas y datos personales que hay que proteger.'});
       if(sub) caps.push({k:'susc',why:'Tu modelo vive de cobros recurrentes y renovaciones.'}); if(pay||sub) caps.push({k:'pagos',why:'Vas a cobrar dentro de la app con los medios de tu mercado.'});
       caps.push({k:'mkt',why:'Una app D2C necesita atraer a las personas correctas y medir qué vende.'});
-      if(p.monet!=='ads') caps.push({k:'fidel',why:'Que tus clientes vuelvan y te recomienden cuesta menos que conseguir nuevos.'});
-      caps.push({k:'dash',why:'Decides con datos: ventas, retención y costo por cliente en vivo.'});
-      var ty=has(/yoga|gimnas|entren|fitness|pilates|crossfit|baile/)?'App de clases y entrenamiento':has(/curso|aprend|academ|lecci|tutor/)?'Plataforma de cursos':has(/reserv|cita|turno|agenda/)?'App de reservas':has(/deliver|pedido|comida|restaur|caf[eé]/)?'App de pedidos':has(/tienda|producto|vend|ropa|marca/)?'Tienda D2C':has(/clase/)?'App de clases':'App D2C';
-      return {status:'ok',appType:ty,summary:'Armamos tu app ('+ty+') con '+caps.length+' capas, empezando por la base y sumando lo que tu modelo necesita para vender y fidelizar.',caps:caps,__local:true}; }
+      var big=p.scale==='s3'||p.scale==='s4', rep=has(/puntos|fideli|recompens|frecuent|vuelv|club|membres|comunidad/)||(pay&&has(/caf[eé]|comida|restaur|pan|tienda|ropa/));
+      if(rep&&p.monet!=='ads') caps.push({k:'fidel',why:'Tus clientes compran seguido: que vuelvan y te recomienden cuesta menos que conseguir nuevos.'});
+      if(big||has(/m[eé]trica|reporte|dashboard|anal[ií]tica|kpi|inventario|sucursal/)) caps.push({k:'dash',why:'Con tu volumen necesitas ver ventas, retención y costo por cliente en vivo.'});
+      var omit=['seg','pagos','susc','fidel','dash'].filter(function(k){ return !caps.some(function(c){ return c.k===k; }); });
+      var ty=has(/pedido|deliver|domicilio/)?'App de pedidos':has(/yoga|gimnas|entren|fitness|pilates|crossfit|baile/)?'App de clases y entrenamiento':has(/curso|aprend|academ|lecci|tutor/)?'Plataforma de cursos':has(/reserv|cita|turno|agenda/)?'App de reservas':has(/deliver|pedido|comida|restaur|caf[eé]/)?'App de pedidos':has(/tienda|producto|vend|ropa|marca/)?'Tienda D2C':has(/clase/)?'App de clases':'App D2C';
+      var NOM={seg:'Seguridad',pagos:'Pagos',susc:'Suscripciones',fidel:'Fidelización',dash:'Dashboards'};
+      return {status:'ok',appType:ty,summary:'Tu app ('+ty+') arranca con '+caps.length+' de las 7 capas.'+(omit.length?' Dejamos para después '+omit.map(function(k){ return NOM[k]; }).join(', ')+': tu idea no las necesita para salir; se suman cuando el negocio crezca.':''),caps:caps,__local:true}; }
     async function run(p,fromVoice){ F.idea=p.idea!=null?p.idea:F.idea; if(p.country) F.country=p.country; if(p.scale) F.scale=/^s[1-4]$/.test(p.scale)?p.scale:F.scale; if(p.monet!=null) F.monet=['sub','once','fee','ads','none'].indexOf(p.monet)>-1?p.monet:F.monet; if(p.hasBase!=null) F.hasBase=!!p.hasBase;
       if(!root||!root.classList.contains('open')) open(true); paint('load'); var d=null;
       try{ var ctl=new AbortController(), to=setTimeout(function(){ ctl.abort(); },25000);
@@ -2541,9 +2544,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='ruta'){ close(); try{ openDir(); }catch(er){} }
       else if(a==='borrar'){ borra(); paint('form'); }
       else if(a==='quiero'){ llevaIdea(); }
-      else if(a==='link'){ var u=location.origin+'/portal360?plan='+last.caps.map(function(c){ return c.k; }).join(','); var bt=b; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ bt.textContent='Enlace copiado'; },function(){ prompt2(u,bt); }); } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
+      else if(a==='link'){ var u=location.origin+'/portal360?plan='+last.caps.map(function(c){ return c.k; }).join(',')+(last.appType&&last.appType!=='Tu plan'?'&app='+encodeURIComponent(String(last.appType).slice(0,60)):''); var bt=b; (navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){ bt.textContent='Enlace copiado'; },function(){ prompt2(u,bt); }); } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
     function open(keep){ root=$i('equipo'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','eqopen'); root.classList.add('open');
-      if(!root._b){ root._b=1; root.innerHTML=shell(); root.addEventListener('click',click); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
+      if(!root._b){ root._b=1; root.innerHTML=shell(); root.addEventListener('click',click); root.addEventListener('keydown',function(e){ var g=e.target.closest&&e.target.closest('.eqPiso'); if(g&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); g.dispatchEvent(new MouseEvent('click',{bubbles:true})); } }); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
       if(!keep) last?paint('res',last):paint('form');
       VOZ.avail().then(function(v){ voiceOn=v; root.querySelector('.eqVz').hidden=!v; [].forEach.call(root.querySelectorAll('.eqVoice'),function(x){ x.hidden=!v; }); if(v&&last&&!keep) paint('res',last); }); }
     function close(){ if(root) root.classList.remove('open'); document.body.classList.remove('magopen','eqopen'); finMode=false; }
@@ -2578,12 +2581,14 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     var bv=document.getElementById('bienv'), visto=false; try{ visto=sessionStorage.getItem('cz_bienv')==='1'; }catch(e){}
     if(capa>=1&&capa<=7){ setTimeout(function(){ try{ window.__czPop=true; goRoom(capa); }catch(e){} },1100); }
     var desde=''; try{ desde=new URLSearchParams(location.search).get('desde')||''; }catch(e){}
+    try{ if(new URLSearchParams(location.search).get('con')==='anfitrion'){ desde='inicio'; history.replaceState(null,'',location.pathname); setTimeout(function(){ try{ var h=document.querySelector('.hs.char'); if(h) h.click(); }catch(e){} },1400); } }catch(e){}
     if(desde==='inicio'){ try{ history.replaceState(null,'',location.pathname); sessionStorage.setItem('cz_bienv','1'); }catch(e){} }
     else if(capa>=1&&capa<=7){}
     var __pl=null; try{ if(new URLSearchParams(location.search).get('plan')) __pl=planCaps(); }catch(e){}
     if(bv&&__pl&&__pl.length){ visto=false; var __h=bv.querySelector('h2'), __p=bv.querySelector('p'), __g=document.getElementById('bienvGo');
-      __h.textContent='Te compartieron un plan de '+__pl.length+(__pl.length===1?' piso':' pisos');
-      __p.textContent='Capas: '+__pl.map(function(c){ return TEAM[c.k].role; }).join(', ')+'. Te llevamos piso por piso; en cada uno, su guía te explica por qué está en el plan.';
+      var __ap=''; try{ __ap=EQUIPO.last&&EQUIPO.last.appType!=='Tu plan'?EQUIPO.last.appType:''; }catch(e){}
+      __h.textContent=__ap?'Te compartieron el plan de una '+__ap.charAt(0).toLowerCase()+__ap.slice(1):'Te compartieron un plan de '+__pl.length+(__pl.length===1?'\u00a0piso':'\u00a0pisos');
+      __p.textContent=(__ap?__pl.length+(__pl.length===1?' piso. ':' pisos. '):'')+'Capas: '+__pl.map(function(c){ return TEAM[c.k].role; }).join(', ')+'. Te llevamos piso por piso; en cada uno, su guía te explica por qué está en el plan.';
       __g.textContent='Empezar en el piso '+pad2(HKI[__pl[0].k]); __g.addEventListener('click',function(){ setTimeout(function(){ try{ goRoom(HKI[__pl[0].k]); }catch(e){} },560); }); }
     if(bv&&!visto&&desde!=='inicio'&&!(capa>=1&&capa<=7)){ bv.hidden=false; var cerrar=function(){ bv.classList.add('fuera'); try{ sessionStorage.setItem('cz_bienv','1'); }catch(e){} setTimeout(function(){ bv.hidden=true; },520); };
       document.getElementById('bienvGo').onclick=cerrar; bv.addEventListener('keydown',function(e){ if(e.key==='Tab'){ var fs=bv.querySelectorAll('button,a[href]'), i=[].indexOf.call(fs,document.activeElement); e.preventDefault(); try{ fs[(i+(e.shiftKey?-1:1)+fs.length)%fs.length].focus(); }catch(_){} } else if(e.key==='Escape'){ cerrar(); } }); setTimeout(function(){ try{ document.getElementById('bienvGo').focus(); }catch(e){} },950); }
