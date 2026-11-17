@@ -924,6 +924,7 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 /* dock de voz */
 .vzDock{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));z-index:70;transform:translate(-50%,140%);display:flex;align-items:center;gap:14px;padding:10px 12px 10px 10px;width:min(560px,calc(100% - 32px));border-radius:22px;background:rgba(10,13,18,.92);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(45,212,167,.3);box-shadow:0 24px 70px -20px rgba(0,0,0,.8);color:#F3F1EC;font-family:Inter,system-ui,sans-serif;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 .vzDock.on{transform:translate(-50%,0)}
+@media(max-width:760px){.vzDock{bottom:calc(max(18px,env(safe-area-inset-bottom)) + 56px)}}
 .vzAv{position:relative;width:56px;height:56px;flex:none}.vzAv img{width:56px;height:56px;border-radius:50%;object-fit:cover;background:#0d1a17;position:relative;z-index:1}
 .vzAv i{position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(45,212,167,.0)}
 .vzDock.talk .vzAv i{border-color:#2DD4A7;animation:vzP 1s ease-in-out infinite}.vzDock.listen .vzAv i{border-color:rgba(243,241,236,.35);animation:vzP 2.4s ease-in-out infinite}.vzDock.think .vzAv i{border-color:#FFCF78;border-style:dashed;animation:pySpin 2s linear infinite}

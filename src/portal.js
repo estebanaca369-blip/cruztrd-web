@@ -1392,7 +1392,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     else { var C=HD[k]; it=C.issues[idx]; title=k==='fc'?'Full Circle Magazine':C.name; sub=k==='fc'?'Edición #'+it.n+' · en inglés · CC BY-SA 3.0':(kLabel(k,it)+(it.pages?' · '+nf(it.pages)+' páginas':'')); cred=(HCRED[k]||'')+(it.license&&k!=='fc'?' ('+it.license+')':''); }
     var me=FB={k:k,idx:idx,it:it,i:0,cp:0,n:k==='rev'?RVN:(it.pages||0),doc:null,ar:k==='rev'?.75:.72,land:false,single:true,T:null,ready:false,rw:960,sw:960,z:1,blank:(k!=='rev'&&k!=='fc')?{}:null,q:0};
     FB.key=fbKeyOf(k,it); FB.saved=+fbMem(FB.key)||0;
-    var phone=innerWidth<760; FB.mode=mode||(k==='rev'?'book':(phone?'scroll':'book'));
+    var phone=innerWidth<760; FB.mode=mode||(k==='rev'?(innerWidth<600?'text':'book'):(phone?'scroll':'book'));
     magEl.classList.add('reading'); magView.className='magview vfb'; magEl.scrollTop=0; if(KFLY&&KFLY.ar&&k!=='rev') FB.ar=KFLY.ar; if(KFLY&&KFLY.ar>1.05&&k!=='rev') FB.land=true; if(KFLY&&KFLY.tint) magEl.style.setProperty('--tint',KFLY.tint); else if(k==='rev') magEl.style.setProperty('--tint','45,212,167');
     magView.innerHTML='<div class="fbw" id="fbW"><header class="fbtop"><button class="kback" data-shelf="1">← Volver al estudio</button><div class="fbti"><b>'+esc(title)+'</b><span>'+esc(sub)+'</span></div>'+
       '<div class="fbmodes" id="fbModes" role="tablist" aria-label="Modo de lectura"><button data-mode="book" role="tab">'+FBIC.book+'<em>Revista</em></button><button data-mode="scroll" role="tab">'+FBIC.scroll+'<em>Continuo</em></button>'+(k==='rev'||k==='fc'?'<button data-mode="text" role="tab">'+FBIC.text+'<em>Texto</em></button>':'')+'</div><span class="fbpg" id="fbPg"></span></header>'+
