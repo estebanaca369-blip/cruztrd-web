@@ -1562,3 +1562,5 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .dplan{max-width:none}
 @media (max-width:820px){#dirProg{flex-wrap:wrap}.dplan{flex-basis:100%}}
 @media (max-width:900px){.eqMain .eqR{order:2}}
+
+.bienv-c h2{font-size:clamp(30px,4.2vw,56px)!important;line-height:1.02}

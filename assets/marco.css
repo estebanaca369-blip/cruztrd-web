@@ -38,3 +38,6 @@
 @media (max-width:700px){.pie-in{grid-template-columns:minmax(0,1fr)}}
 
 .pie-sitio a{display:inline-flex;align-items:center;min-height:44px}
+.indice a[aria-current]{color:#fff}
+.indice a[aria-current] span{color:#2DD4A7}
+main a[href^="mailto:"],main a[href^="tel:"]{display:inline-block;padding:10px 0;margin:-10px 0}

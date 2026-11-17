@@ -15,3 +15,11 @@
   }
   var y=document.querySelectorAll('[data-year]'); for(var i=0;i<y.length;i++) y[i].textContent=new Date().getFullYear();
 })();
+/* Índice de las páginas legales: marca la sección que estás leyendo */
+(function(){
+  var ix=document.querySelector('.indice'); if(!ix||!('IntersectionObserver' in window)) return;
+  var ls=[].slice.call(ix.querySelectorAll('a')), vis={};
+  function marca(){ var id=null; ls.some(function(a){ var k=a.getAttribute('href').slice(1); if(vis[k]){ id=k; return true; } return false; }); if(!id) return; ls.forEach(function(a){ if(a.getAttribute('href')==='#'+id) a.setAttribute('aria-current','true'); else a.removeAttribute('aria-current'); }); }
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ vis[e.target.id]=e.isIntersecting; }); marca(); },{rootMargin:'-20% 0px -60% 0px'});
+  ls.forEach(function(a){ var t=document.getElementById(a.getAttribute('href').slice(1)); if(t) io.observe(t); });
+})();
