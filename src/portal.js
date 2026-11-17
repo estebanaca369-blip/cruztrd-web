@@ -1031,11 +1031,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     pChar.className='charspr '+s.cls; 
     try{ var __n={intro:0,infra:1,seg:2,pagos:3,susc:4,mkt:5,fidel:6,dash:7}[s.hk]||0; pChar.parentNode.style.backgroundImage='url(/media/'+(__n?('home-capa-0'+__n+'.webp?v=n8'):'home-recepcion.webp?v=1')+')'; }catch(e){}
     void pChar.offsetWidth; pChar.classList.add('go','reveal');
+    try{ var fg=pChar.parentNode.querySelector('.pfig'); if(!fg){ fg=document.createElement('img'); fg.className='pfig'; fg.alt=''; fg.decoding='async'; pChar.parentNode.appendChild(fg); }
+      fg.classList.remove('on'); fg.onload=function(){ fg.classList.add('on'); }; fg.src='/media/fig-'+s.hk+'.webp?v=2'; if(fg.complete&&fg.naturalWidth) fg.classList.add('on'); }catch(e){}
     var D=SPEC[s.hk]; document.getElementById('pNum').textContent=D?D.n:'';
     if(s.el){ s.el.classList.add('seen'); s.el.classList.remove('say'); }
     document.getElementById('pEye').textContent=s.eye;
     document.getElementById('pTitle').textContent=s.title;
-    document.getElementById('pWho').textContent=s.who;
+    document.getElementById('pWho').textContent=(TEAM[s.hk]&&s.hk!=='intro')?TEAM[s.hk].nm+', tu guía virtual':s.who;
     document.getElementById('pBody').innerHTML=panelBody(s);
     panel.classList.add('open');
   }
@@ -1210,18 +1212,20 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   function closeDir(){dirPanel.classList.remove('open');dirBack.classList.remove('open');}
   function openDir(){
     panel.classList.remove('open'); if(clubCard) clubCard.classList.remove('on');
-    var vis=CLUB.st.rooms, n=0, html='';
+    var vis=CLUB.st.rooms, n=0, html='', plan=[];
+    try{ if(EQUIPO.last&&EQUIPO.last.caps) plan=EQUIPO.last.caps.map(function(c){ return c.k; }); }catch(e){}
     for(var i=1;i<ROOMS.length;i++){
       var R=ROOMS[i], ch=null; R.spots.forEach(function(sp){ if(sp.type==='char')ch=sp; });
       var hk=ch?ch.hk:'', nm=R.name.replace(/^Capa \d+ · /,''), here=i===cur, seen=vis.indexOf(i)>-1; if(seen)n++;
-      var st=here?'<span class="dst here">Estás aquí</span>':(seen?'<span class="dst ok">Visitada ✓</span>':'');
-      html+='<button class="dcard'+(here?' cur':'')+(seen?' seen':'')+'" data-go="'+i+'" style="--d:'+(i*45)+'ms">'+
+      var pl=plan.indexOf(hk), enPlan=pl>-1;
+      var st=here?'<span class="dst here">Estás aquí</span>':(enPlan?'<span class="dst plan">En tu plan · paso '+(pl+1)+'</span>':(seen?'<span class="dst ok">Visitada ✓</span>':''));
+      html+='<button class="dcard'+(here?' cur':'')+(seen?' seen':'')+(enPlan?' plan':'')+(plan.length&&!enPlan?' fuera':'')+'" data-go="'+i+'" style="--d:'+(i*45)+'ms">'+
         '<span class="dbig">'+(i<10?'0'+i:i)+'</span>'+
         '<span class="dav" style="background-image:url(media/av-'+hk+'.webp)"></span>'+
         '<span class="dtx"><span class="dno">Piso '+(i<10?'0'+i:i)+'</span><b>'+nm+'</b><em>'+(SPTAG[hk]||'')+'</em></span>'+st+'</button>';
     }
     var pr=Math.round(n/7*100);
-    document.getElementById('dirProg').innerHTML='<div class="dpr"><b>'+n+'<i>/7</i></b><span>capas recorridas</span></div><div class="dbar"><i style="width:'+pr+'%"></i></div>';
+    document.getElementById('dirProg').innerHTML='<div class="dpr"><b>'+n+'<i>/7</i></b><span>capas recorridas</span></div><div class="dbar"><i style="width:'+pr+'%"></i></div>'+(plan.length?'<p class="dplan">Tu idea necesita '+plan.length+' de las 7 capas. Están marcadas en el orden sugerido.</p>':'');
     dirList.innerHTML='<button class="dlobby'+(cur===0?' cur':'')+'" data-go="0" style="--d:0ms"><span class="dav" style="background-image:url(media/av-intro.webp)"></span><span><b>Recepción</b><em>'+(cur===0?'Estás aquí':'Volver a la recepción')+'</em></span><span class="darr">→</span></button>'+html;
     [].slice.call(dirList.querySelectorAll('[data-go]')).forEach(function(b){b.onclick=function(){var g=+b.getAttribute('data-go'); closeDir(); if(g!==cur)goRoom(g);};});
     dirBack.classList.add('open'); dirPanel.classList.add('open');
@@ -2424,7 +2428,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function result(d){ var n=d.caps.length;
       return '<span class="pyEye"><i></i>Tu app ideal'+(d.__local?' · diagnóstico rápido':'')+'</span><h2>'+esc2(d.appType)+'</h2><p class="eqSum">'+esc2(d.summary)+'</p>'+
         '<div class="eqCaps">'+d.caps.map(function(c,i){ var T=TEAM[c.k]||{nm:c.k,role:c.k}; return '<div class="eqCap"><img src="'+tAv(c.k)+'" alt=""><div class="eqCt"><em>'+String(i+1).padStart(2,'0')+' · '+esc2(T.role)+'</em><b>'+esc2(T.nm)+'</b><p>'+esc2(c.why)+'</p></div><div class="eqCb">'+(voiceOn?'<button class="pyGhost" data-eq="talk" data-k="'+c.k+'">Hablar con '+esc2(T.nm)+'</button>':'')+'<button class="pyGhost" data-eq="room" data-k="'+c.k+'">Ver su capa</button></div></div>'; }).join('')+'</div>'+
-        '<div class="eqActs"><button class="pyGo" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><a class="pyGhost eqA" href="/#diagnostico">Quiero construirla</a><button class="pyGhost" data-eq="edit">Ajustar la idea</button></div>'+
+        '<div class="eqActs"><button class="pyGo" data-eq="ruta"><span>Ver mi ruta en el edificio</span></button><button class="pyGhost" data-eq="pdf"><span>Descargar mi plan (PDF)</span></button><a class="pyGhost eqA" href="/#diagnostico">Quiero construirla</a><button class="pyGhost" data-eq="edit">Ajustar la idea</button></div>'+
         '<p class="eqMuted">'+n+' capas · '+(d.__local?'Diagnóstico rápido por palabras clave: la IA no respondió en este momento.':'Diagnóstico generado con IA a partir de tu descripción.')+'</p>'; }
     function paint(view,d){ var L=root.querySelector('#eqL'), R=root.querySelector('#eqR');
       L.innerHTML=view==='load'?loading():(view==='res'?result(d):(view==='inc'?incomplete(d):form()));
@@ -2480,7 +2484,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       var a=b.getAttribute('data-eq'), k=b.getAttribute('data-k');
       if(a==='close') close(); else if(a==='go'){ readForm(); if(F.idea.length<8){ var t=root.querySelector('#eqIdea'); t.focus(); t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); },500); return; } run({}); }
       else if(a==='voice'){ readForm(); VOZ.start('intro',{idea:F.idea}); } else if(a==='talk'){ VOZ.start(k,{idea:F.idea,dx:last}); }
-      else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
+      else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='ruta'){ close(); try{ openDir(); }catch(er){} } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
     function open(keep){ root=$i('equipo'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','eqopen'); root.classList.add('open');
       if(!root._b){ root._b=1; root.innerHTML=shell(); root.addEventListener('click',click); addEventListener('keydown',function(e){ if(e.key==='Escape'&&root.classList.contains('open')){ e.stopImmediatePropagation(); close(); } },true); }
       if(!keep) last?paint('res',last):paint('form');
@@ -2490,9 +2494,9 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   })();
   function irDiagnostico(){ try{ document.body.style.transition='opacity .25s'; document.body.style.opacity='0'; }catch(e){} setTimeout(function(){ location.href='/#diagnostico'; },240); }
   addEventListener('pageshow',function(){ try{ document.body.style.opacity=''; }catch(e){} });
-  function openEquipo(){ irDiagnostico(); }
+  function openEquipo(){ EQUIPO.open(); }
   // botones de voz en los paneles de especialistas (se muestran solo si la voz está conectada)
-  document.addEventListener('click',function(e){ var b=e.target.closest('[data-vz]'); if(!b) return; e.preventDefault(); var k=b.getAttribute('data-vz'); if(k==='design'){ irDiagnostico(); return; } VOZ.start(k,{idea:'',dx:EQUIPO.last}); });
+  document.addEventListener('click',function(e){ var b=e.target.closest('[data-vz]'); if(!b) return; e.preventDefault(); var k=b.getAttribute('data-vz'); if(k==='design'){ EQUIPO.open(); return; } VOZ.start(k,{idea:'',dx:EQUIPO.last}); });
   (function(){ var hecho=0; document.addEventListener('click',function(e){ if(hecho||!e.target.closest||!e.target.closest('.hs')) return; hecho=1; VOZ.avail().then(function(v){ if(v) document.body.classList.add('vzok'); }); },true); })();
   function openMag(){ closeDir(); panel.classList.remove('open'); magIndex(); magBack.classList.add('open'); magEl.classList.add('open'); document.body.classList.add('magopen'); }
   function closeMag(){ fbClose(); magEl.classList.remove('open'); magBack.classList.remove('open'); document.body.classList.remove('magopen'); }

@@ -53,6 +53,13 @@ p{margin:0}
 .portada{touch-action:pan-y;cursor:grab}.portada.arr{cursor:grabbing}
 .giro{position:absolute;left:0;top:-19%;display:flex;width:max-content;height:119%;will-change:transform;user-select:none;-webkit-user-select:none}
 .giro img{height:100%;width:auto;max-width:none;flex:none;pointer-events:none;-webkit-user-drag:none}
+.cara{position:relative;height:100%;flex:none}
+.toca{position:absolute;border-radius:10px;outline:1px solid rgba(255,255,255,0);transition:outline-color .25s,background .25s;-webkit-tap-highlight-color:transparent}
+.toca::before{content:"";position:absolute;right:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:#2DD4A7;box-shadow:0 0 0 4px rgba(45,212,167,.22)}
+.toca span{position:absolute;left:50%;top:calc(100% + 10px);transform:translate(-50%,-4px);white-space:nowrap;font-size:13px;font-weight:600;color:#07090C;background:#2DD4A7;padding:6px 12px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.toca:hover,.toca:focus-visible{outline-color:rgba(45,212,167,.9);background:rgba(45,212,167,.08)}
+.toca:hover span,.toca:focus-visible span{opacity:1;transform:translate(-50%,0)}
+.portada::after{pointer-events:none}
 @media(min-width:900px){.giro{top:-24%;height:124%}}
 .pista{position:absolute;z-index:2;right:var(--pad);top:104px;font-size:14px;color:#fff;background:rgba(7,9,12,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:8px 14px;border-radius:999px;transition:opacity .5s;pointer-events:none}
 .pista.fuera{opacity:0}
@@ -196,11 +203,11 @@ p{margin:0}
 
 <main id="contenido">
 <section class="portada" aria-label="Recepción del Estudio CruzTRD">
-  <div class="giro" aria-hidden="true">
-    <img src="/media/home-estudio.webp?v=n8" alt="" width="4096" height="980">
-    <img src="/media/home-estudio.webp?v=n8" alt="" width="4096" height="980">
+  <div class="giro">
+    <div class="cara"><img src="/media/home-estudio.webp?v=n8" alt="" width="4096" height="980"><a class="toca" href="/productos" style="left:40.92%;top:32.86%;width:2.88%;height:21.63%"><span>Declárame, nuestra app</span></a><a class="toca" href="#diagnostico" style="left:43.92%;top:32.86%;width:2.86%;height:21.63%"><span>Diagnosticar mi idea</span></a><a class="toca" href="/portal360?capa=6" style="left:46.90%;top:32.86%;width:2.88%;height:21.63%"><span>Ver el piso de Fidelización</span></a><a class="toca" href="#capas" style="left:50.29%;top:32.86%;width:8.98%;height:21.63%"><span>Ver las siete capas</span></a></div>
+    <div class="cara"><img src="/media/home-estudio.webp?v=n8" alt="" width="4096" height="980"><a class="toca" href="/productos" style="left:40.92%;top:32.86%;width:2.88%;height:21.63%" tabindex="-1" aria-hidden="true"><span>Declárame, nuestra app</span></a><a class="toca" href="#diagnostico" style="left:43.92%;top:32.86%;width:2.86%;height:21.63%" tabindex="-1" aria-hidden="true"><span>Diagnosticar mi idea</span></a><a class="toca" href="/portal360?capa=6" style="left:46.90%;top:32.86%;width:2.88%;height:21.63%" tabindex="-1" aria-hidden="true"><span>Ver el piso de Fidelización</span></a><a class="toca" href="#capas" style="left:50.29%;top:32.86%;width:8.98%;height:21.63%" tabindex="-1" aria-hidden="true"><span>Ver las siete capas</span></a></div>
   </div>
-  <div class="pista" id="pista" aria-hidden="true">Arrastra para mirar alrededor</div>
+  <div class="pista" id="pista" aria-hidden="true">Arrastra para mirar; toca las pantallas</div>
   <div class="portada-txt"><div class="ancho">
     <h1><span><i>Construimos la app</i></span><span><i>con la que vendes</i></span><span><i>directo.</i></span></h1>
     <div class="portada-pie">
@@ -343,7 +350,7 @@ p{margin:0}
 </div></footer>
 <div class="velo" id="velo" aria-hidden="true"></div>
 
-<script src="/assets/inicio.js?v=5" defer></script>
+<script src="/assets/inicio.js?v=6" defer></script>
 <script src="/assets/marco.js?v=4" defer></script>
 </body>
 </html>

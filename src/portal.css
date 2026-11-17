@@ -1466,3 +1466,16 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
 .pyDays i b{font-size:11px;color:rgba(243,241,236,.82)}
 .pyFoot{font-size:12px;color:rgba(243,241,236,.7)}
 .pyNote{color:rgba(243,241,236,.72)}
+
+/* ruta sugerida por el diagnóstico, en el directorio */
+.dst.plan{background:#2DD4A7;color:#03110b}
+.dcard.plan{border-color:rgba(45,212,167,.7)!important;box-shadow:0 0 0 1px rgba(45,212,167,.35),0 0 28px -8px rgba(45,212,167,.5)}
+.dcard.fuera{opacity:.5}
+.dcard.fuera:hover,.dcard.fuera:focus-visible{opacity:1}
+.dplan{margin:10px 0 0;font:500 13.5px/1.4 Inter,system-ui;color:#cfe9e0}
+
+/* el guía, presente en su sala al abrir el panel */
+.charwrap{overflow:hidden}
+.pfig{position:absolute;right:4%;bottom:0;height:94%;width:auto;z-index:2;opacity:0;transform:translateY(14px);transition:opacity .45s .12s,transform .6s .12s cubic-bezier(.2,.7,.1,1);filter:drop-shadow(0 10px 24px rgba(0,0,0,.6));pointer-events:none}
+.pfig.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.pfig{transition:none}}
