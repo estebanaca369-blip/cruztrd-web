@@ -64,7 +64,7 @@ export async function onRequestPost({ request, env }) {
   if (mensaje.length < 10) return json({ error: 'Mensaje muy corto' }, 400);
 
   const to = env.CONTACT_TO || 'esteban@cruztrd.com';
-  const from = env.CONTACT_FROM || 'no-reply@cruztrd.com';
+  const from = env.CONTACT_FROM || 'no-reply@contacto.cruztrd.com';
   const subject = 'Contacto web · ' + nombre;
   const text =
     'Nuevo mensaje desde cruztrd.com/contacto\n\n' +
