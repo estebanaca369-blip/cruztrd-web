@@ -312,3 +312,7 @@ main .card p,main .card li,main .list li,main dl.data dd,main .contact-data dd,m
 main dl.data dt,main .contact-data dt,main .contact-data .k,.edif-nota,.demo-guia,.demo-fig figcaption,.piso .pn{font-size:14px}
 main .card h3,.pasos h3{font-size:20px}
 @media(min-width:1800px){.wrap{max-width:1480px}main .card p,main .card li,main .list li,.pasos p,.lead{font-size:18px}}
+
+/* ---------- ronda 12 ---------- */
+#contenido .card p,#contenido .card li{font-size:16px;line-height:1.65}
+@media(max-width:900px){.piso::after{background:linear-gradient(90deg,rgba(7,9,12,.94) 0%,rgba(7,9,12,.86) 60%,rgba(7,9,12,.55) 100%)}.piso .pd{padding-left:20px;max-width:none}}

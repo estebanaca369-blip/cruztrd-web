@@ -1005,8 +1005,26 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   var panel=document.getElementById('panel'), pChar=document.getElementById('pChar');
   panel.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.pNext'); if(b){ goRoom(+b.getAttribute('data-go')); }});
   function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  // ---- ruta del diagnóstico: acompaña piso a piso ----
+  var HKI={infra:1,seg:2,pagos:3,susc:4,mkt:5,fidel:6,dash:7}, rutaEl=null;
+  function planCaps(){ try{ return (EQUIPO.last&&EQUIPO.last.caps)||[]; }catch(e){ return []; } }
+  function rutaUI(){
+    var caps=planCaps();
+    if(!rutaEl){ if(!caps.length) return; rutaEl=document.createElement('div'); rutaEl.className='ruta'; rutaEl.setAttribute('role','status'); document.body.appendChild(rutaEl);
+      rutaEl.addEventListener('click',function(e){ var b=e.target.closest('[data-go]'); if(b) goRoom(+b.getAttribute('data-go')); else if(e.target.closest('[data-ver]')){ try{ openDir(); }catch(er){} } }); }
+    if(!caps.length){ rutaEl.classList.remove('on'); return; }
+    var i=-1; caps.forEach(function(c,k){ if(HKI[c.k]===cur) i=k; });
+    var nx=caps[i+1], h;
+    if(i<0){ var c0=caps[0]; h='<button type="button" class="rT" data-ver="1">Tu plan · '+caps.length+' pisos</button><button type="button" class="rN" data-go="'+HKI[c0.k]+'">Empezar en '+esc(TEAM[c0.k].role)+'</button>'; }
+    else if(nx){ h='<button type="button" class="rT" data-ver="1">Tu plan · paso '+(i+1)+' de '+caps.length+'</button><button type="button" class="rN" data-go="'+HKI[nx.k]+'">Siguiente: '+esc(TEAM[nx.k].role)+'</button>'; }
+    else { h='<button type="button" class="rT" data-ver="1">Tu plan · último paso</button><a class="rN" href="/contacto">Quiero construirla</a>'; }
+    rutaEl.innerHTML=h; rutaEl.classList.add('on');
+  }
+  window.__rutaUI=rutaUI;
   function panelBody(s){
     var D=SPEC[s.hk], I=INFO[s.hk]||{lead:s.text,items:[]}, h='';
+    var __pc=planCaps(), __pi=-1; __pc.forEach(function(c,k){ if(c.k===s.hk) __pi=k; });
+    var __plan=__pi>-1?'<div class="pPlan"><b>En tu plan · paso '+(__pi+1)+' de '+__pc.length+'</b><p>'+esc(__pc[__pi].why)+'</p></div>':'';
     if(!D){ h='<p class="pLead">'+I.lead+'</p>'; }
     else {
       h+='<p class="pLead2">'+esc(D.lead)+'</p>';
@@ -1020,9 +1038,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     h+='<div class="pCta">'; if(s.hk==='intro') h+='<button class="pBtn eqb" data-vz="design">Diagnostica tu idea con IA<span>→</span></button>'; if(TEAM[s.hk]) h+='<button class="pBtn vzb" data-vz="'+s.hk+'">Hablar con '+(s.hk==='intro'?'el anfitrión':esc(TEAM[s.hk].nm))+' por voz<span>🎙</span></button>';
     h+='<a class="pBtn pri" href="/#diagnostico">'+esc((D&&D.cta)||'Quiero esta capa en mi app')+'<span>→</span></a>';
     if(LINKS.live) h+='<a class="pBtn sec" href="'+esc(LINKS.live)+'" target="_blank" rel="noopener">Ver la plataforma en vivo<span>↗</span></a>';
-    var nx=SPNEXT[s.hk]; if(nx!=null&&ROOMS[nx]) h+='<button class="pNext" data-go="'+nx+'"><span>'+(nx===0?'Volver a':'Siguiente capa')+'</span><b>'+esc(nx===0?'Recepción':ROOMS[nx].name.replace(/^Capa /,''))+'</b><i>→</i></button>';
+    var nx=SPNEXT[s.hk], __np=(__pi>-1&&__pc[__pi+1])?HKI[__pc[__pi+1].k]:null;
+    if(__np&&ROOMS[__np]) h+='<button class="pNext" data-go="'+__np+'"><span>Siguiente en tu plan</span><b>'+esc(ROOMS[__np].name.replace(/^Capa /,''))+'</b><i>→</i></button>';
+    else if(nx!=null&&ROOMS[nx]) h+='<button class="pNext" data-go="'+nx+'"><span>'+(nx===0?'Volver a':'Siguiente capa')+'</span><b>'+esc(nx===0?'Recepción':ROOMS[nx].name.replace(/^Capa /,''))+'</b><i>→</i></button>';
     h+='</div>';
     if(s.hk==='intro'&&I.note) h+='<p class="pNote" style="margin-top:14px">'+I.note+'</p>';
+    h=__plan+h;
     return h;
   }
   function openPanel(s){
@@ -1152,7 +1173,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     // 2 · con las puertas cerradas se carga el piso destino y corre el indicador
     elev.classList.add('riding');
     var __okP=true, __pEnd=Promise.resolve(); setFlat(ROOMS[to]); if(!ROOMS[to].flat) __pEnd=new Promise(function(res){ setPano(ROOMS[to].pano,function(ok){ __okP=ok!==false; res(); }); });
-    window.__ES=ROOMS[to].es||1; buildHotspots(ROOMS[to]); buildWall(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name; window.__clubArr=to;
+    window.__ES=ROOMS[to].es||1; buildHotspots(ROOMS[to]); buildWall(ROOMS[to]); cur=to; roomtag.textContent=ROOMS[to].name; window.__clubArr=to; try{ rutaUI(); }catch(e){}
     var __empujo=false; try{ if(!window.__czPop){ var __u=to?('?capa='+to):location.pathname; if(history.state&&history.state.ov) history.replaceState({r:to},'',__u); else { history.pushState({r:to},'',__u); __empujo=true; } } }catch(e){} window.__czPop=false;
     var seq=[];
     if(up){for(f=from;f<=to;f++)seq.push(f);} else {for(f=from;f>=to;f--)seq.push(f);}
@@ -2451,7 +2472,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         d=await fetch('/api/diagnose',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({idea:F.idea,country:F.country,scale:F.scale,monet:F.monet,hasBase:F.hasBase}),signal:ctl.signal}).then(function(r){ return r.json(); }); clearTimeout(to); }catch(e){ d=null; }
       if(d&&d.status==='incompleto'){ paint('inc',d); return d; }
       if(!d||d.status!=='ok'||!d.caps||!d.caps.length) d=local(F);
-      d.caps=d.caps.filter(function(c){ return TEAM[c.k]&&c.k!=='intro'; }); last=d; paint('res',d); try{ CLUB.spec&&CLUB.spec('intro'); }catch(e){} return d; }
+      d.caps=d.caps.filter(function(c){ return TEAM[c.k]&&c.k!=='intro'; }); last=d; paint('res',d); try{ window.__rutaUI(); }catch(e){} try{ CLUB.spec&&CLUB.spec('intro'); }catch(e){} return d; }
     async function pdf(){ var d=last; if(!d) return; var btn=root.querySelector('[data-eq="pdf"] span'); if(btn) btn.textContent='Preparando PDF…';
       try{ if(!window.jspdf){ await new Promise(function(res,rej){ var s=document.createElement('script'); s.src='/vendor/jspdf.umd.min.js?v=1'; s.onload=res; s.onerror=rej; document.head.appendChild(s); }); }
         var J=new window.jspdf.jsPDF({unit:'mm',format:'a4'}), W=210, H=297, M=18, y;
@@ -2482,7 +2503,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     function click(e){ var b=e.target.closest('[data-eq],.eqChips button'); if(!b||!root.contains(b)) return;
       if(b.parentNode.classList&&b.parentNode.classList.contains('eqChips')){ var nm=b.parentNode.getAttribute('data-n'); F[nm]=b.getAttribute('data-v'); [].forEach.call(b.parentNode.children,function(x){ x.classList.toggle('on',x===b); }); return; }
       var a=b.getAttribute('data-eq'), k=b.getAttribute('data-k');
-      if(a==='close') close(); else if(a==='go'){ readForm(); if(F.idea.length<8){ var t=root.querySelector('#eqIdea'); t.focus(); t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); },500); return; } run({}); }
+      if(a==='close') close(); else if(a==='go'){ readForm(); if(F.idea.length<8){ var t=root.querySelector('#eqIdea'); t.focus(); t.classList.add('shake'); setTimeout(function(){ t.classList.remove('shake'); },500); var er=root.querySelector('#eqErr'); if(!er){ er=document.createElement('p'); er.id='eqErr'; er.className='eqErr'; er.setAttribute('role','alert'); t.parentNode.insertBefore(er,t.nextSibling); } er.textContent='Cuéntanos tu idea en una o dos frases para armar tu plan.'; t.setAttribute('aria-invalid','true'); t.setAttribute('aria-describedby','eqErr'); return; } run({}); }
       else if(a==='voice'){ readForm(); VOZ.start('intro',{idea:F.idea}); } else if(a==='talk'){ VOZ.start(k,{idea:F.idea,dx:last}); }
       else if(a==='room'){ close(); try{ goRoom(tRoom(k)); }catch(er){} } else if(a==='ruta'){ close(); try{ openDir(); }catch(er){} } else if(a==='pdf') pdf(); else if(a==='edit'){ paint('form'); } }
     function open(keep){ root=$i('equipo'); if(!root) return; if(typeof closeDir==='function') closeDir(); try{ panel.classList.remove('open'); }catch(e){} document.body.classList.add('magopen','eqopen'); root.classList.add('open');
