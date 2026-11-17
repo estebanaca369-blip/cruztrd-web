@@ -2568,7 +2568,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     var desde=''; try{ desde=new URLSearchParams(location.search).get('desde')||''; }catch(e){}
     if(desde==='inicio'){ try{ history.replaceState(null,'',location.pathname); sessionStorage.setItem('cz_bienv','1'); }catch(e){} }
     else if(capa>=1&&capa<=7){}
-    else if(bv&&!visto){ bv.hidden=false; var cerrar=function(){ bv.classList.add('fuera'); try{ sessionStorage.setItem('cz_bienv','1'); }catch(e){} setTimeout(function(){ bv.hidden=true; },520); };
+    var __pl=null; try{ if(new URLSearchParams(location.search).get('plan')) __pl=planCaps(); }catch(e){}
+    if(bv&&__pl&&__pl.length){ visto=false; var __h=bv.querySelector('h2'), __p=bv.querySelector('p'), __g=document.getElementById('bienvGo');
+      __h.textContent='Te compartieron un plan de '+__pl.length+(__pl.length===1?' piso':' pisos');
+      __p.textContent='Capas: '+__pl.map(function(c){ return TEAM[c.k].role; }).join(', ')+'. Te llevamos piso por piso; en cada uno, su guía te explica por qué está en el plan.';
+      __g.textContent='Empezar en el piso '+pad2(HKI[__pl[0].k]); __g.addEventListener('click',function(){ setTimeout(function(){ try{ goRoom(HKI[__pl[0].k]); }catch(e){} },560); }); }
+    if(bv&&!visto&&desde!=='inicio'&&!(capa>=1&&capa<=7)){ bv.hidden=false; var cerrar=function(){ bv.classList.add('fuera'); try{ sessionStorage.setItem('cz_bienv','1'); }catch(e){} setTimeout(function(){ bv.hidden=true; },520); };
       document.getElementById('bienvGo').onclick=cerrar; bv.addEventListener('keydown',function(e){ if(e.key==='Tab'){ var fs=bv.querySelectorAll('button,a[href]'), i=[].indexOf.call(fs,document.activeElement); e.preventDefault(); try{ fs[(i+(e.shiftKey?-1:1)+fs.length)%fs.length].focus(); }catch(_){} } else if(e.key==='Escape'){ cerrar(); } }); setTimeout(function(){ try{ document.getElementById('bienvGo').focus(); }catch(e){} },950); }
   });
   buildHotspots(ROOMS[0]); buildWall(ROOMS[0]); roomtag.textContent=ROOMS[0].name; CLUB.ui(); try{ rutaUI(); planHs(); }catch(e){} setTimeout(function(){ try{ rutaUI(); planHs(); }catch(e){} },1800); if((CLUB.st.v||1)>1) setTimeout(function(){CLUB.toast('Bienvenido de vuelta','+200 pts por regresar · visita nº '+CLUB.st.v);},1600);
