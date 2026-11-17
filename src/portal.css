@@ -1583,3 +1583,17 @@ html,body{height:100%;background:var(--bg);color:var(--ink);font-family:Inter,sa
   #equipo.modoFin .eqFinT h2{font-size:clamp(40px,4.4vw,64px)}
   #equipo.modoFin .eqCorte{max-width:440px}
 }
+
+/* ---- ronda 18: edificio de vidrio; cierre compacto en celular ---- */
+.eqPiso.fuera{cursor:default}
+.eqPiso.fuera:hover rect{stroke:inherit;stroke-width:inherit}
+.eqFin.anim .eqPiso.ok rect{animation:eqLuz 1.1s ease-out both;animation-delay:calc(var(--i) * 110ms + 700ms)}
+#eqFinH:focus{outline:none}
+#eqFinH:focus-visible{outline:none}
+@media (max-width:900px){
+  #equipo.modoFin .eqFin~*{display:none}
+  #equipo.modoFin .eqR{display:none}
+  #equipo.modoFin .eqFin{border-bottom:0;margin-bottom:0;padding-bottom:8px}
+  #equipo.modoFin .eqCorte{max-width:300px}
+  #equipo.modoFin .eqFinT h2{font-size:32px}
+}

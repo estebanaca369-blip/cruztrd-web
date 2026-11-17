@@ -93,6 +93,12 @@ p{margin:0}
 .visor{position:sticky;top:6vh;margin:0;width:100%;height:min(74vh,720px);border-radius:6px;overflow:hidden;background:#11151a}
 .visor img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;clip-path:inset(0 0 100% 0);transition:clip-path .6s cubic-bezier(.3,.7,.1,1);z-index:0}
 .visor img.on{clip-path:inset(0);z-index:1}
+.torre{position:absolute;right:18px;top:18px;z-index:2;display:flex;flex-direction:column-reverse;gap:4px;padding:10px;border-radius:10px;background:rgba(7,9,12,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.torre i{display:block;width:46px;height:9px;border-radius:2px;background:rgba(255,255,255,.12);transition:background .4s,box-shadow .4s,transform .4s}
+.torre i.ya{background:rgba(45,212,167,.38)}
+.torre i.on{background:#2DD4A7;box-shadow:0 0 14px rgba(45,212,167,.8);transform:scaleX(1.12)}
+@media(prefers-reduced-motion:reduce){.torre i{transition:none}}
+.datos a,.cierre .enlace{display:inline-flex;align-items:center;min-height:44px}
 .visor figcaption{position:absolute;left:16px;bottom:14px;z-index:2;font-size:13px;color:#fff;background:rgba(7,9,12,.62);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px}
 .lista{list-style:none;margin:0;padding:0;border-top:1px solid var(--linea)}
 .lista a{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:baseline;gap:8px 20px;padding:clamp(18px,2.2vh,26px) 0;border-bottom:1px solid var(--linea);text-decoration:none}
@@ -252,6 +258,7 @@ p{margin:0}
         <img src="/media/home-capa-06.webp?v=n8" alt="" loading="lazy" width="1100" height="682">
         <img src="/media/home-capa-07.webp?v=n8" alt="" loading="lazy" width="1100" height="682">
         <figcaption id="visorTxt">Piso 01, Infraestructura</figcaption>
+        <div class="torre" id="torre" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       </figure>
       <ol class="lista" id="lista">
         <li><a class="on" href="/portal360?capa=1" data-i="0" data-n="Piso 01, Infraestructura"><img class="mini" src="/media/home-capa-01.webp?v=n8" alt="" loading="lazy"><span class="n">01</span><span class="nom">Infraestructura</span><span class="ir">Subir a este piso</span><span class="que">Servidores y base de datos preparados para cuando tu app crezca.</span></a></li>
@@ -370,7 +377,7 @@ p{margin:0}
 </div></footer>
 <div class="velo" id="velo" aria-hidden="true"></div>
 
-<script src="/assets/inicio.js?v=7" defer></script>
+<script src="/assets/inicio.js?v=8" defer></script>
 <script src="/assets/marco.js?v=5" defer></script>
 </body>
 </html>
