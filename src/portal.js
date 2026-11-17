@@ -639,13 +639,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     try{ var r=JSON.parse(localStorage.getItem(KEY)||'null'); if(r&&r.rooms){ st=r; if(Date.now()-(st.last||0)>30*60*1000) st.v=(st.v||1)+1; } }catch(e){}
     st.last=Date.now();
     var TIERS=[['Bronce',0,'#f0b089'],['Plata',300,'#e6eef2'],['Oro',600,'#ffd27a'],['Platino',900,'#d9f3ff']];
-    var REWARD={Plata:'Diagnostica tu idea y llévate la estimación en PDF',Oro:'Sesión 1:1 con el equipo CruzTRD',Platino:'Sesión 1:1 con el equipo CruzTRD'};
+    var REWARD={Plata:'Diagnostica tu idea y llévate la estimación en PDF',Oro:'Revisión humana de tu estimación en 24 h',Platino:'Revisión humana en 24 h + llamada de 30 min con el equipo'};
     function save(){ try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){} }
     function pts(){ return st.rooms.length*100+st.spec.length*50+Math.max(0,(st.v||1)-1)*200+Math.min(3,st.share||0)*100+(st.read||[]).length*25+(st.play?50:0); }
     function tier(p){ p=p==null?pts():p; var t=0; for(var i=0;i<TIERS.length;i++) if(p>=TIERS[i][1]) t=i; return t; }
     function progress(){ var p=pts(), t=tier(p); if(t===TIERS.length-1) return 1; return (p-TIERS[t][1])/(TIERS[t+1][1]-TIERS[t][1]); }
     var pill=null, toastEl=null, toastT=null;
-    function ui(){ if(!pill){ pill=document.createElement('div'); pill.className='clubpill'; pill.title='Club CruzTRD: ganas puntos recorriendo el estudio. Canjéalos en la capa 06 · Fidelización'; document.body.appendChild(pill);
+    function ui(){ if(!pill){ pill=document.createElement('div'); pill.className='clubpill'; pill.title='Club CruzTRD: ganas puntos recorriendo el estudio. En nivel Oro, revisamos tu estimación en 24 h'; document.body.appendChild(pill);
         pill.onclick=function(){ if(typeof clubLounge==='function') clubLounge(); }; pill.setAttribute('role','button'); pill.tabIndex=0; pill.addEventListener('keydown',function(ev){ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); pill.click(); } }); pill.title='Club CruzTRD: ganas puntos recorriendo el estudio'; }
       var t=tier(); pill.innerHTML='<span class="cs">★</span><b>'+pts().toLocaleString('es')+' pts</b><i style="color:'+TIERS[t][2]+'">'+TIERS[t][0]+'</i>'; }
     function toast(main,sub){ if(!toastEl){toastEl=document.createElement('div'); toastEl.className='clubtoast'; toastEl.setAttribute('role','status'); toastEl.setAttribute('aria-live','polite'); document.body.appendChild(toastEl);}
@@ -700,7 +700,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     var py=bot-step*0.5-(shown/3)*(step*3), g=c.createLinearGradient(0,bot,0,py); g.addColorStop(0,'rgba(45,212,167,0.35)'); g.addColorStop(1,'rgba(160,255,225,1)');
     c.strokeStyle=g; c.beginPath(); c.moveTo(lx,bot-step*0.5); c.lineTo(lx,py); c.stroke();
     var rg=c.createRadialGradient(lx,py,0,lx,py,u*1.6); rg.addColorStop(0,'rgba(255,255,255,1)'); rg.addColorStop(0.35,'rgba(140,255,220,0.8)'); rg.addColorStop(1,'rgba(45,212,167,0)'); c.fillStyle=rg; c.beginPath(); c.arc(lx,py,u*1.6,0,7); c.fill();
-    var sub=['Bienvenida','Guía PDF','Diagnóstico','Sesión 1:1'];
+    var sub=['Bienvenida','Estimación PDF','Revisión en 24 h','Revisión + llamada'];
     for(var k=0;k<4;k++){ var i=3-k, y=top+step*i+step*0.5, on=me>=k, here=me===k;
       c.fillStyle=on?T[k][2]:'rgba(200,230,222,0.35)'; c.beginPath(); c.arc(lx,y,u*(here?0.62:0.42),0,7); c.fill();
       c.textBaseline='middle'; c.textAlign='left'; c.font='700 '+(u*1.2)+'px Inter Tight,system-ui,sans-serif';
@@ -711,7 +711,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
   // ===== FIDELIZACIÓN (foto nueva): lounge del Club CruzTRD =====
   var TIK=['#8a4f2a','#56636b','#8f6410','#2c7690'];          // tinta oscura por nivel
   var TMET=[['#3a2418','#b8774f','#f6c3a0'],['#2a3034','#9aa7ae','#f4f8fa'],['#33260c','#c49634','#ffe3a3'],['#1d3540','#8fc2d4','#eefcff']];
-  var TREW=['Bienvenida al Club','Estimación de tu idea (PDF)','Diagnóstico de tu app con IA','Sesión 1:1 con el equipo'];
+  var TREW=['Bienvenida al Club','Tu estimación en PDF','Revisión humana de tu estimación en 24 h','Revisión en 24 h + llamada de 30 min'];
   function wrapL(c,txt,maxW){ var w=txt.split(' '),L=[],cur=''; for(var i=0;i<w.length;i++){ var tt=cur?cur+' '+w[i]:w[i]; if(c.measureText(tt).width>maxW&&cur){L.push(cur);cur=w[i];} else cur=tt; } if(cur)L.push(cur); return L; }
   function star(c,x,y,R,col){ c.beginPath(); for(var i=0;i<10;i++){ var a=-Math.PI/2+i*Math.PI/5, r=i%2?R*0.45:R; c.lineTo(x+Math.cos(a)*r,y+Math.sin(a)*r);} c.closePath(); c.fillStyle=col; c.fill(); }
   function hola(){ var h=new Date().getHours(); return (h<5||h>=19)?'Buenas noches':(h<12?'Buenos días':'Buenas tardes'); }
@@ -976,12 +976,12 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
        text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.', cls:'mkta'},
       {type:'door', lon:166,lat:-2, to:0, label:'Volver a Recepción'}
     ]},
-    {name:'Capa 06 · Fidelización', pano:'media/sala7f.webp?v=w4', p6:'media/sala7f-6k.webp?v=w4', flat:{lonA:-45.3617,lonB:45.3948,latT:18.4474,latB:-18.6971}, es:3, entryYaw:0, fx:[], screens:[{"ui":"cardtv","act":[[1955.604,962.702],[2140.559,962.791],[2140.497,1069.398],[1955.684,1069.473]],"rad":[0,0,0,0],"res":760,"iv":60,"glass":0.035,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":0,"act":[[2209.426,946.863],[2248.031,951.339],[2248.036,1090.555],[2209.479,1094.612]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":1,"act":[[2269.035,953.847],[2302.932,958.092],[2302.852,1084.402],[2269.029,1088.22]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":2,"act":[[2321.562,960.629],[2352.232,964.813],[2352.217,1078.432],[2321.461,1082.062]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"tierbox","k":3,"act":[[2368.639,967.061],[2390.314,970.087],[2390.323,1073.721],[2368.588,1076.452]],"rad":[0,0,0,0],"res":1000,"iv":80,"glass":0.0,"lift":[0.0,0.0,0.0],"fxui":1},{"ui":"invite","act":[[1854.389,1011.904],[1886.586,1011.55],[1883.924,1075.659],[1851.706,1074.331]],"rad":[0,0,0,0],"res":640,"iv":66,"glass":0.04,"fxui":1},{"ui":"reward","act":[[2484.325,963.984],[2535.743,960.834],[2535.629,1056.519],[2484.325,1055.202]],"rad":[0,0,0,0],"res":900,"iv":66,"glass":0.04,"fxui":1},{"ui":"tabglow","act":[[2492.376,1073.968],[2532.63,1075.102],[2528.882,1078.178],[2482.923,1076.721]],"rad":[0.6,0.6,0.6,0.6],"res":90,"iv":80,"glass":0.0,"fxui":1}], spots:[
-      {type:'act', act:'card', icon:'★', label:'Mi tarjeta', lon:0.009,lat:-5.231},
-      {type:'act', act:'chakra', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z"/><path d="M7 21h10"/></svg>', label:'Chakra · tu huerto de fidelidad', lon:21.5,lat:-8.2},
-      {type:'char', lon:-5.534,lat:-6.2, hk:'fidel', eye:'Capa 06', title:'Fidelización', who:'GUÍA VIRTUAL · FIDELIZACIÓN',
+    {name:'Capa 06 · Fidelización', pan:0.3, pano:'media/sala7.webp?v=w5', p6:'media/sala7-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+      {type:'act', act:'card', icon:'★', label:'Mi tarjeta del Club', lon:27,lat:-3},
+      {type:'act', act:'chakra', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4 3-6.5 7-6.5 0 4-3 6.5-7 6.5zM12 14.5c0-3-2.4-5-5.5-5 0 3 2.4 5 5.5 5z"/><path d="M7 21h10"/></svg>', label:'Chakra · tu huerto de fidelidad', lon:128,lat:-10},
+      {type:'char', lon:0,lat:-16, hk:'fidel', eye:'Capa 06', title:'Fidelización', who:'GUÍA VIRTUAL · FIDELIZACIÓN',
        text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.', cls:'fidela'},
-      {type:'door', lon:-35.328,lat:-3.237, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-91,lat:-4, to:0, label:'Ascensor · volver a Recepción'}
     ]},
     {name:'Capa 07 · Dashboards', pan:0.3, ep:0.07, pano:'media/sala8.webp?v=w4', p6:'media/sala8-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:33,lat:-15},
@@ -1109,7 +1109,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     var p=CLUB.pts(), ti=CLUB.tier(), T=CLUB.TIERS[ti], nx=CLUB.TIERS[ti+1], miss=CLUB.missing().filter(function(i){return i!==6;});
     var h='<div class="cbar"><span class="ce">Club CruzTRD · tu tarjeta</span><button class="cx" aria-label="Cerrar">✕</button></div>'+
       '<div class="ctj" style="--niv:'+T[2]+'"><span class="ctm">Cruz<b>TRD</b></span><span class="ctk">Club</span><i class="ctc" aria-hidden="true"></i><span class="ctd">CTRD · '+('000'+((CLUB.st.v||1)*37%10000)).slice(-4)+' · '+('000'+(p%10000)).slice(-4)+'</span><span class="ctn">'+T[0]+'</span><b class="ctp">'+p.toLocaleString('es')+' <small>pts</small></b><span class="ctv">Visita nº '+(CLUB.st.v||1)+'</span></div>';
-    if(ti>=1){ h+='<div class="cr"><span>'+(T[0]==='Plata'?'Tu siguiente paso':'Recompensa desbloqueada')+'</span><b>'+CLUB.REWARD[T[0]]+'</b><a class="cbtn" href="'+(T[0]!=='Plata'?'https://wa.me/593988011913?text='+encodeURIComponent('Hola CruzTRD, llegué a nivel '+T[0]+' en el Estudio 360° y quiero mi sesión 1:1.'):'/#diagnostico')+'"'+(T[0]!=='Plata'?' target="_blank" rel="noopener"':' target="_top"')+'>'+(T[0]==='Plata'?'Diagnosticar':'Reclamar')+'</a></div>'; }
+    if(ti>=1){ h+='<div class="cr"><span>'+(T[0]==='Plata'?'Tu siguiente paso':'Recompensa desbloqueada')+'</span><b>'+CLUB.REWARD[T[0]]+'</b><a class="cbtn" href="'+(T[0]!=='Plata'?'https://wa.me/593988011913?text='+encodeURIComponent('Hola CruzTRD, llegué a nivel '+T[0]+' en el Club del Estudio 360° y quiero mi recompensa: '+CLUB.REWARD[T[0]]+'. Adjunto mi estimación en PDF.'):'/#diagnostico')+'"'+(T[0]!=='Plata'?' target="_blank" rel="noopener"':' target="_top"')+'>'+(T[0]==='Plata'?'Diagnosticar':'Reclamar')+'</a></div>'; }
     if(nx){ h+='<p class="cp">Te faltan <b>'+(nx[1]-p)+' pts</b> para <b style="color:'+nx[2]+'">'+nx[0]+'</b>'+(nx[0]==='Oro'?' · '+CLUB.REWARD.Oro:'')+'.</p>'; } else { h+='<p class="cp">Llegaste al nivel más alto del recorrido.</p>'; }
     if(miss.length){ h+='<div class="cm"><span>Gana +100 en cada capa que te falta:</span><div>'+miss.map(function(i){return '<button data-go="'+i+'">'+ROOMS[i].name.replace(/^Capa (\d+) · /,'$1 · ')+'</button>';}).join('')+'</div></div>'; }
     h+='<p class="cn">Así se siente un programa de lealtad bien hecho: te reconoce, te premia y te da un motivo para volver. Esto construimos para tus clientes.</p>';
