@@ -2383,7 +2383,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
         var r=await fetch('/api/voz?t=1',{cache:'no-store'}).then(function(x){ return x.json(); }); if(!r.ok||!r.token) throw new Error(r.error||'token');
         var L=await lib(), vid=(r.voices||{})[hk];
         var opts={conversationToken:r.token,connectionType:'webrtc',
-          overrides:{agent:{prompt:{prompt:persona(hk,ctx)},firstMessage:first(hk,ctx),language:'es'}},
+          overrides:{agent:{prompt:{prompt:persona(hk,ctx)+'\nYa saludaste con un mensaje de bienvenida general. En tu primera respuesta preséntate en una frase con tu nombre y tu capa, y sigue con lo que el visitante pregunte.',},language:'es'}},
           clientTools:{
             diagnosticar_app:async function(p){ status('Diseñando tu app…','think'); var dx=await EQUIPO.run({idea:p.idea||'',country:p.pais||'Ecuador',scale:p.escala||'s1',monet:p.monetizacion||''},true); ctx.dx=dx&&dx.status==='ok'?dx:null; ctx.idea=p.idea; status('Hablando','talk');
               if(!dx) return 'No pude completar el diagnóstico ahora. Pide al visitante que lo intente con el botón Diseñar mi app.';
