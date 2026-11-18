@@ -941,13 +941,13 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
 
   // ===== salas del recorrido =====
   var ROOMS=[
-    {name:'Recepción · Lobby', pano:'media/lab-pano.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], spots:[
+    {name:'Recepción · Lobby', pano:'media/lab-pano.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], spots:[
       {type:'char', lon:0,lat:-15, hk:'intro', eye:'Anfitrión', title:'Bienvenido al estudio', who:'ANFITRIÓN · D2C',
        text:'Tu idea entra por aquí y se construye capa por capa hasta ser una app lista para miles de personas. Llama al ascensor cuando quieras subir a cualquier piso del estudio.', cls:'hosta'},
-      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Revista', lon:-114,lat:-15},
+      {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Revista', lon:112,lat:-12},
       {type:'act', act:'play', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 11c3.5-2.5 6.5-2.6 10 0 3.5-2.6 6.5-2.5 10 0"/><path d="M5 9.4L3.5 7M8.5 8.6L8 6M19 9.4L20.5 7M15.5 8.6L16 6"/><path d="M12 11v3.5"/></svg>', label:'Juegos', lon:159,lat:-22},
-      {type:'act', act:'equipo', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>', label:'Diagnostica tu idea con IA', lon:-133,lat:-17.5},
-      {type:'dir', lon:49,lat:-1, label:'Subir a los pisos'}
+      {type:'act', act:'equipo', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>', label:'Diagnostica tu idea con IA', lon:-26,lat:-8},
+      {type:'dir', lon:-127.5,lat:-1, label:'Ascensor · subir a los pisos'}
     ]},
     {name:'Capa 01 · Infraestructura', pano:'media/sala2.webp?v=w4', p6:'media/sala2-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: las 7 capas de una app', pg:5, lon:62,lat:-6},
@@ -2580,7 +2580,7 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
     // 6K en escritorio; en móviles solo en equipos recientes, con buena red y guardando menos salas en memoria
     var movil6=tactil&&devicePixelRatio>=2&&Math.max(screen.width,screen.height)>=800&&mem>=6&&!red.saveData&&(!red.effectiveType||red.effectiveType==='4g');
     if(movil6) MAXTEX=2;
-    if(renderer.capabilities.maxTextureSize>=8192&&((!tactil&&innerWidth>=1100&&mem>=4)||movil6)){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w4'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
+    if(renderer.capabilities.maxTextureSize>=8192&&((!tactil&&innerWidth>=1100&&mem>=4)||movil6)){ ROOMS[0].pano='media/lab-pano-6k.webp?v=w5'; ROOMS.forEach(function(R){ if(R.p6) R.pano=R.p6; }); } }catch(e){}
   setPano(ROOMS[0].pano, function(){loader.style.opacity='0';setTimeout(function(){loader.style.display='none';},900);
     // bienvenida (una vez por visita) o entrada directa a un piso desde el inicio (?capa=N)
     var capa=0; try{ capa=parseInt(new URLSearchParams(location.search).get('capa')||'0',10)||0; }catch(e){}
