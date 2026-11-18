@@ -110,6 +110,8 @@ p{margin:0}
 .lista .ir{grid-row:1;grid-column:3;font-size:14px;color:var(--verde);opacity:0;transition:opacity .2s}
 .lista a:hover .n,.lista a:focus-visible .n,.lista a.on .n{color:var(--verde)}
 .lista a:hover .nom,.lista a:focus-visible .nom{transform:translateX(8px)}
+.rodando .lista a:hover .nom{transform:none}.rodando .lista a:hover .ir{opacity:0}
+.visor img{will-change:clip-path}
 .lista a:hover .ir,.lista a:focus-visible .ir{opacity:1}
 .lista .mini{display:none}
 .capas-fin{margin-top:clamp(36px,5vw,60px);display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px}
@@ -380,7 +382,7 @@ p{margin:0}
 </div></footer>
 <div class="velo" id="velo" aria-hidden="true"></div>
 
-<script src="/assets/inicio.js?v=10" defer></script>
+<script src="/assets/inicio.js?v=11" defer></script>
 <script src="/assets/marco.js?v=5" defer></script>
 </body>
 </html>

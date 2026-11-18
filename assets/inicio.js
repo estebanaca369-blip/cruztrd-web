@@ -6,9 +6,16 @@
   var losas=[].slice.call(document.querySelectorAll('#torre i')), alto=0;
   function torre(i){ losas.forEach(function(l,k){ l.className=k===i?'on':(k<i?'ya':''); }); }
   function ver(a){ var i=+a.getAttribute('data-i'); filas.forEach(function(f){f.classList.toggle('on',f===a);}); fotos.forEach(function(f,k){f.classList.toggle('on',k===i);}); txt.textContent=a.getAttribute('data-n'); torre(i); }
-  filas.forEach(function(a){ a.addEventListener('mouseenter',function(){ver(a);}); a.addEventListener('focus',function(){ver(a);}); });
-  /* al bajar por la lista, el piso que cruza el centro de la pantalla se enciende en la torre */
-  if('IntersectionObserver' in window&&filas.length){ var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting) ver(e.target); }); },{rootMargin:'-45% 0px -45% 0px'}); filas.forEach(function(a){ io.observe(a); }); }
+  var actual=null; function poner(a){ if(a&&a!==actual){ actual=a; ver(a); } }
+  /* mientras se hace scroll, el puntero no manda: solo cuenta si de verdad se mueve sobre una fila */
+  var rodando=0, raiz=document.documentElement;
+  addEventListener('scroll',function(){ raiz.classList.add('rodando'); clearTimeout(rodando); rodando=setTimeout(function(){ raiz.classList.remove('rodando'); },180); centro(); },{passive:true});
+  filas.forEach(function(a){ a.addEventListener('pointermove',function(e){ if(e.pointerType==='mouse'&&!raiz.classList.contains('rodando')) poner(a); }); a.addEventListener('focus',function(){poner(a);}); });
+  /* al bajar por la lista, se enciende la fila más cercana al centro de la pantalla */
+  var pend=false; function centro(){ if(pend||!filas.length) return; pend=true; requestAnimationFrame(function(){ pend=false; var mid=innerHeight/2, mejor=null, d=1e9;
+    filas.forEach(function(a){ var r=a.getBoundingClientRect(); if(r.bottom<0||r.top>innerHeight) return; var c=Math.abs((r.top+r.bottom)/2-mid); if(c<d){ d=c; mejor=a; } });
+    var lista=document.getElementById('lista'), rl=lista&&lista.getBoundingClientRect(); if(mejor&&rl&&rl.top<mid&&rl.bottom>mid*0.6) poner(mejor); }); }
+  centro();
 
   /* Portada: la recepción gira sola y se puede arrastrar */
   (function(){
