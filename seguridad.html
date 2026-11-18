@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es-EC">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguridad — CruzTRD</title>
+<meta name="description" content="Cómo protege CruzTRD sus sitios y aplicaciones, sellos de seguridad que puedes verificar y cómo reportarnos una vulnerabilidad.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CruzTRD">
+<meta property="og:locale" content="es_EC">
+<meta property="og:url" content="https://cruztrd.com/seguridad">
+<meta property="og:title" content="Seguridad — CRUZTRD CT S.A.S.">
+<meta property="og:description" content="Cómo protege CruzTRD sus sitios y aplicaciones, sellos de seguridad que puedes verificar y cómo reportarnos una vulnerabilidad.">
+<meta property="og:image" content="https://cruztrd.com/media/og.jpg?v=3">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cruztrd.com/seguridad">
+<meta name="theme-color" content="#07090C">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Crect%20width='100'%20height='100'%20rx='22'%20fill='%2307090C'/%3E%3Ctext%20x='50'%20y='71'%20font-family='Arial,sans-serif'%20font-size='62'%20font-weight='700'%20text-anchor='middle'%20fill='%232DD4A7'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/media/logo.png">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/inter-tight.woff2">
+<link rel="stylesheet" href="/assets/fuentes.css?v=1">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--accent:#2DD4A7;--accent2:#2DD4A7;--bg:#07090C;--ink:#EDF3F1;--muted:#9AA6AD;--card:#0d1116}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+.hero{max-width:1100px;margin:0 auto;padding:clamp(120px,15vw,200px) 24px clamp(20px,3vw,40px)}
+.eyebrow{color:var(--muted);font-weight:500;font-size:15px}
+h1{font-family:'Inter Tight','Inter';font-weight:600;font-size:clamp(44px,6.4vw,96px);line-height:.96;letter-spacing:-.035em;margin:14px 0 18px;max-width:14ch}
+.updated{color:var(--muted);font-size:16px}
+main{max-width:1100px;margin:0 auto;padding:22px 24px 100px}
+main.legal{display:grid;grid-template-columns:minmax(0,240px) minmax(0,72ch);gap:clamp(32px,6vw,96px);align-items:start}
+.indice{position:sticky;top:96px;display:flex;flex-direction:column;padding-top:clamp(28px,3.4vw,44px)}
+.indice a{display:flex;gap:12px;padding:8px 0;color:var(--muted);font-size:15px;line-height:1.35;text-decoration:none;border-top:1px solid rgba(255,255,255,.07)}
+.indice a span{font-variant-numeric:tabular-nums;color:rgba(154,166,173,.7);min-width:20px}
+.indice a:hover,.indice a:focus-visible{color:#fff}
+.card{scroll-margin-top:90px}
+h1{text-wrap:balance}
+@media(max-width:900px){main.legal{grid-template-columns:minmax(0,1fr)}.indice{display:none}}
+.card{max-width:72ch;background:none;border:0;border-top:1px solid rgba(255,255,255,.12);border-radius:0;padding:clamp(28px,3.4vw,44px) 0 6px;margin-top:0}
+.card h2{font-family:'Inter Tight','Inter';font-weight:600;font-size:clamp(24px,2.4vw,32px);letter-spacing:-.02em;line-height:1.15;color:#fff;margin-bottom:12px;display:flex;gap:14px;align-items:baseline}
+.card h2 .n{color:var(--muted);font-size:15px;font-weight:500;flex:0 0 auto;font-variant-numeric:tabular-nums}
+.card p{color:#c6d0d4;font-size:17px;line-height:1.65;margin-top:10px}
+.card ul{margin:10px 0 0 2px;list-style:none}
+.card li{position:relative;padding-left:22px;color:#c6d0d4;font-size:17px;line-height:1.6;margin-top:9px}
+.card li::before{content:'';position:absolute;left:3px;top:12px;width:6px;height:6px;border-radius:50%;background:var(--muted)}
+.data{display:grid;grid-template-columns:auto 1fr;gap:8px 22px;margin-top:14px;font-size:16px}
+.data dt{color:var(--muted)}
+.data dd{color:var(--ink)}
+.sellos{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0;margin-top:16px;border-top:1px solid rgba(255,255,255,.08)}
+.sellos>*{padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:16px}
+.sellos .nota{color:#fff;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;padding-left:18px}
+.sellos a{color:var(--ink)}
+.note{background:rgba(25,195,125,.06);border:1px solid rgba(25,195,125,.26);border-radius:12px;padding:14px 16px;margin-top:18px;color:#cfe9df;font-size:14px}
+</style>
+<link rel="stylesheet" href="/assets/marco.css?v=3">
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="barra">
+  <a class="marca" href="/" aria-label="CruzTRD, inicio">Cruz<b>TRD</b></a>
+  <button class="hamb" id="burger" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks"></button>
+  <nav id="navlinks" aria-label="Principal">
+    <a href="/portal360">Estudio 360°</a>
+    <a href="/#diagnostico">Diagnóstico</a>
+    <a href="/productos">Productos</a>
+    <a href="/empresa">Empresa</a>
+    <a href="/contacto">Contacto</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="eyebrow">Confianza</div>
+  <h1>Seguridad</h1>
+  <div class="updated">Última actualización: 18 de noviembre de 2026</div>
+</div>
+
+<main id="contenido" class="legal">
+<nav class="indice" aria-label="Secciones"><a href="#s01"><span>01</span>Cómo protegemos lo que construimos</a><a href="#s02"><span>02</span>Sellos que puedes verificar</a><a href="#s03"><span>03</span>Cómo reportarnos una vulnerabilidad</a><a href="#s04"><span>04</span>Reglas para probar de buena fe</a></nav>
+<div class="lectura">
+  <div class="card" id="s01">
+    <h2><span class="n">01</span> Cómo protegemos lo que construimos</h2>
+    <p>La seguridad es parte del servicio que ofrecemos, así que la aplicamos primero en nuestros propios productos: este sitio y la app Declárame.</p>
+    <ul>
+      <li>Todo el tráfico va cifrado (TLS 1.2 y 1.3). Los navegadores tienen orden de usar siempre la conexión segura (HSTS).</li>
+      <li>Las contraseñas se guardan como resumen irreversible (scrypt) y las credenciales del SRI de los usuarios de Declárame se guardan cifradas (AES-256-GCM).</li>
+      <li>Las sesiones caducan, se renuevan y se pueden cerrar desde otro dispositivo. Hay freno de intentos contra el adivinado de contraseñas.</li>
+      <li>En el teléfono, la app guarda la sesión en el almacenamiento seguro del sistema y no acepta conexiones sin cifrar.</li>
+      <li>Cada página declara qué puede cargar (Content-Security-Policy) y prohíbe que otros sitios la metan en un marco.</li>
+      <li>Revisamos las librerías que usamos contra las bases públicas de vulnerabilidades y las actualizamos.</li>
+    </ul>
+  </div>
+
+  <div class="card" id="s02">
+    <h2><span class="n">02</span> Sellos que puedes verificar</h2>
+    <p>Estos resultados los emiten terceros independientes. Cada enlace vuelve a correr la prueba en el momento, así que no dependen de lo que nosotros digamos.</p>
+    <div class="sellos">
+      <a href="https://developer.mozilla.org/en-US/observatory/analyze?host=cruztrd.com" rel="noopener">Mozilla HTTP Observatory · cruztrd.com</a><span class="nota">A+</span>
+      <a href="https://developer.mozilla.org/en-US/observatory/analyze?host=declarame.com" rel="noopener">Mozilla HTTP Observatory · declarame.com</a><span class="nota">A+</span>
+      <a href="https://www.ssllabs.com/ssltest/analyze.html?d=cruztrd.com" rel="noopener">Qualys SSL Labs · cruztrd.com</a><span class="nota">A+</span>
+      <a href="https://www.ssllabs.com/ssltest/analyze.html?d=declarame.com" rel="noopener">Qualys SSL Labs · declarame.com</a><span class="nota">A+</span>
+    </div>
+    <p>Resultados de noviembre de 2026.</p>
+  </div>
+
+  <div class="card" id="s03">
+    <h2><span class="n">03</span> Cómo reportarnos una vulnerabilidad</h2>
+    <p>Si encuentras un problema de seguridad en cruztrd.com, declarame.com, api.declarame.com o la app Declárame, escríbenos a <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> antes de hacerlo público. Incluye:</p>
+    <ul>
+      <li>qué encontraste y dónde (dirección o pantalla);</li>
+      <li>los pasos para reproducirlo;</li>
+      <li>qué podría hacer alguien que lo aprovechara.</li>
+    </ul>
+    <p>Te respondemos en máximo 5 días hábiles, te contamos cómo avanza la corrección y, si quieres, te damos el crédito cuando esté resuelto.</p>
+  </div>
+
+  <div class="card" id="s04">
+    <h2><span class="n">04</span> Reglas para probar de buena fe</h2>
+    <ul>
+      <li>Usa solo cuentas tuyas o de prueba. No entres, cambies ni borres datos de otras personas.</li>
+      <li>Nunca uses ni guardes claves del SRI que no sean tuyas.</li>
+      <li>No hagas pruebas de saturación o denegación de servicio, ni ingeniería social a nuestro equipo o usuarios.</li>
+      <li>Detente apenas confirmes el problema y no lo divulgues hasta que lo hayamos corregido.</li>
+    </ul>
+    <p>Si sigues estas reglas, tratamos tu reporte como una colaboración. Por ahora no tenemos un programa de recompensas en dinero.</p>
+    <p>Los datos técnicos de contacto están también en <a href="/.well-known/security.txt">/.well-known/security.txt</a>, el formato estándar para investigadores (RFC 9116).</p>
+  </div>
+
+</div>
+</main>
+
+<footer class="pie-sitio"><div class="pie-in">
+  <div>
+    <a class="marca" href="/" aria-label="CruzTRD, inicio">Cruz<b>TRD</b></a>
+    <address>
+      CRUZTRD CT S.A.S. · RUC 1793237622001<br>
+      Calle OE1C S5-213, Santa María, Tumbaco<br>
+      Quito, Pichincha 170184, Ecuador<br>
+      <a href="mailto:esteban@cruztrd.com">esteban@cruztrd.com</a> · <a href="tel:+593988011913">+593 98 801 1913</a>
+    </address>
+  </div>
+  <nav class="pie-nav" aria-label="Pie">
+    <a href="/portal360">Estudio 360°</a>
+    <a href="/#diagnostico">Diagnóstico</a>
+    <a href="/productos">Productos</a>
+    <a href="/empresa">Empresa</a>
+    <a href="/contacto">Contacto</a>
+    <a href="/terminos">Términos y Condiciones</a>
+    <a href="/privacidad">Política de Privacidad</a>
+    <a href="/seguridad">Seguridad</a>
+  </nav>
+  <div class="pie-copy">© <span data-year>2026</span> CRUZTRD CT S.A.S. · Desarrollo de software, aplicaciones y páginas web (CIIU J620101)</div>
+</div></footer>
+<script src="/assets/marco.js?v=5" defer></script>
+</body>
+</html>
