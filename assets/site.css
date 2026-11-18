@@ -430,3 +430,4 @@ h1,h2{text-wrap:balance}
 @media(max-width:520px){.recep{grid-template-columns:110px minmax(0,1fr)}.recep img{width:110px}}
 .phero[style*="cab-productos"] h1{max-width:10.5ch}
 #dp{width:100%;display:flex;justify-content:center}
+main dl dd a{display:inline-block;min-height:24px;padding:2px 0}
