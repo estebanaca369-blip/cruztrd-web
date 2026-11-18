@@ -949,32 +949,32 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
       {type:'act', act:'equipo', icon:'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M18.5 15.5l.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg>', label:'Diagnostica tu idea con IA', lon:-26,lat:-8},
       {type:'dir', lon:-127.5,lat:-1, label:'Ascensor · subir a los pisos'}
     ]},
-    {name:'Capa 01 · Infraestructura', pano:'media/sala2.webp?v=w4', p6:'media/sala2-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 01 · Infraestructura', pano:'media/sala2.webp?v=w5', p6:'media/sala2-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: las 7 capas de una app', pg:5, lon:62,lat:-6},
       {type:'char', lon:0,lat:-24, hk:'infra', eye:'Capa 01', title:'Infraestructura', who:'GUÍA VIRTUAL · INFRA',
        text:'La base que deja tu app lista para crecer sin rehacerla.', cls:'infraa'},
-      {type:'door', lon:-46,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-121,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]},
-    {name:'Capa 02 · Seguridad', pano:'media/sala3.webp?v=w4', p6:'media/sala3-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 02 · Seguridad', pano:'media/sala3.webp?v=w5', p6:'media/sala3-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'char', lon:27,lat:-12, hk:'seg', eye:'Capa 02', title:'Seguridad', who:'GUÍA VIRTUAL · SEGURIDAD',
        text:'Cifrado, 2FA y registro de accesos: tus datos y los de tus usuarios, protegidos desde el diseño.', cls:'sega'},
-      {type:'door', lon:-47,lat:-1, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-101,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]},
-    {name:'Capa 03 · Pagos', pano:'media/sala4.webp?v=w4', p6:'media/sala4-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 03 · Pagos', pano:'media/sala4.webp?v=w5', p6:'media/sala4-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cobrar en Ecuador sin fricción', pg:7, lon:128,lat:-12},
       {type:'char', lon:13,lat:-12, hk:'pagos', eye:'Capa 03', title:'Pagos', who:'GUÍA VIRTUAL · PAGOS',
        text:'Cobros directos al consumidor, sin fricción: la capa que convierte usuarios en ingresos.', cls:'pagosa'},
-      {type:'door', lon:48,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-108.5,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]},
-    {name:'Capa 04 · Suscripciones', pan:0.3, pano:'media/sala5.webp?v=w4', p6:'media/sala5-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 04 · Suscripciones', pan:0.3, pano:'media/sala5.webp?v=w5', p6:'media/sala5-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'char', lon:0,lat:-18, hk:'susc', eye:'Capa 04', title:'Suscripciones', who:'GUÍA VIRTUAL · SUSCRIPCIONES',
        text:'Ingresos recurrentes: planes, renovaciones y reintentos que crecen mes a mes.', cls:'susca'},
-      {type:'door', lon:48,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-130,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]},
-    {name:'Capa 05 · Marketing', pan:0.3, pano:'media/sala6.webp?v=w4', p6:'media/sala6-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 05 · Marketing', pan:0.3, pano:'media/sala6.webp?v=w5', p6:'media/sala6-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'char', lon:0,lat:-18, hk:'mkt', eye:'Capa 05', title:'Marketing', who:'GUÍA VIRTUAL · MARKETING',
        text:'Llega a las personas correctas al menor costo de adquisición, y hazlas entrar al producto.', cls:'mkta'},
-      {type:'door', lon:166,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-133.5,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]},
     {name:'Capa 06 · Fidelización', pan:0.3, pano:'media/sala7.webp?v=w5', p6:'media/sala7-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'card', icon:'★', label:'Mi tarjeta del Club', lon:27,lat:-3},
@@ -983,11 +983,11 @@ WDASH.dash="<div class=\"wdash\"><div class=\"wdhead\"><span>Panel · tiempo rea
        text:'Que vuelvan y recomienden: recurrencia, referidos y recompra como motor de crecimiento.', cls:'fidela'},
       {type:'door', lon:-91,lat:-4, to:0, label:'Ascensor · volver a Recepción'}
     ]},
-    {name:'Capa 07 · Dashboards', pan:0.3, ep:0.07, pano:'media/sala8.webp?v=w4', p6:'media/sala8-6k.webp?v=w4', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
+    {name:'Capa 07 · Dashboards', pan:0.3, ep:0.07, pano:'media/sala8.webp?v=w5', p6:'media/sala8-6k.webp?v=w5', lim:{giro:1,lonA:-180,lonB:180,latT:58,latB:-58}, entryYaw:0, fx:[], screens:[], spots:[
       {type:'act', act:'mag', icon:'<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 5.5c3-1.3 6-1.3 9 .6 3-1.9 6-1.9 9-.6v13c-3-1.3-6-1.3-9 .6-3-1.9-6-1.9-9-.6z"/><path d="M12 6.1v13"/></svg>', label:'Leer: cinco números para decidir', pg:11, lon:33,lat:-15},
       {type:'char', lon:0,lat:-16, hk:'dash', eye:'Capa 07', title:'Dashboards', who:'GUÍA VIRTUAL · DATOS',
        text:'Todo el estudio en una pantalla: métricas vivas para decidir con datos, no con corazonadas.', cls:'dasha'},
-      {type:'door', lon:166,lat:-2, to:0, label:'Volver a Recepción'}
+      {type:'door', lon:-128,lat:-2, to:0, label:'Ascensor · volver a Recepción'}
     ]}
   ];
   var cur=0;
