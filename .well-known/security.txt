@@ -1,0 +1,6 @@
+# Reporte de vulnerabilidades de CruzTRD (cruztrd.com y declarame.com).
+# Si encuentras un problema de seguridad, escríbenos antes de publicarlo; respondemos en máximo 5 días hábiles.
+Contact: mailto:esteban@cruztrd.com
+Expires: 2027-11-18T05:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://cruztrd.com/.well-known/security.txt
