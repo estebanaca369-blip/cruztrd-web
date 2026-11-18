@@ -85,11 +85,12 @@ h1{text-wrap:balance}
     <h2><span class="n">01</span> Cómo protegemos lo que construimos</h2>
     <p>La seguridad es parte del servicio que ofrecemos, así que la aplicamos primero en nuestros propios productos: este sitio y la app Declárame.</p>
     <ul>
-      <li>Todo el tráfico va cifrado (TLS 1.2 y 1.3). Los navegadores tienen orden de usar siempre la conexión segura (HSTS).</li>
+      <li>Todo el tráfico va cifrado (TLS 1.2 y 1.3). Los navegadores tienen orden de usar siempre la conexión segura (HSTS) y los dominios están firmados con DNSSEC, para que nadie pueda suplantarlos.</li>
       <li>Las contraseñas se guardan como resumen irreversible (scrypt) y las credenciales del SRI de los usuarios de Declárame se guardan cifradas (AES-256-GCM).</li>
       <li>Las sesiones caducan, se renuevan y se pueden cerrar desde otro dispositivo. Hay freno de intentos contra el adivinado de contraseñas.</li>
       <li>En el teléfono, la app guarda la sesión en el almacenamiento seguro del sistema y no acepta conexiones sin cifrar.</li>
       <li>Cada página declara qué puede cargar (Content-Security-Policy) y prohíbe que otros sitios la metan en un marco.</li>
+      <li>El servidor de Declárame solo acepta conexiones web y de administración; todo lo demás lo bloquea un firewall de red.</li>
       <li>Revisamos las librerías que usamos contra las bases públicas de vulnerabilidades y las actualizamos.</li>
     </ul>
   </div>
@@ -102,6 +103,7 @@ h1{text-wrap:balance}
       <a href="https://developer.mozilla.org/en-US/observatory/analyze?host=declarame.com" rel="noopener">Mozilla HTTP Observatory · declarame.com</a><span class="nota">A+</span>
       <a href="https://www.ssllabs.com/ssltest/analyze.html?d=cruztrd.com" rel="noopener">Qualys SSL Labs · cruztrd.com</a><span class="nota">A+</span>
       <a href="https://www.ssllabs.com/ssltest/analyze.html?d=declarame.com" rel="noopener">Qualys SSL Labs · declarame.com</a><span class="nota">A+</span>
+      <a href="https://internet.nl/site/declarame.com/" rel="noopener">internet.nl · declarame.com (estándares modernos: IPv6, DNSSEC, HTTPS, cabeceras)</a><span class="nota">100%</span>
     </div>
     <p>Resultados de noviembre de 2026.</p>
   </div>
